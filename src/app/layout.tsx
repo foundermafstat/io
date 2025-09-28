@@ -6,6 +6,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Header from '@/components/header';
 import ChatProvider from '@/components/chat-provider';
+import { ChatProvider as ChatVisibilityProvider } from '@/components/chat-context';
 import ReplicaProvider from '@/components/replica-provider';
 import ResizablePanel from '@/components/resizable-panel';
 
@@ -36,16 +37,18 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<HeaderProvider>
-						<ReplicaProvider>
-							<ChatProvider>
-								<div className="flex flex-col h-full">
-									<Header />
-									<main className="flex-1 flex overflow-hidden">
-										<ResizablePanel>{children}</ResizablePanel>
-									</main>
-								</div>
-							</ChatProvider>
-						</ReplicaProvider>
+						<ChatVisibilityProvider>
+							<ReplicaProvider>
+								<ChatProvider>
+									<div className="flex flex-col h-full">
+										<Header />
+										<main className="flex-1 flex overflow-hidden">
+											<ResizablePanel>{children}</ResizablePanel>
+										</main>
+									</div>
+								</ChatProvider>
+							</ReplicaProvider>
+						</ChatVisibilityProvider>
 					</HeaderProvider>
 				</ThemeProvider>
 				{/* <Script 

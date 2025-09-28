@@ -28,16 +28,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useHeader } from '@/components/header-context';
 import { useReplica } from './replica-context';
+import { useChatVisibility } from './chat-context';
 import { Skeleton } from '@/components/ui/skeleton';
 
 function HeaderInner() {
 	const pathname = usePathname();
-	const [isAIChatVisible, setIsAIChatVisible] = useState(true);
 	const [playerName] = useState('User');
-
-	const toggleAIChat = () => {
-		setIsAIChatVisible((prev) => !prev);
-	};
+	const { isChatVisible, toggleChat } = useChatVisibility();
 
 	// Navigation items divided by categories
 
@@ -181,12 +178,12 @@ function HeaderInner() {
 					<Button
 						variant="ghost"
 						size="icon"
-						onClick={toggleAIChat}
+						onClick={toggleChat}
 						className="text-foreground hover:bg-accent hover:text-accent-foreground"
-						title={isAIChatVisible ? 'Hide AI Assistant' : 'Show AI Assistant'}
+						title={isChatVisible ? 'Hide AI Assistant' : 'Show AI Assistant'}
 					>
 						<MessageSquare
-							className={isAIChatVisible ? 'text-primary' : 'text-white'}
+							className={isChatVisible ? 'text-primary' : 'text-white'}
 						/>
 					</Button>
 

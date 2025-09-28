@@ -22,6 +22,8 @@ const buttonVariants = cva(
 				gold: 'bg-gold-400 text-dark-100 hover:bg-gold-500 font-medium rounded-full',
 				'dark-outline':
 					'border border-border bg-card text-card-foreground hover:bg-accent',
+				'dark-primary':
+					'bg-dark-primary text-dark-primary-foreground hover:bg-dark-primary-hover font-medium',
 			},
 			size: {
 				default: 'h-10 px-4 py-2',

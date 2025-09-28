@@ -69,6 +69,13 @@ const config = {
           400: "#fbbf24",  // Main gold color from screenshots
           500: "#f59e0b",
           600: "#d97706",
+        },
+        // Dark theme primary accent color
+        "dark-primary": {
+          DEFAULT: "hsl(var(--dark-primary))",  // #F49E25 for dark theme
+          foreground: "hsl(var(--dark-primary-foreground))",  // Black text
+          hover: "hsl(var(--dark-primary-hover))",  // Darker shade for hover
+          light: "hsl(var(--dark-primary-light))",  // Lighter shade
         }
       },
       borderRadius: {

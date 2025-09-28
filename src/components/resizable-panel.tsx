@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import ChatInterface from './chat-interface';
+import { useChatVisibility } from './chat-context';
 
 interface ResizablePanelProps {
 	children: React.ReactNode;
@@ -22,14 +23,14 @@ export default function ResizablePanel({
 	const [width, setWidth] = useState(defaultWidth);
 	const [isResizing, setIsResizing] = useState(false);
 	const resizableRef = useRef<HTMLDivElement>(null);
-	const [isAIChatVisible] = useState(true);
+	const { isChatVisible } = useChatVisibility();
 
 	useEffect(() => {
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!isResizing) return;
 
-			// Calculate new width based on mouse position
-			const newWidth = e.clientX;
+			// Calculate new width based on mouse position from the right side
+			const newWidth = window.innerWidth - e.clientX;
 
 			// Apply constraints
 			if (newWidth >= minWidth && newWidth <= maxWidth) {
@@ -61,32 +62,32 @@ export default function ResizablePanel({
 		setIsResizing(true);
 	};
 
-	if (!isAIChatVisible) {
-		return <div className="w-full h-full">{children}</div>;
+	if (!isChatVisible) {
+		return <div className="w-full h-full overflow-auto">{children}</div>;
 	}
 
 	return (
 		<div className="flex h-full w-full">
-			{/* Resizable chat panel */}
+			{/* Main content */}
+			<div className="flex-1 h-full overflow-auto">{children}</div>
+
+			{/* Resizable chat panel on the right */}
 			<div
 				ref={resizableRef}
-				className={cn('h-full relative border-r border-dark-500', className)}
+				className={cn('h-full relative border-l border-border', className)}
 				style={{
 					width: `${width}px`,
 					minWidth: `${minWidth}px`,
 					maxWidth: `${maxWidth}px`,
 				}}
 			>
-				<ChatInterface />
 				{/* Resize handle */}
 				<div
-					className="absolute top-0 right-0 w-1 h-full bg-border hover:bg-accent cursor-ew-resize"
+					className="absolute top-0 left-0 w-1 h-full bg-border hover:bg-accent cursor-ew-resize"
 					onMouseDown={startResizing}
 				/>
+				<ChatInterface />
 			</div>
-
-			{/* Main content */}
-			<div className="flex-1 h-full overflow-auto">{children}</div>
 		</div>
 	);
 }
