@@ -83,7 +83,7 @@ and IO provides curated listings from integrated property databases.
 
 ### Global Replica Selection
 
-Like in MAF Coach, IO supports selecting different **Sensay replicas** (e.g., Rental Advisor, Investment Consultant, Luxury Homes).  
+IO supports selecting different **Sensay replicas** (e.g., Rental Advisor, Investment Consultant, Luxury Homes).  
 
 ### Rich Markdown Rendering
 
