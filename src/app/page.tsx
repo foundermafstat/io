@@ -213,7 +213,7 @@ export default function Home() {
 			</section>
 
 			{/* Final CTA */}
-			<section className="py-20 px-4 text-center bg-primary text-primary-foreground">
+			<section className="py-20 px-4 text-center bg-gold-400 text-primary-foreground">
 				<div className="container mx-auto max-w-4xl">
 					<h2 className="text-4xl font-bold mb-8">Your Property Journey Begins Here. Dive into Endless Possibilities!</h2>
 					<Button size="lg" variant="secondary" className="px-8">

@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,7 +10,7 @@ import {
 	MapPin, 
 	Home, 
 	Building, 
-	Villa,
+	Castle,
 	Filter,
 	Bot,
 	MessageSquare
@@ -133,7 +135,7 @@ export default function SmartSearch() {
 										</SelectItem>
 										<SelectItem value="villa">
 											<div className="flex items-center gap-2">
-												<Villa className="w-4 h-4" />
+												<Castle className="w-4 h-4" />
 												Villa
 											</div>
 										</SelectItem>
