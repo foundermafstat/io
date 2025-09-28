@@ -88,12 +88,12 @@ export default function ApiKeysPage() {
 
   return (
     <div className="container mx-auto py-6">
-      <h1 className="text-3xl font-bold mb-6 text-mafia-900 dark:text-mafia-300">API Keys</h1>
+      <h1 className="text-3xl font-bold mb-6 text-foreground">API Keys</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-mafia-200 dark:border-mafia-800">
-          <CardHeader className="bg-mafia-50 dark:bg-mafia-900/20 rounded-t-lg">
-            <CardTitle className="text-mafia-900 dark:text-mafia-300">Redeem Invitation</CardTitle>
+        <Card className="border-border">
+          <CardHeader className="bg-muted/50 rounded-t-lg">
+            <CardTitle className="text-foreground">Redeem Invitation</CardTitle>
             <CardDescription>Redeem an API key invitation code</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-4">
@@ -106,7 +106,7 @@ export default function ApiKeysPage() {
                 value={inviteCode}
                 onChange={(e) => setInviteCode(e.target.value)}
                 placeholder="Enter your invitation code"
-                className="border-mafia-300 focus-visible:ring-mafia-500"
+                className="border-border focus-visible:ring-ring"
               />
             </div>
             <div>
@@ -118,7 +118,7 @@ export default function ApiKeysPage() {
                 value={organizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
                 placeholder="Enter organization name"
-                className="border-mafia-300 focus-visible:ring-mafia-500"
+                className="border-border focus-visible:ring-ring"
               />
             </div>
             <div>
@@ -130,7 +130,7 @@ export default function ApiKeysPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
-                className="border-mafia-300 focus-visible:ring-mafia-500"
+                className="border-border focus-visible:ring-ring"
               />
             </div>
             <div>
@@ -143,12 +143,12 @@ export default function ApiKeysPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="border-mafia-300 focus-visible:ring-mafia-500"
+                className="border-border focus-visible:ring-ring"
               />
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleRedeemInvite} className="bg-mafia-600 hover:bg-mafia-700" disabled={loading}>
+            <Button onClick={handleRedeemInvite} className="bg-primary hover:bg-primary/90" disabled={loading}>
               <Key className="mr-2 h-4 w-4" />
               {loading ? "Redeeming..." : "Redeem Code"}
             </Button>
@@ -156,9 +156,9 @@ export default function ApiKeysPage() {
         </Card>
 
         {apiKey && (
-          <Card className="border-mafia-200 dark:border-mafia-800">
-            <CardHeader className="bg-mafia-50 dark:bg-mafia-900/20 rounded-t-lg">
-              <CardTitle className="text-mafia-900 dark:text-mafia-300">Your API Key</CardTitle>
+          <Card className="border-border">
+            <CardHeader className="bg-muted/50 rounded-t-lg">
+              <CardTitle className="text-foreground">Your API Key</CardTitle>
               <CardDescription>Store this key securely</CardDescription>
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
@@ -183,7 +183,7 @@ export default function ApiKeysPage() {
               </p>
             </CardContent>
             <CardFooter>
-              <Button onClick={copyApiKey} className="bg-mafia-600 hover:bg-mafia-700">
+              <Button onClick={copyApiKey} className="bg-primary hover:bg-primary/90">
                 Copy API Key
               </Button>
             </CardFooter>

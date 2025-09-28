@@ -140,7 +140,7 @@ export function TriggerButtons({
 					key={trigger.id}
 					variant="outline"
 					size="sm"
-					className="bg-mafia-50 border-mafia-200 hover:bg-mafia-100 text-mafia-800 text-xs font-medium dark:bg-mafia-900 dark:border-mafia-700 dark:text-mafia-200 flex items-center"
+					className="bg-muted/50 border-border hover:bg-muted text-foreground text-xs font-medium flex items-center"
 					onClick={() => handleTrigger(trigger.trigger)}
 				>
 					{trigger.icon}

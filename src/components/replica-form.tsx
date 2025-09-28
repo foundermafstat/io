@@ -72,11 +72,11 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
     const { name, value } = e.target;
     setFormData(prev => {
       if (name.startsWith('llm.')) {
-        const llmField = name.split('.')[1];
+        const llmField = name.split('.')[1] as keyof typeof prev.llm;
         return {
           ...prev,
           llm: {
-            ...prev.llm,
+            ...prev.llm!,
             [llmField]: value
           }
         };
@@ -669,7 +669,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                   <Input
                     value={newQuestion}
                     onChange={(e) => setNewQuestion(e.target.value)}
-                    placeholder="What is Mafia Coach?"
+                    placeholder="What is IO?"
                     className="border-border bg-background text-foreground"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddQuestion())}
                   />

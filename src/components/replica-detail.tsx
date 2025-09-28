@@ -34,7 +34,7 @@ export default function ReplicaDetail({ replica }: ReplicaDetailProps) {
         <Card className="border border-dark-500 bg-dark-300 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bot className="h-5 w-5 text-mafia-300" />
+              <Bot className="h-5 w-5 text-primary" />
               <span>Основная информация</span>
             </CardTitle>
           </CardHeader>
@@ -103,7 +103,7 @@ export default function ReplicaDetail({ replica }: ReplicaDetailProps) {
           <Card className="border border-dark-500 bg-dark-300 text-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Tag className="h-5 w-5 text-mafia-300" />
+                <Tag className="h-5 w-5 text-primary" />
                 <span>Теги</span>
               </CardTitle>
             </CardHeader>
@@ -124,7 +124,7 @@ export default function ReplicaDetail({ replica }: ReplicaDetailProps) {
           <Card className="border border-dark-500 bg-dark-300 text-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Mail className="h-5 w-5 text-mafia-300" />
+                <Mail className="h-5 w-5 text-primary" />
                 <span>Разрешенные Email-адреса</span>
               </CardTitle>
             </CardHeader>
@@ -145,7 +145,7 @@ export default function ReplicaDetail({ replica }: ReplicaDetailProps) {
           <Card className="border border-dark-500 bg-dark-300 text-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MessageCircleQuestion className="h-5 w-5 text-mafia-300" />
+                <MessageCircleQuestion className="h-5 w-5 text-primary" />
                 <span>Предложенные вопросы</span>
               </CardTitle>
             </CardHeader>
@@ -166,7 +166,7 @@ export default function ReplicaDetail({ replica }: ReplicaDetailProps) {
           <Card className="border border-dark-500 bg-dark-300 text-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BrainCircuit className="h-5 w-5 text-mafia-300" />
+                <BrainCircuit className="h-5 w-5 text-primary" />
                 <span>Настройки LLM</span>
               </CardTitle>
             </CardHeader>
@@ -206,7 +206,7 @@ export default function ReplicaDetail({ replica }: ReplicaDetailProps) {
         <Card className="border border-dark-500 bg-dark-300 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Database className="h-5 w-5 text-mafia-300" />
+              <Database className="h-5 w-5 text-primary" />
               <span>Интеграции и функции</span>
             </CardTitle>
           </CardHeader>

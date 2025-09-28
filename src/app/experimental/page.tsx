@@ -297,7 +297,7 @@ export default function ExperimentalPage() {
 							<Button
 								type="submit"
 								disabled={isLoading || !userInput.trim() || !replicaId}
-								className="bg-mafia-600 hover:bg-primary/90 text-white"
+								className="bg-primary hover:bg-primary/90 text-primary-foreground"
 							>
 								{isLoading ? (
 									<Loader2 className="h-4 w-4 animate-spin" />

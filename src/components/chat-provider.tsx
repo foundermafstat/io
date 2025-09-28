@@ -28,7 +28,7 @@ const createWelcomeMessage = (replicaName?: string, greeting?: string) => {
   return {
     id: `welcome-message-${Date.now()}`,
     role: "assistant" as const,
-    content: greeting || `Привет! Я ${replicaName || "Mafia Coach"}. Чем я могу помочь тебе в игре Мафия?`,
+    content: greeting || `Привет! Я ${replicaName || "IO"}. Чем я могу помочь тебе в игре Мафия?`,
     timestamp: Date.now(),
   }
 }

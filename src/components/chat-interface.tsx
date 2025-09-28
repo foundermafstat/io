@@ -111,8 +111,8 @@ export default function ChatInterface() {
       // Передаём UUID выбранной реплики для корректной обработки последующих сообщений
       addMessage({ role: "assistant", content: welcomeMessage }, selectedReplicaUuid)
     } else {
-      // Если реплика не выбрана, используем стандартное приветствие Mafia Coach
-      addMessage({ role: "assistant", content: "Привет! Я Mafia Coach. Как я могу помочь тебе в игре Мафия?" })
+      // Если реплика не выбрана, используем стандартное приветствие IO
+      addMessage({ role: "assistant", content: "Привет! IO. Как я могу помочь тебе в игре Мафия?" })
     }
   }
 
@@ -144,7 +144,7 @@ export default function ChatInterface() {
                 <div className="relative h-8 w-8 rounded-full overflow-hidden border-2 border-white">
                   <Image
                     src="/coach.png"
-                    alt="Mafia Coach"
+                    alt="IO"
                     fill
                     className="object-cover"
                     sizes="32px"
@@ -154,7 +154,7 @@ export default function ChatInterface() {
               )}
               <div className="flex flex-col">
                 <span className="truncate text-sm font-semibold">
-                  {selectedReplica ? selectedReplica.name : 'Mafia Coach'}
+                  {selectedReplica ? selectedReplica.name : 'IO'}
                 </span>
                 {selectedReplica && (
                   <span className="text-xs text-gray-400">
@@ -248,7 +248,7 @@ export default function ChatInterface() {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Enter your message"
             disabled={isLoading}
-            className="focus-visible:ring-mafia-500"
+            className="focus-visible:ring-ring"
           />
           <Button
             type="submit"

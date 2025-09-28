@@ -189,11 +189,11 @@ function HeaderInner() {
 								className="flex items-center gap-2 text-foreground hover:bg-accent hover:text-accent-foreground"
 							>
 								<div className="flex items-center gap-2">
-									<div className="bg-mafia-700 rounded-full p-1">
+									<div className="bg-muted rounded-full p-1">
 										<User size={16} />
 									</div>
 									<span className="hidden sm:inline">{playerName}</span>
-									<div className="flex items-center gap-1 bg-mafia-800 rounded-full px-2 py-0.5 text-xs">
+									<div className="flex items-center gap-1 bg-muted rounded-full px-2 py-0.5 text-xs">
 										<Award size={12} className="text-yellow-400" />
 										<span>{playerLevel.level}</span>
 									</div>
@@ -218,8 +218,8 @@ function HeaderInner() {
 										</div>
 										<Progress
 											value={progressPercentage}
-											className="h-2 bg-mafia-200"
-											indicatorClassName="bg-mafia-600"
+											className="h-2 bg-muted"
+											indicatorClassName="bg-primary"
 										/>
 									</div>
 								</div>
