@@ -227,7 +227,7 @@ export default function ReplicasPage() {
             <TableCell>
               <div className="font-medium flex items-center gap-3">
                 {/* Добавляем изображение реплики */}
-                <div className="relative h-10 w-10 rounded-full overflow-hidden flex-shrink-0 bg-mafia-100/10">
+                <div className="relative h-10 w-10 rounded-full overflow-hidden flex-shrink-0 bg-muted/20">
                   <img 
                     src={replica.profileImage || 'https://placehold.co/400x400/4F46E5/FFFFFF?text=AI'} 
                     alt={replica.name}
@@ -241,7 +241,7 @@ export default function ReplicasPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     {replica.name}
-                    {replica.private && <Badge variant="outline" className="ml-1 bg-dark-400">Private</Badge>}
+                    {replica.private && <Badge variant="outline" className="ml-1 bg-muted">Private</Badge>}
                   </div>
                   {(replica.shortDescription || replica.short_description) && (
                     <div className="text-xs text-muted-foreground mt-1 max-w-md truncate">
@@ -250,8 +250,8 @@ export default function ReplicasPage() {
                   )}
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="secondary" className="text-xs">{replica.type}</Badge>
-                    {replica.voice_enabled && <Badge variant="outline" className="text-xs bg-dark-400">Voice</Badge>}
-                    {replica.video_enabled && <Badge variant="outline" className="text-xs bg-dark-400">Video</Badge>}
+                    {replica.voice_enabled && <Badge variant="outline" className="text-xs bg-muted">Voice</Badge>}
+                    {replica.video_enabled && <Badge variant="outline" className="text-xs bg-muted">Video</Badge>}
                   </div>
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function ReplicasPage() {
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Bot className="h-4 w-4 text-mafia-300" />
+                <Bot className="h-4 w-4 text-primary" />
                 <span>{replica.llm?.model || "Not specified"}</span>
               </div>
               {replica.llm?.memoryMode && (
@@ -287,7 +287,7 @@ export default function ReplicasPage() {
                       System Message
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-80 p-2 bg-dark-300 border-dark-500 text-white">
+                  <PopoverContent className="w-80 p-2 bg-card border-border text-card-foreground">
                     <p className="text-xs">{replica.llm?.systemMessage || replica.system_message}</p>
                   </PopoverContent>
                 </Popover>
@@ -296,10 +296,10 @@ export default function ReplicasPage() {
             <TableCell>
               <div className="flex flex-wrap gap-1 max-w-[150px]">
                 {replica.tags?.slice(0, 3).map((tag, index) => (
-                  <Badge key={index} variant="outline" className="text-xs bg-dark-400">{tag}</Badge>
+                  <Badge key={index} variant="outline" className="text-xs bg-muted">{tag}</Badge>
                 ))}
                 {replica.tags && replica.tags.length > 3 && (
-                  <Badge variant="outline" className="text-xs bg-dark-400">+{replica.tags.length - 3}</Badge>
+                  <Badge variant="outline" className="text-xs bg-muted">+{replica.tags.length - 3}</Badge>
                 )}
                 {(!replica.tags || replica.tags.length === 0) && (
                   <span className="text-xs text-muted-foreground">No tags</span>
@@ -376,7 +376,7 @@ export default function ReplicasPage() {
         <div className="flex gap-2">
           <Button 
             onClick={() => setIsCreateDialogOpen(true)} 
-            className="bg-gold-500 hover:bg-gold-600"
+            className="bg-primary hover:bg-primary/90"
           >
             <Plus className="h-4 w-4 mr-2" />
             Create Replica
@@ -385,17 +385,17 @@ export default function ReplicasPage() {
             onClick={fetchReplicasData} 
             disabled={loading} 
             variant="outline"
-            className="border-dark-500 bg-dark-400 text-white"
+            className="border-border bg-muted text-foreground"
           >
             {loading ? "Loading..." : "Refresh"}
           </Button>
         </div>
       </div>
 
-      <Card className="border border-dark-500 bg-dark-300 text-white">
+      <Card className="border-border bg-card text-card-foreground">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Database className="h-5 w-5 text-mafia-300" />
+            <Database className="h-5 w-5 text-primary" />
             <span>Active Replicas</span>
           </CardTitle>
           <CardDescription>
@@ -423,7 +423,7 @@ export default function ReplicasPage() {
 
       {/* Replica details dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="max-w-4xl border border-dark-500 bg-dark-300 text-white">
+        <DialogContent className="max-w-4xl border-border bg-card text-card-foreground">
           <DialogHeader>
             <DialogTitle>Replica Information</DialogTitle>
             <DialogDescription>
@@ -434,7 +434,7 @@ export default function ReplicasPage() {
           <DialogFooter>
             <Button 
               onClick={() => setIsViewDialogOpen(false)}
-              className="border-dark-500 bg-dark-400 text-white"
+              className="border-border bg-muted text-foreground"
             >
               Close
             </Button>
@@ -444,7 +444,7 @@ export default function ReplicasPage() {
 
       {/* Create replica dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="max-w-4xl border border-dark-500 bg-dark-300 text-white">
+        <DialogContent className="max-w-4xl border-border bg-card text-card-foreground">
           <DialogHeader>
             <DialogTitle>Create New Replica</DialogTitle>
             <DialogDescription>
@@ -461,7 +461,7 @@ export default function ReplicasPage() {
 
       {/* Edit replica dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-4xl border border-dark-500 bg-dark-300 text-white">
+        <DialogContent className="max-w-4xl border-border bg-card text-card-foreground">
           <DialogHeader>
             <DialogTitle>Edit Replica</DialogTitle>
             <DialogDescription>
@@ -481,7 +481,7 @@ export default function ReplicasPage() {
 
       {/* Delete confirmation dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent className="border border-dark-500 bg-dark-300 text-white">
+        <AlertDialogContent className="border-border bg-card text-card-foreground">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
@@ -489,12 +489,12 @@ export default function ReplicasPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-dark-500 bg-dark-400 text-white">
+            <AlertDialogCancel className="border-border bg-muted text-foreground">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDeleteReplica}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive hover:bg-destructive/90"
             >
               Delete
             </AlertDialogAction>

@@ -255,44 +255,44 @@ export default function ChatHistoryPage() {
 
   return (
     <div style={pageStyles} className="space-y-6">
-      <h1 className="text-3xl font-bold text-mafia-900 dark:text-mafia-300">Chat History</h1>
+      <h1 className="text-3xl font-bold text-foreground">Chat History</h1>
 
-      <Card className="border-mafia-200 dark:border-mafia-800">
-        <CardHeader className="bg-mafia-50 dark:bg-mafia-900/20 rounded-t-lg">
-          <CardTitle className="text-mafia-900 dark:text-mafia-300">Active Replica</CardTitle>
+      <Card className="border-border">
+        <CardHeader className="bg-muted/50 rounded-t-lg">
+          <CardTitle className="text-foreground">Active Replica</CardTitle>
           <CardDescription>View and manage your chat history</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 pt-4">
           <div>
-            <div className="flex items-center gap-2 p-2 border rounded-md border-mafia-300 bg-mafia-50 dark:bg-mafia-900/20 dark:border-mafia-700">
-              <Bot className="h-5 w-5 text-mafia-500" />
+            <div className="flex items-center gap-2 p-2 border rounded-md border-border bg-muted/50 ">
+              <Bot className="h-5 w-5 text-muted-foreground" />
               {selectedReplica ? (
                 <div>
                   <span className="font-medium">{selectedReplica.name}</span>
                   <span className="ml-2 text-xs opacity-70">({selectedReplica.type})</span>
                 </div>
               ) : (
-                <div className="text-mafia-500 italic">
+                <div className="text-muted-foreground italic">
                   No replica selected. Please select a replica from the header dropdown.
                 </div>
               )}
             </div>
           </div>
           <div className="flex space-x-2">
-            <Button onClick={fetchChatHistory} className="bg-mafia-600 hover:bg-mafia-700">
+            <Button onClick={fetchChatHistory} className="bg-primary hover:bg-primary/90">
               <RefreshCcw className="mr-2 h-4 w-4" />
               Refresh History
             </Button>
-            <Button onClick={handleCreateChatEntry} variant="outline" className="border-mafia-300">
+            <Button onClick={handleCreateChatEntry} variant="outline" className="border-border">
               Create Test Entry
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-mafia-200 dark:border-mafia-800">
-        <CardHeader className="bg-mafia-50 dark:bg-mafia-900/20 rounded-t-lg">
-          <CardTitle className="text-mafia-900 dark:text-mafia-300">Chat History</CardTitle>
+      <Card className="border-border">
+        <CardHeader className="bg-muted/50 rounded-t-lg">
+          <CardTitle className="text-foreground">Chat History</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -400,36 +400,36 @@ export default function ChatHistoryPage() {
             </DialogHeader>
             <div className="space-y-4">
               {/* Debug information section */}
-              <div className="bg-mafia-50 dark:bg-mafia-900/20 p-4 rounded-md border border-mafia-200 dark:border-mafia-800">
+              <div className="bg-muted/50 p-4 rounded-md border border-border">
                 <h3 className="text-sm font-medium mb-2">Debug Information</h3>
                 <div className="grid grid-cols-2 gap-2 mb-4">
                   <div>
                     <span className="text-xs font-semibold">ID:</span>
-                    <code className="ml-2 text-xs bg-mafia-100 dark:bg-mafia-800 p-1 rounded">
+                    <code className="ml-2 text-xs bg-muted p-1 rounded">
                       {selectedChat.id}
                     </code>
                   </div>
                   <div>
                     <span className="text-xs font-semibold">Created:</span>
-                    <code className="ml-2 text-xs bg-mafia-100 dark:bg-mafia-800 p-1 rounded">
+                    <code className="ml-2 text-xs bg-muted p-1 rounded">
                       {formatDate(selectedChat.createdAt)}
                     </code>
                   </div>
                   <div>
                     <span className="text-xs font-semibold">Status:</span>
-                    <code className="ml-2 text-xs bg-mafia-100 dark:bg-mafia-800 p-1 rounded">
+                    <code className="ml-2 text-xs bg-muted p-1 rounded">
                       {selectedChat.status || 'UNKNOWN'}
                     </code>
                   </div>
                   <div>
                     <span className="text-xs font-semibold">Replica UUID:</span>
-                    <code className="ml-2 text-xs bg-mafia-100 dark:bg-mafia-800 p-1 rounded">
+                    <code className="ml-2 text-xs bg-muted p-1 rounded">
                       {selectedChat.replicaUUID}
                     </code>
                   </div>
                   <div className="col-span-2">
                     <span className="text-xs font-semibold">Message Count:</span>
-                    <code className="ml-2 text-xs bg-mafia-100 dark:bg-mafia-800 p-1 rounded">
+                    <code className="ml-2 text-xs bg-muted p-1 rounded">
                       {selectedChat.messages.length}
                     </code>
                   </div>
@@ -437,7 +437,7 @@ export default function ChatHistoryPage() {
               </div>
               
               {/* Messages section */}
-              <div className="bg-mafia-50 dark:bg-mafia-900/20 p-4 rounded-md border border-mafia-200 dark:border-mafia-800">
+              <div className="bg-muted/50 p-4 rounded-md border border-border">
                 <h3 className="text-sm font-medium mb-2">Messages</h3>
                 <div className="space-y-3">
                   {selectedChat.messages.map((message: SensayChatMessage, idx: number) => (
@@ -445,8 +445,8 @@ export default function ChatHistoryPage() {
                       key={`msg-${idx}`}
                       className={`p-3 rounded-lg ${
                         message.role === 'user'
-                          ? 'bg-mafia-200 dark:bg-mafia-800 text-mafia-900 dark:text-mafia-100 ml-auto max-w-[80%]'
-                          : 'bg-mafia-600 text-white mr-auto max-w-[80%]'
+                          ? 'bg-muted text-foreground ml-auto max-w-[80%]'
+                          : 'bg-primary text-primary-foreground mr-auto max-w-[80%]'
                       }`}
                     >
                       <div className="flex justify-between items-center mb-1">

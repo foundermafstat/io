@@ -27,12 +27,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="h-full dark">
-			<body className={`${inter.className} h-full bg-[#121316]`}>
+		<html lang="en" className="h-full">
+			<body className={`${inter.className} h-full`}>
 				<ThemeProvider
 					attribute="class"
-					defaultTheme="dark"
-					enableSystem={false}
+					defaultTheme="system"
+					enableSystem={true}
 					disableTransitionOnChange
 				>
 					<HeaderProvider>

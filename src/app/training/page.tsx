@@ -477,7 +477,7 @@ export default function TrainingPage() {
     <div className="container mx-auto py-8 pb-32" style={{ height: "calc(100vh - 60px)", overflowY: "auto" }}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-mafia-900 dark:text-mafia-100">AI Training</h1>
+          <h1 className="text-3xl font-bold text-foreground">AI Training</h1>
           <Button 
             onClick={handleRefresh} 
             variant="outline" 
@@ -497,9 +497,9 @@ export default function TrainingPage() {
           </TabsList>
 
           <TabsContent value="text">
-            <Card className="border-mafia-200 dark:border-mafia-800">
-              <CardHeader className="bg-mafia-50 dark:bg-mafia-900/20 rounded-t-lg">
-                <CardTitle className="text-mafia-900 dark:text-mafia-300">Create Training Entry</CardTitle>
+            <Card className="border-border">
+              <CardHeader className="bg-muted/50 rounded-t-lg">
+                <CardTitle className="text-foreground">Create Training Entry</CardTitle>
                 <CardDescription>Train your AI agent with custom knowledge</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 pt-4">
@@ -507,15 +507,15 @@ export default function TrainingPage() {
                   <label htmlFor="replicaInfo" className="block text-sm font-medium mb-1">
                     Active Replica
                   </label>
-                  <div className="flex items-center gap-2 p-2 border rounded-md border-mafia-300 bg-mafia-50 dark:bg-mafia-900/20 dark:border-mafia-700">
-                    <Bot className="h-5 w-5 text-mafia-500" />
+                  <div className="flex items-center gap-2 p-2 border rounded-md border-border bg-muted/50 ">
+                    <Bot className="h-5 w-5 text-muted-foreground" />
                     {selectedReplica ? (
                       <div>
                         <span className="font-medium">{selectedReplica.name}</span>
                         <span className="ml-2 text-xs opacity-70">({selectedReplica.type})</span>
                       </div>
                     ) : (
-                      <div className="text-mafia-500 italic">
+                      <div className="text-muted-foreground italic">
                         No replica selected. Please select a replica from the header dropdown.
                       </div>
                     )}
@@ -530,7 +530,7 @@ export default function TrainingPage() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Enter a title for this training entry"
-                    className="border-mafia-300 focus-visible:ring-mafia-500"
+                    className="border-border focus-visible:ring-ring"
                   />
                 </div>
                 <div>
@@ -542,7 +542,7 @@ export default function TrainingPage() {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Enter the training content"
-                    className="min-h-[150px] border-mafia-300 focus-visible:ring-mafia-500"
+                    className="min-h-[150px] border-border focus-visible:ring-ring"
                   />
                 </div>
                 <div>
@@ -554,14 +554,14 @@ export default function TrainingPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Enter a description for this training entry"
-                    className="min-h-[80px] border-mafia-300 focus-visible:ring-mafia-500"
+                    className="min-h-[80px] border-border focus-visible:ring-ring"
                   />
                 </div>
               </CardContent>
               <CardFooter>
                 <Button
                   onClick={handleCreateEntry}
-                  className="bg-mafia-600 hover:bg-mafia-700"
+                  className="bg-primary hover:bg-primary/90"
                   disabled={loading}
                 >
                   <Plus className="mr-2 h-4 w-4" />
@@ -572,9 +572,9 @@ export default function TrainingPage() {
           </TabsContent>
 
           <TabsContent value="upload">
-            <Card className="border-mafia-200 dark:border-mafia-800">
-              <CardHeader className="bg-mafia-50 dark:bg-mafia-900/20 rounded-t-lg">
-                <CardTitle className="text-mafia-900 dark:text-mafia-300">Upload Training Files</CardTitle>
+            <Card className="border-border">
+              <CardHeader className="bg-muted/50 rounded-t-lg">
+                <CardTitle className="text-foreground">Upload Training Files</CardTitle>
                 <CardDescription>Upload documents to train your AI agent</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 pt-4">
@@ -582,15 +582,15 @@ export default function TrainingPage() {
                   <label htmlFor="replicaInfo" className="block text-sm font-medium mb-1">
                     Active Replica
                   </label>
-                  <div className="flex items-center gap-2 p-2 border rounded-md border-mafia-300 bg-mafia-50 dark:bg-mafia-900/20 dark:border-mafia-700">
-                    <Bot className="h-5 w-5 text-mafia-500" />
+                  <div className="flex items-center gap-2 p-2 border rounded-md border-border bg-muted/50 ">
+                    <Bot className="h-5 w-5 text-muted-foreground" />
                     {selectedReplica ? (
                       <div>
                         <span className="font-medium">{selectedReplica.name}</span>
                         <span className="ml-2 text-xs opacity-70">({selectedReplica.type})</span>
                       </div>
                     ) : (
-                      <div className="text-mafia-500 italic">
+                      <div className="text-muted-foreground italic">
                         No replica selected. Please select a replica from the header dropdown.
                       </div>
                     )}
@@ -605,7 +605,7 @@ export default function TrainingPage() {
                       id="file"
                       type="file"
                       onChange={handleFileChange}
-                      className="border-mafia-300 focus-visible:ring-mafia-500"
+                      className="border-border focus-visible:ring-ring"
                     />
                     {file && (
                       <div className="flex items-center gap-2 text-sm">
@@ -627,7 +627,7 @@ export default function TrainingPage() {
               <CardFooter>
                 <Button
                   onClick={handleFileUpload}
-                  className="bg-mafia-600 hover:bg-mafia-700"
+                  className="bg-primary hover:bg-primary/90"
                   disabled={!file || uploadProgress > 0 || loading}
                 >
                   <Upload className="mr-2 h-4 w-4" />
@@ -639,7 +639,7 @@ export default function TrainingPage() {
         </Tabs>
 
         <div>
-          <h2 className="text-xl font-bold mb-4 text-mafia-900 dark:text-mafia-100">Training Entries</h2>
+          <h2 className="text-xl font-bold mb-4 text-foreground">Training Entries</h2>
           {loading && !refreshing ? (
             <div className="space-y-4">
               <Skeleton className="h-12 w-full" />
@@ -648,9 +648,9 @@ export default function TrainingPage() {
             </div>
           ) : entries.length === 0 ? (
             <div className="text-center py-8 border border-dashed rounded-lg">
-              <AlertCircle className="mx-auto h-10 w-10 text-mafia-400 mb-2" />
-              <p className="text-mafia-600 dark:text-mafia-400">No training entries found</p>
-              <p className="text-sm text-mafia-500 dark:text-mafia-500">
+              <AlertCircle className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
+              <p className="text-muted-foreground">No training entries found</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Create a new entry above to get started with training your AI
               </p>
             </div>
@@ -670,7 +670,7 @@ export default function TrainingPage() {
                 </TableHeader>
                 <TableBody>
                   {entries.map((entry) => (
-                    <TableRow key={entry.id} className={editingId === entry.id ? "bg-mafia-50 dark:bg-mafia-800/30" : ""}>
+                    <TableRow key={entry.id} className={editingId === entry.id ? "bg-muted/30" : ""}>
                       <TableCell className="font-medium">{entry.id}</TableCell>
                       <TableCell>
                         {editingId === entry.id ? (
@@ -678,7 +678,7 @@ export default function TrainingPage() {
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
                             placeholder="Title"
-                            className="border-mafia-300 focus-visible:ring-mafia-500"
+                            className="border-border focus-visible:ring-ring"
                           />
                         ) : (
                           <div className="max-w-[200px] truncate">{entry.title || "No title"}</div>
@@ -690,7 +690,7 @@ export default function TrainingPage() {
                             value={editContent}
                             onChange={(e) => setEditContent(e.target.value)}
                             placeholder="Content"
-                            className="min-h-[100px] border-mafia-300 focus-visible:ring-mafia-500"
+                            className="min-h-[100px] border-border focus-visible:ring-ring"
                           />
                         ) : (
                           <div className="max-w-[200px] truncate">{entry.raw_text || "No content"}</div>

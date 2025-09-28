@@ -118,14 +118,14 @@ export default function ExperimentalPage() {
 
 	return (
 		<div className="container mx-auto p-4 space-y-6">
-			<h1 className="text-2xl font-bold text-white">Sensay Experimental API</h1>
+			<h1 className="text-2xl font-bold text-foreground">Sensay Experimental API</h1>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{/* Left settings panel */}
-				<Card className="border border-dark-500 bg-dark-300 text-white">
+				<Card className="border-border bg-card text-card-foreground">
 					<CardHeader>
 						<CardTitle>Request Settings</CardTitle>
-						<CardDescription className="text-gray-400">
+						<CardDescription className="text-muted-foreground">
 							Configure parameters for Experimental API requests
 						</CardDescription>
 					</CardHeader>
@@ -138,7 +138,7 @@ export default function ExperimentalPage() {
 									<DropdownMenuTrigger asChild>
 										<Button
 											variant="outline"
-											className="flex-1 justify-between flex overflow-hidden border-dark-500 bg-dark-400 text-white"
+											className="flex-1 justify-between flex overflow-hidden border-border bg-background text-foreground"
 											disabled={isLoading}
 										>
 											{isLoading ? (
@@ -171,7 +171,7 @@ export default function ExperimentalPage() {
 															<span className="font-medium">
 																{replica.name}
 															</span>
-															<span className="text-xs text-gray-400 font-mono truncate">
+															<span className="text-xs text-muted-foreground font-mono truncate">
 																{replica.uuid}
 															</span>
 														</div>
@@ -181,7 +181,7 @@ export default function ExperimentalPage() {
 													</DropdownMenuItem>
 												))
 											) : (
-												<div className="p-2 text-center text-sm text-gray-400">
+												<div className="p-2 text-center text-sm text-muted-foreground">
 													{loading ? 'Loading...' : 'No replicas available'}
 												</div>
 											)}
@@ -194,7 +194,7 @@ export default function ExperimentalPage() {
 									onClick={refreshReplicas}
 									disabled={isLoading}
 									title="Refresh replica list"
-									className="border-dark-500 bg-dark-400 text-white"
+									className="border-border bg-background text-foreground"
 								>
 									<RefreshCw
 										className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`}
@@ -207,7 +207,7 @@ export default function ExperimentalPage() {
 								value={replicaId}
 								onChange={(e) => setReplicaId(e.target.value)}
 								placeholder="Or enter replica UUID manually"
-								className="mt-2 text-xs font-mono border-dark-500 bg-dark-400 text-white"
+								className="mt-2 text-xs font-mono border-border bg-background text-foreground"
 							/>
 						</div>
 
@@ -217,13 +217,13 @@ export default function ExperimentalPage() {
 								id="systemPrompt"
 								value={systemPrompt}
 								onChange={(e) => setSystemPrompt(e.target.value)}
-								className="min-h-[100px] border-dark-500 bg-dark-400 text-white"
+								className="min-h-[100px] border-border bg-background text-foreground"
 							/>
 							<Button
 								variant="outline"
 								size="sm"
 								onClick={updateSystemPrompt}
-								className="mt-2 border-dark-500 bg-dark-400 text-white"
+								className="mt-2 border-border bg-background text-foreground"
 							>
 								Update Prompt
 							</Button>
@@ -240,10 +240,10 @@ export default function ExperimentalPage() {
 				</Card>
 
 				{/* Right chat panel */}
-				<Card className="border border-dark-500 bg-dark-300 text-white">
+				<Card className="border-border bg-card text-card-foreground">
 					<CardHeader>
 						<CardTitle>Experimental API Chat</CardTitle>
-						<CardDescription className="text-gray-400">
+						<CardDescription className="text-muted-foreground">
 							Send messages and receive responses from the replica
 						</CardDescription>
 					</CardHeader>
@@ -255,17 +255,17 @@ export default function ExperimentalPage() {
 										key={`${msg.role}-${index}`}
 										className={`p-3 rounded-lg ${
 											msg.role === 'user'
-												? 'bg-mafia-600 text-white ml-auto max-w-[80%]'
+												? 'bg-primary text-primary-foreground ml-auto max-w-[80%]'
 												: msg.role === 'assistant'
-												? 'bg-gray-700 text-white max-w-[80%]'
-												: 'bg-gray-800 text-white text-xs italic max-w-full'
+												? 'bg-muted text-foreground max-w-[80%]'
+												: 'bg-muted/80 text-muted-foreground text-xs italic max-w-full'
 										}`}
 									>
 										<p>{msg.content}</p>
 									</div>
 								))}
 								{isLoading && (
-									<div className="flex items-center space-x-2 bg-gray-700 text-white p-3 rounded-lg max-w-[80%]">
+									<div className="flex items-center space-x-2 bg-muted text-foreground p-3 rounded-lg max-w-[80%]">
 										<Loader2 className="h-4 w-4 animate-spin" />
 										<p>API is responding...</p>
 									</div>
@@ -292,12 +292,12 @@ export default function ExperimentalPage() {
 								onChange={(e) => setUserInput(e.target.value)}
 								placeholder="Type your message..."
 								disabled={isLoading}
-								className="flex-1 border-dark-500 bg-dark-400 text-white"
+								className="flex-1 border-border bg-background text-foreground"
 							/>
 							<Button
 								type="submit"
 								disabled={isLoading || !userInput.trim() || !replicaId}
-								className="bg-mafia-600 hover:bg-mafia-700 text-white"
+								className="bg-mafia-600 hover:bg-primary/90 text-white"
 							>
 								{isLoading ? (
 									<Loader2 className="h-4 w-4 animate-spin" />
@@ -312,16 +312,16 @@ export default function ExperimentalPage() {
 
 			{/* Display API response in JSON format for debugging */}
 			{response && (
-				<Card className="border border-dark-500 bg-dark-300 text-white">
+				<Card className="border-border bg-card text-card-foreground">
 					<CardHeader>
 						<CardTitle>API Response (JSON)</CardTitle>
-						<CardDescription className="text-gray-400">
+						<CardDescription className="text-muted-foreground">
 							Complete API response in JSON format
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<ScrollArea className="h-[200px]">
-							<pre className="text-xs font-mono whitespace-pre-wrap text-green-400">
+							<pre className="text-xs font-mono whitespace-pre-wrap text-green-600 dark:text-green-400">
 								{JSON.stringify(response, null, 2)}
 							</pre>
 						</ScrollArea>

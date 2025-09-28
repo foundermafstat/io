@@ -60,7 +60,7 @@ function HeaderInner() {
 
 	const { headerState } = useHeader();
 	return (
-		<header className="border-b text-white">
+		<header className="border-b bg-background text-foreground">
 			<div className="container mx-auto px-4 py-3 flex items-center justify-between">
 				<div className="flex items-center gap-4">
 					<h1 className="text-xl font-bold">IO</h1>
@@ -68,8 +68,8 @@ function HeaderInner() {
 					<nav className="hidden md:flex items-center gap-6">
 						<Link
 							href="/"
-							className={`text-sm font-medium transition-colors hover:text-mafia-300 ${
-								pathname === '/' ? 'text-mafia-300' : 'text-white'
+							className={`text-sm font-medium transition-colors hover:text-primary ${
+								pathname === '/' ? 'text-primary' : 'text-foreground'
 							}`}
 						>
 							Home
@@ -80,7 +80,7 @@ function HeaderInner() {
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
-									className="flex items-center gap-1 text-white hover:bg-mafia-800 hover:text-white px-2 py-1 h-auto"
+									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
 									<span className="text-sm font-medium">Administration</span>
 									<ChevronDown size={14} />
@@ -93,7 +93,7 @@ function HeaderInner() {
 											href={item.path}
 											className={
 												pathname === item.path
-													? 'bg-mafia-100 dark:bg-mafia-800'
+													? 'bg-accent'
 													: ''
 											}
 										>
@@ -109,7 +109,7 @@ function HeaderInner() {
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
-									className="flex items-center gap-1 text-white hover:bg-mafia-800 hover:text-white px-2 py-1 h-auto"
+									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
 									<span className="text-sm font-medium">AI Training</span>
 									<ChevronDown size={14} />
@@ -122,7 +122,7 @@ function HeaderInner() {
 											href={item.path}
 											className={
 												pathname === item.path
-													? 'bg-mafia-100 dark:bg-mafia-800'
+													? 'bg-accent'
 													: ''
 											}
 										>
@@ -138,7 +138,7 @@ function HeaderInner() {
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
-									className="flex items-center gap-1 text-white hover:bg-mafia-800 hover:text-white px-2 py-1 h-auto"
+									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
 									<span className="text-sm font-medium">Experimental</span>
 									<ChevronDown size={14} />
@@ -151,7 +151,7 @@ function HeaderInner() {
 											href={item.path}
 											className={
 												pathname === item.path
-													? 'bg-mafia-100 dark:bg-mafia-800'
+													? 'bg-accent'
 													: ''
 											}
 										>
@@ -169,11 +169,11 @@ function HeaderInner() {
 						variant="ghost"
 						size="icon"
 						onClick={toggleAIChat}
-						className="text-white hover:bg-mafia-800 hover:text-white"
+						className="text-foreground hover:bg-accent hover:text-accent-foreground"
 						title={isAIChatVisible ? 'Hide AI Assistant' : 'Show AI Assistant'}
 					>
 						<MessageSquare
-							className={isAIChatVisible ? 'text-mafia-300' : 'text-white'}
+							className={isAIChatVisible ? 'text-primary' : 'text-white'}
 						/>
 					</Button>
 
@@ -186,7 +186,7 @@ function HeaderInner() {
 						<DropdownMenuTrigger asChild>
 							<Button
 								variant="ghost"
-								className="flex items-center gap-2 text-white hover:bg-mafia-800 hover:text-white"
+								className="flex items-center gap-2 text-foreground hover:bg-accent hover:text-accent-foreground"
 							>
 								<div className="flex items-center gap-2">
 									<div className="bg-mafia-700 rounded-full p-1">
@@ -266,7 +266,7 @@ function ReplicaDropdown() {
 			<DropdownMenuTrigger asChild>
 				<Button
 					variant="ghost"
-					className="flex items-center gap-1 text-white hover:bg-mafia-800 hover:text-white px-2 py-1 h-auto"
+					className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 				>
 					<Bot size={14} className="mr-1" />
 					<span className="text-sm font-medium">
@@ -296,7 +296,7 @@ function ReplicaDropdown() {
 							onClick={() => setSelectedReplicaUuid(replica.uuid)}
 							className={
 								selectedReplicaUuid === replica.uuid
-									? 'bg-mafia-100 dark:bg-mafia-800'
+									? 'bg-accent'
 									: ''
 							}
 						>

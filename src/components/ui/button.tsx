@@ -18,10 +18,10 @@ const buttonVariants = cva(
 					'bg-secondary text-secondary-foreground hover:bg-secondary/80',
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
 				link: 'text-primary underline-offset-4 hover:underline',
-				mafia: 'bg-mafia-600 text-white hover:bg-mafia-700',
+				mafia: 'bg-primary text-primary-foreground hover:bg-primary/90',
 				gold: 'bg-gold-400 text-dark-100 hover:bg-gold-500 font-medium rounded-full',
 				'dark-outline':
-					'border border-dark-500 bg-dark-300 text-white hover:bg-dark-400',
+					'border border-border bg-card text-card-foreground hover:bg-accent',
 			},
 			size: {
 				default: 'h-10 px-4 py-2',

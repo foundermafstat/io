@@ -122,7 +122,7 @@ export default function ChatInterface() {
 
   return (
     <div className="flex flex-col h-full bg-background">
-      <div className="p-3 border-b text-white flex items-center justify-between">
+      <div className="p-3 border-b text-foreground flex items-center justify-between">
         <div className="flex items-center space-x-2">
           {/* Отображение текущей реплики из глобального контекста */}
           <div className="flex items-center gap-2 px-2">
@@ -169,7 +169,7 @@ export default function ChatInterface() {
           variant="ghost"
           size="icon"
           onClick={handleClearChat}
-          className="text-white hover:bg-mafia-800 hover:text-white"
+          className="text-foreground hover:bg-accent hover:text-accent-foreground"
           title="Clear chat history"
         >
           <Trash2 className="h-4 w-4" />
@@ -182,7 +182,7 @@ export default function ChatInterface() {
             <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
               <div
                 className={`max-w-[80%] rounded-lg p-3 ${
-                  message.role === "user" ? "bg-mafia-600 text-white" : "bg-muted dark:bg-mafia-800/50"
+                  message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                 }`}
               >
                 {message.role === "assistant" ? (
@@ -203,13 +203,13 @@ export default function ChatInterface() {
                           const match = /language-(\w+)/.exec(className || '')
                           const isInline = !match && !props.children?.includes('\n');
                           return isInline ? (
-                            <code className="bg-mafia-100 dark:bg-mafia-700 px-1 py-0.5 rounded text-xs" {...props} />
+                            <code className="bg-muted px-1 py-0.5 rounded text-xs" {...props} />
                           ) : (
-                            <code className="block bg-mafia-100 dark:bg-mafia-700 p-2 rounded text-xs my-2 overflow-x-auto" {...props} />
+                            <code className="block bg-muted p-2 rounded text-xs my-2 overflow-x-auto" {...props} />
                           )
                         },
-                        pre: ({node, ...props}) => <pre className="bg-mafia-100 dark:bg-mafia-700 p-2 rounded my-2 overflow-x-auto" {...props} />,
-                        blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-mafia-300 dark:border-mafia-600 pl-2 italic my-2" {...props} />
+                        pre: ({node, ...props}) => <pre className="bg-muted p-2 rounded my-2 overflow-x-auto" {...props} />,
+                        blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-border pl-2 italic my-2" {...props} />
                       }}
                     >
                       {message.content}

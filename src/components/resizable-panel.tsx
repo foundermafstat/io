@@ -80,7 +80,7 @@ export default function ResizablePanel({
 				<ChatInterface />
 				{/* Resize handle */}
 				<div
-					className="absolute top-0 right-0 w-1 h-full bg-dark-500 hover:bg-mafia-500 cursor-ew-resize"
+					className="absolute top-0 right-0 w-1 h-full bg-border hover:bg-accent cursor-ew-resize"
 					onMouseDown={startResizing}
 				/>
 			</div>

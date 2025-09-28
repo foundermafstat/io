@@ -380,7 +380,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
 
           {/* Basic Information */}
           <TabsContent value="basic" className="space-y-4">
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>
               </CardHeader>
@@ -394,7 +394,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     onChange={handleChange}
                     placeholder="John Smith"
                     required
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                   />
                 </div>
 
@@ -407,7 +407,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     onChange={handleChange}
                     placeholder="Acts as my AI twin for answering questions about my creative work."
                     required
-                    className="min-h-[80px] border-dark-500 bg-dark-400 text-white"
+                    className="min-h-[80px] border-border bg-background text-foreground"
                   />
                 </div>
 
@@ -420,7 +420,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     onChange={handleChange}
                     placeholder="John Smith is a 55 year old accountant from Brooklyn who loves sports and his family."
                     required
-                    className="min-h-[80px] border-dark-500 bg-dark-400 text-white"
+                    className="min-h-[80px] border-border bg-background text-foreground"
                   />
                 </div>
 
@@ -433,7 +433,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     onChange={handleChange}
                     placeholder="What would you like to know?"
                     required
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                   />
                 </div>
               </CardContent>
@@ -442,7 +442,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
 
           {/* Advanced Information */}
           <TabsContent value="advanced" className="space-y-4">
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>Advanced Information</CardTitle>
               </CardHeader>
@@ -453,10 +453,10 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     defaultValue={formData.type} 
                     onValueChange={(value) => setFormData(prev => ({ ...prev, type: value }))}
                   >
-                    <SelectTrigger className="border-dark-500 bg-dark-400 text-white">
+                    <SelectTrigger className="border-border bg-background text-foreground">
                       <SelectValue placeholder="Select replica type" />
                     </SelectTrigger>
-                    <SelectContent className="border-dark-500 bg-dark-300 text-white">
+                    <SelectContent className="border-border bg-card text-card-foreground">
                       <SelectItem value="individual">Individual</SelectItem>
                       <SelectItem value="character">Character</SelectItem>
                       <SelectItem value="brand">Brand</SelectItem>
@@ -472,7 +472,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={formData.slug}
                     onChange={handleChange}
                     placeholder="example-replica"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                   />
                 </div>
 
@@ -484,7 +484,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={formData.profileImage}
                     onChange={handleChange}
                     placeholder="https://images.invalid/photo.jpeg"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                     required
                   />
                   <p className="text-xs text-muted-foreground mt-1">
@@ -500,7 +500,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={formData.voicePreviewText}
                     onChange={handleChange}
                     placeholder="Hi, I'm your Sensay replica! How can I assist you today?"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                   />
                 </div>
 
@@ -518,7 +518,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
 
           {/* LLM Settings */}
           <TabsContent value="llm" className="space-y-4">
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>LLM Settings</CardTitle>
               </CardHeader>
@@ -532,10 +532,10 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                       llm: { ...prev.llm!, model: value } 
                     }))}
                   >
-                    <SelectTrigger className="border-dark-500 bg-dark-400 text-white">
+                    <SelectTrigger className="border-border bg-background text-foreground">
                       <SelectValue placeholder="Select a model" />
                     </SelectTrigger>
-                    <SelectContent className="border-dark-500 bg-dark-300 text-white">
+                    <SelectContent className="border-border bg-card text-card-foreground">
                       <SelectItem value="gpt-4o">GPT-4o</SelectItem>
                       <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
                       <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
@@ -553,10 +553,10 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                       llm: { ...prev.llm!, memoryMode: value } 
                     }))}
                   >
-                    <SelectTrigger className="border-dark-500 bg-dark-400 text-white">
+                    <SelectTrigger className="border-border bg-background text-foreground">
                       <SelectValue placeholder="Select memory mode" />
                     </SelectTrigger>
-                    <SelectContent className="border-dark-500 bg-dark-300 text-white">
+                    <SelectContent className="border-border bg-card text-card-foreground">
                       <SelectItem value="rag-search">RAG Search</SelectItem>
                       <SelectItem value="window">Window</SelectItem>
                       <SelectItem value="none">None</SelectItem>
@@ -573,7 +573,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     onChange={handleChange}
                     placeholder="Concise, knowledgeable, empathetic and cheerful."
                     required
-                    className="min-h-[80px] border-dark-500 bg-dark-400 text-white"
+                    className="min-h-[80px] border-border bg-background text-foreground"
                   />
                 </div>
               </CardContent>
@@ -582,7 +582,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
 
           {/* Lists */}
           <TabsContent value="lists" className="space-y-4">
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>Tags</CardTitle>
               </CardHeader>
@@ -592,13 +592,13 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     placeholder="Add tag"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                   />
                   <Button 
                     type="button" 
                     onClick={handleAddTag}
-                    className="bg-mafia-600 hover:bg-mafia-700"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -621,7 +621,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
               </CardContent>
             </Card>
 
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>Allowed Email Addresses</CardTitle>
               </CardHeader>
@@ -631,13 +631,13 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={newEmail}
                     onChange={(e) => setNewEmail(e.target.value)}
                     placeholder="user@domain.example"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddEmail())}
                   />
                   <Button 
                     type="button" 
                     onClick={handleAddEmail}
-                    className="bg-mafia-600 hover:bg-mafia-700"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -660,7 +660,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
               </CardContent>
             </Card>
 
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>Suggested Questions</CardTitle>
               </CardHeader>
@@ -670,13 +670,13 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={newQuestion}
                     onChange={(e) => setNewQuestion(e.target.value)}
                     placeholder="What is Mafia Coach?"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddQuestion())}
                   />
                   <Button 
                     type="button" 
                     onClick={handleAddQuestion}
-                    className="bg-mafia-600 hover:bg-mafia-700"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -699,7 +699,7 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
               </CardContent>
             </Card>
 
-            <Card className="border border-dark-500 bg-dark-300 text-white">
+            <Card className="border border-border bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>LLM Tools</CardTitle>
               </CardHeader>
@@ -709,13 +709,13 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
                     value={newTool}
                     onChange={(e) => setNewTool(e.target.value)}
                     placeholder="getTokenInfo"
-                    className="border-dark-500 bg-dark-400 text-white"
+                    className="border-border bg-background text-foreground"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTool())}
                   />
                   <Button 
                     type="button" 
                     onClick={handleAddTool}
-                    className="bg-mafia-600 hover:bg-mafia-700"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -746,14 +746,14 @@ export default function ReplicaForm({ onSubmit, initialData, onCancel, isLoading
           type="button"
           variant="outline"
           onClick={onCancel}
-          className="border-dark-500 bg-dark-400 text-white"
+          className="border-border bg-background text-foreground"
           disabled={isLoading}
         >
           Cancel
         </Button>
         <Button
           type="submit"
-          className="bg-mafia-600 hover:bg-mafia-700"
+          className="bg-primary hover:bg-primary/90"
           disabled={isLoading}
         >
           {isLoading ? (
