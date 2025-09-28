@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshCcw } from "lucide-react"
-import { fetchReplicas } from "@/app/lib/api/sensay-replicas-client"
-import type { SensayReplica } from "@/app/lib/api/sensay-replicas-client"
+import { fetchReplicas } from "@/lib/api/sensay-replicas-client"
+import type { SensayReplica } from "@/lib/api/sensay-replicas-client"
 import { useToast } from "@/hooks/use-toast"
 
 interface ReplicaSelectProps {

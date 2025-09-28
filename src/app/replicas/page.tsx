@@ -33,8 +33,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-import { SensayReplica, ReplicaCreateUpdateData } from "@/app/lib/api/sensay-replicas-client"
-import { fetchReplicas, fetchReplicaById, createReplica, updateReplica, deleteReplica } from "@/app/lib/api/sensay-replicas-client"
+import { SensayReplica, ReplicaCreateUpdateData } from "@/lib/api/sensay-replicas-client"
+import { fetchReplicas, fetchReplicaById, createReplica, updateReplica, deleteReplica } from "@/lib/api/sensay-replicas-client"
 import ReplicaDetail from "@/components/replica-detail"
 import ReplicaForm from "@/components/replica-form"
 import { format } from "date-fns"

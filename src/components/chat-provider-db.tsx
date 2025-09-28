@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useState, useContext, type ReactNode, useEffect } from "react"
-import { SensayApi } from "@/app/lib/api/sensay-api"
+import { SensayApi } from "@/lib/api/sensay-api"
 
 type Message = {
   id: string

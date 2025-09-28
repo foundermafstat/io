@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import type { SensayReplica } from "@/app/lib/api/sensay-replicas-client";
-import { fetchReplicas } from "@/app/lib/api/sensay-replicas-client";
+import type { SensayReplica } from "@/lib/api/sensay-replicas-client";
+import { fetchReplicas } from "@/lib/api/sensay-replicas-client";
 import { useToast } from "@/hooks/use-toast";
 
 const LOCAL_STORAGE_KEY = "selected_replica_uuid";

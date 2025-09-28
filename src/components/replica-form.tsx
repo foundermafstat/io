@@ -11,7 +11,7 @@ import { X, Plus, Save, Loader2, Wand2 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ReplicaCreateUpdateData, SensayReplica } from '@/app/lib/api/sensay-replicas-client';
+import { ReplicaCreateUpdateData, SensayReplica } from '@/lib/api/sensay-replicas-client';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/components/ui/use-toast';
 

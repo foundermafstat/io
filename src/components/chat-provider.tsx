@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useState, useContext, type ReactNode, useEffect } from "react"
-import { sendMessageToReplicaDirect } from "@/app/lib/api/sensay-direct"
+import { sendMessageToReplicaDirect } from "@/lib/api/sensay-direct"
 import { useReplica } from "./replica-provider"
 
 // Используем переменные окружения для клиентской части

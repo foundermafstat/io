@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateReplicaContent } from '@/app/lib/api/openai';
+import { generateReplicaContent } from '@/lib/api/openai';
 
 export async function POST(request: Request) {
   try {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { SensaySettingsService } from '@/app/lib/api/sensay-settings';
+import { SensaySettingsService } from '@/lib/api/sensay-settings';
 
 export async function GET() {
   try {

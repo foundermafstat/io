@@ -41,20 +41,27 @@ function HeaderInner() {
 
 	// Navigation items divided by categories
 
+	// Real Estate Application Menu
+	const realEstateItems = [
+		{ name: 'Browse Properties', path: '/real-estate/browse' },
+		{ name: 'Smart Search', path: '/real-estate/search' },
+		{ name: 'Compare Properties', path: '/real-estate/compare' },
+		{ name: 'Contact Agent', path: '/real-estate/contact' },
+		{ name: 'Book Viewing', path: '/real-estate/booking' },
+	];
+
+	// Admin Panel Menu
 	const adminItems = [
-		{ name: 'API Settings', path: '/admin/settings' },
+		{ name: 'Replicas Management', path: '/admin/replicas' },
+		{ name: 'AI Training', path: '/admin/training' },
+		{ name: 'Database Management', path: '/admin/database' },
+		{ name: 'Settings', path: '/admin/settings' },
+	];
+
+	// Legacy items (keeping for backward compatibility)
+	const legacyItems = [
 		{ name: 'API Keys', path: '/api-keys' },
-	];
-
-	const sensayTrainingItems = [
-		{ name: 'AI Training', path: '/training' },
-		{ name: 'Replicas', path: '/replicas' },
 		{ name: 'Chat History', path: '/chat-history' },
-	];
-
-	const gameItems: { name: string; path: string }[] = [];
-
-	const experimentalItems = [
 		{ name: 'Experimental API', path: '/experimental' },
 	];
 
@@ -75,18 +82,51 @@ function HeaderInner() {
 							Home
 						</Link>
 
-						{/* Dropdown menu for administration */}
+						{/* Dropdown menu for Real Estate Application */}
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">Administration</span>
+									<span className="text-sm font-medium">Real Estate</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
+								<DropdownMenuLabel>Property Search & Purchase</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								{realEstateItems.map((item) => (
+									<DropdownMenuItem key={item.path} asChild>
+										<Link
+											href={item.path}
+											className={
+												pathname === item.path
+													? 'bg-accent'
+													: ''
+											}
+										>
+											{item.name}
+										</Link>
+									</DropdownMenuItem>
+								))}
+							</DropdownMenuContent>
+						</DropdownMenu>
+
+						{/* Dropdown menu for Admin Panel */}
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									variant="ghost"
+									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
+								>
+									<span className="text-sm font-medium">Admin Panel</span>
+									<ChevronDown size={14} />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>System Management</DropdownMenuLabel>
+								<DropdownMenuSeparator />
 								{adminItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
 										<Link
@@ -104,48 +144,21 @@ function HeaderInner() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 
-						{/* Dropdown menu for AI training through Sensay API */}
+						{/* Dropdown menu for Legacy/Development Tools */}
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">AI Training</span>
+									<span className="text-sm font-medium">Development</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								{sensayTrainingItems.map((item) => (
-									<DropdownMenuItem key={item.path} asChild>
-										<Link
-											href={item.path}
-											className={
-												pathname === item.path
-													? 'bg-accent'
-													: ''
-											}
-										>
-											{item.name}
-										</Link>
-									</DropdownMenuItem>
-								))}
-							</DropdownMenuContent>
-						</DropdownMenu>
-
-						{/* Dropdown menu for experimental API */}
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									variant="ghost"
-									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
-								>
-									<span className="text-sm font-medium">Experimental</span>
-									<ChevronDown size={14} />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								{experimentalItems.map((item) => (
+								<DropdownMenuLabel>Development Tools</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								{legacyItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
 										<Link
 											href={item.path}

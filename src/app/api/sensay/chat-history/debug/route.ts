@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { SensayChatMessage, SensayChatHistory } from '@/app/lib/api/sensay-chat-history-sdk';
+import type { SensayChatMessage, SensayChatHistory } from '@/lib/api/sensay-chat-history-sdk';
 
 // Получаем настройки API из переменных окружения
 const SENSAY_API_KEY = process.env.SENSAY_API_KEY || '';

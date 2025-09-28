@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import type { SensayChatHistory, SensayChatMessage } from "@/app/lib/api/sensay-chat-history"
+import type { SensayChatHistory, SensayChatMessage } from "@/lib/api/sensay-chat-history"
 
 // Используем тип из нашего сервиса
 

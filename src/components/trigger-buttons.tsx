@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Navigation, Moon, Sun, Palette, MessageSquare } from 'lucide-react';
 import { useHeader } from './header-context';
 import { ChatTrigger } from '@/app/lib/utils/parseTrigger';
-import { SensayReplica } from '@/app/lib/api/sensay-replicas-client';
+import { SensayReplica } from '@/lib/api/sensay-replicas-client';
 import { useChat } from './chat-provider';
 
 // Расширенный тип триггера, включающий возможность вопросов
