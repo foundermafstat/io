@@ -223,7 +223,7 @@ export function PropertyCard({
             )}
           </div>
 
-          {property.features && property.features.length > 0 && (
+          {property.features && Array.isArray(property.features) && property.features.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {property.features.slice(0, 3).map((feature, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">

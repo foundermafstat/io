@@ -207,7 +207,7 @@ export default function CompareProperties() {
 									{properties.map((property) => (
 										<td key={property.id} className="p-4">
 											<div className="flex flex-wrap gap-1 justify-center">
-												{property.features.map((feature, index) => (
+												{property.features && Array.isArray(property.features) && property.features.map((feature, index) => (
 													<Badge key={index} variant="outline" className="text-xs">
 														{feature}
 													</Badge>

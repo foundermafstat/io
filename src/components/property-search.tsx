@@ -44,6 +44,7 @@ const PROPERTY_TYPE_OPTIONS = [
 ];
 
 const OPERATION_TYPE_OPTIONS = [
+  { value: 'any', label: 'Все типы' },
   { value: OperationType.RENT, label: 'Аренда' },
   { value: OperationType.SALE, label: 'Продажа' },
   { value: OperationType.BOTH, label: 'Аренда и продажа' },
@@ -184,8 +185,8 @@ export function PropertySearch({
             <div>
               <Label htmlFor="operationType">Тип операции</Label>
               <Select
-                value={filters.operationType || ''}
-                onValueChange={(value) => handleFilterChange('operationType', value || undefined)}
+                value={filters.operationType || 'any'}
+                onValueChange={(value) => handleFilterChange('operationType', value === 'any' ? undefined : value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Все типы" />
@@ -213,14 +214,14 @@ export function PropertySearch({
             <div>
               <Label htmlFor="bedrooms">Спальни</Label>
               <Select
-                value={filters.bedrooms?.toString() || ''}
-                onValueChange={(value) => handleFilterChange('bedrooms', value ? parseInt(value) : undefined)}
+                value={filters.bedrooms?.toString() || 'any'}
+                onValueChange={(value) => handleFilterChange('bedrooms', value === 'any' ? undefined : parseInt(value))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Любое" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Любое</SelectItem>
+                  <SelectItem value="any">Любое</SelectItem>
                   {[1, 2, 3, 4, 5, 6].map((num) => (
                     <SelectItem key={num} value={num.toString()}>
                       {num}+
@@ -233,14 +234,14 @@ export function PropertySearch({
             <div>
               <Label htmlFor="bathrooms">Ванные</Label>
               <Select
-                value={filters.bathrooms?.toString() || ''}
-                onValueChange={(value) => handleFilterChange('bathrooms', value ? parseFloat(value) : undefined)}
+                value={filters.bathrooms?.toString() || 'any'}
+                onValueChange={(value) => handleFilterChange('bathrooms', value === 'any' ? undefined : parseFloat(value))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Любое" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Любое</SelectItem>
+                  <SelectItem value="any">Любое</SelectItem>
                   {[1, 1.5, 2, 2.5, 3, 3.5, 4].map((num) => (
                     <SelectItem key={num} value={num.toString()}>
                       {num}+

@@ -123,7 +123,7 @@ export default async function CarPage({ params }: CarPageProps) {
             <div className="mb-6">
               <h2 className="text-lg font-semibold">Features</h2>
               <div className="mt-6 grid grid-cols-2 gap-4">
-                {car.features.map((feature) => (
+                {car.features && Array.isArray(car.features) && car.features.map((feature) => (
                   <div
                     key={feature}
                     className="flex flex-row items-center gap-4"

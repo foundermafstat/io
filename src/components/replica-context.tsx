@@ -41,13 +41,21 @@ export function ReplicaProvider({ children }: { children: React.ReactNode }) {
     }
   }, [selectedReplicaUuid]);
 
-  // Fetch replicas on component mount
+  // Fetch replicas on component mount (only on client side)
   useEffect(() => {
-    refreshReplicas();
+    // Only fetch on client side to avoid SSR issues
+    if (typeof window !== 'undefined') {
+      refreshReplicas();
+    }
   }, []);
 
   // Function to fetch replicas from API
   const refreshReplicas = async () => {
+    // Only fetch on client side
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
     try {
       setLoading(true);
       const replicasList = await fetchReplicas();

@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PropertyCard } from '@/components/property-card';
 import { PropertyAIMemoryAPI } from '@/lib/api/property-ai-memory';
-import { PropertyAPI } from '@/lib/api/property-api';
+import { PropertyClient } from '@/lib/api/property-client';
 import { 
   MapPin, 
   Bed, 
@@ -83,7 +83,7 @@ export default function PropertyPage() {
   const loadProperty = async () => {
     try {
       setLoading(true);
-      const propertyData = await PropertyAPI.getPropertyById(propertyId);
+      const propertyData = await PropertyClient.getPropertyById(propertyId);
       if (propertyData) {
         setProperty(propertyData);
       } else {
@@ -287,7 +287,7 @@ export default function PropertyPage() {
 
                 {/* Особенности и удобства */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {property.features && property.features.length > 0 && (
+                  {property.features && Array.isArray(property.features) && property.features.length > 0 && (
                     <div>
                       <h3 className="font-semibold mb-2">Особенности</h3>
                       <div className="flex flex-wrap gap-2">
@@ -300,7 +300,7 @@ export default function PropertyPage() {
                     </div>
                   )}
 
-                  {property.amenities && property.amenities.length > 0 && (
+                  {property.amenities && Array.isArray(property.amenities) && property.amenities.length > 0 && (
                     <div>
                       <h3 className="font-semibold mb-2">Удобства</h3>
                       <div className="flex flex-wrap gap-2">
@@ -440,7 +440,7 @@ export default function PropertyPage() {
                   <CardTitle>Отзывы</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {property.reviews && property.reviews.length > 0 ? (
+                  {property.reviews && Array.isArray(property.reviews) && property.reviews.length > 0 ? (
                     <div className="space-y-4">
                       {property.reviews.map((review) => (
                         <div key={review.id} className="border rounded-lg p-4">

@@ -134,12 +134,15 @@ export class PropertyAPI {
     // Построение условий поиска
     const where: any = {};
 
+    // Собираем все OR условия
+    const orConditions: any[] = [];
+
     if (filters.query) {
-      where.OR = [
-        { title: { contains: filters.query, mode: 'insensitive' } },
-        { description: { contains: filters.query, mode: 'insensitive' } },
-        { address: { contains: filters.query, mode: 'insensitive' } },
-      ];
+      orConditions.push(
+        { title: { contains: filters.query } },
+        { description: { contains: filters.query } },
+        { address: { contains: filters.query } }
+      );
     }
 
     if (filters.propertyTypes && filters.propertyTypes.length > 0) {
@@ -151,7 +154,7 @@ export class PropertyAPI {
     }
 
     if (filters.minPrice || filters.maxPrice) {
-      where.OR = [
+      orConditions.push(
         {
           rentPrice: {
             gte: filters.minPrice,
@@ -163,8 +166,13 @@ export class PropertyAPI {
             gte: filters.minPrice,
             lte: filters.maxPrice,
           },
-        },
-      ];
+        }
+      );
+    }
+
+    // Если есть OR условия, добавляем их в where
+    if (orConditions.length > 0) {
+      where.OR = orConditions;
     }
 
     if (filters.minArea || filters.maxArea) {
@@ -183,15 +191,15 @@ export class PropertyAPI {
     }
 
     if (filters.city) {
-      where.city = { contains: filters.city, mode: 'insensitive' };
+      where.city = { contains: filters.city };
     }
 
     if (filters.state) {
-      where.state = { contains: filters.state, mode: 'insensitive' };
+      where.state = { contains: filters.state };
     }
 
     if (filters.country) {
-      where.country = { contains: filters.country, mode: 'insensitive' };
+      where.country = { contains: filters.country };
     }
 
     if (filters.isFeatured !== undefined) {

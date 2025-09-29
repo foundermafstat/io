@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
     // Параметры поиска
     const filters: PropertySearchFilters = {
       query: searchParams.get('query') || undefined,
-      propertyTypes: searchParams.get('propertyTypes')?.split(',') as any,
-      operationType: searchParams.get('operationType') as any,
+      propertyTypes: searchParams.get('propertyTypes')?.split(',').filter(Boolean) as any,
+      operationType: searchParams.get('operationType') === 'any' ? undefined : (searchParams.get('operationType') as any),
       minPrice: searchParams.get('minPrice') ? parseFloat(searchParams.get('minPrice')!) : undefined,
       maxPrice: searchParams.get('maxPrice') ? parseFloat(searchParams.get('maxPrice')!) : undefined,
       minArea: searchParams.get('minArea') ? parseFloat(searchParams.get('minArea')!) : undefined,
@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
       city: searchParams.get('city') || undefined,
       state: searchParams.get('state') || undefined,
       country: searchParams.get('country') || undefined,
-      isFeatured: searchParams.get('isFeatured') === 'true',
-      isVerified: searchParams.get('isVerified') === 'true',
+      isFeatured: searchParams.get('isFeatured') === 'true' ? true : undefined,
+      isVerified: searchParams.get('isVerified') === 'true' ? true : undefined,
       latitude: searchParams.get('latitude') ? parseFloat(searchParams.get('latitude')!) : undefined,
       longitude: searchParams.get('longitude') ? parseFloat(searchParams.get('longitude')!) : undefined,
       radius: searchParams.get('radius') ? parseFloat(searchParams.get('radius')!) : undefined,
@@ -44,8 +44,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(result);
   } catch (error) {
     console.error('Error searching properties:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      filters: filters
+    });
     return NextResponse.json(
-      { error: 'Ошибка при поиске недвижимости' },
+      { 
+        error: 'Ошибка при поиске недвижимости',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

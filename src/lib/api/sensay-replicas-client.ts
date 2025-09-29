@@ -81,6 +81,11 @@ export interface ReplicaCreateUpdateData {
  * @returns Promise<SensayReplica[]> Array of replicas
  */
 export async function fetchReplicas(): Promise<SensayReplica[]> {
+  // Only fetch on client side
+  if (typeof window === 'undefined') {
+    return [];
+  }
+  
   try {
     console.log('Fetching replicas from server API route...');
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { PropertySearch } from '@/components/property-search';
 import { PropertyCard } from '@/components/property-card';
 import { Property, PropertySearchFilters, PropertySearchResult } from '@/types/property';
-import { PropertyAPI } from '@/lib/api/property-api';
+import { PropertyClient } from '@/lib/api/property-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,9 +35,9 @@ export default function RealEstatePage() {
     try {
       setLoading(true);
       const [featured, recent, statsData] = await Promise.all([
-        PropertyAPI.getFeaturedProperties(6),
-        PropertyAPI.getRecentProperties(6),
-        PropertyAPI.getPropertyStats(),
+        PropertyClient.getFeaturedProperties(6),
+        PropertyClient.getRecentProperties(6),
+        PropertyClient.getPropertyStats(),
       ]);
       
       setFeaturedProperties(featured);
@@ -53,7 +53,7 @@ export default function RealEstatePage() {
   const handleSearch = async (filters: PropertySearchFilters) => {
     try {
       setLoading(true);
-      const results = await PropertyAPI.searchProperties(filters, 1, 20);
+      const results = await PropertyClient.searchProperties(filters, 1, 20);
       setSearchResults(results);
       setCurrentPage(1);
     } catch (error) {
@@ -69,7 +69,7 @@ export default function RealEstatePage() {
     try {
       setLoading(true);
       const nextPage = currentPage + 1;
-      const results = await PropertyAPI.searchProperties(
+      const results = await PropertyClient.searchProperties(
         searchResults.filters,
         nextPage,
         20
@@ -90,7 +90,7 @@ export default function RealEstatePage() {
   const handleLocationSearch = async (latitude: number, longitude: number, radius: number) => {
     try {
       setLoading(true);
-      const results = await PropertyAPI.searchByLocation(latitude, longitude, radius, 1, 20);
+      const results = await PropertyClient.searchByLocation(latitude, longitude, radius, 1, 20);
       setSearchResults(results);
       setCurrentPage(1);
     } catch (error) {

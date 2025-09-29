@@ -152,7 +152,7 @@ export default function BrowseProperties() {
 							</div>
 
 							<div className="flex flex-wrap gap-1 mb-4">
-								{property.features.map((feature, index) => (
+								{property.features && Array.isArray(property.features) && property.features.map((feature, index) => (
 									<Badge key={index} variant="outline" className="text-xs">
 										{feature}
 									</Badge>
