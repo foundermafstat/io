@@ -151,6 +151,110 @@ export const zh = {
   },
   language: "Chinese",
   languagePrompt: "只用中文说话和回答。你一定要保持你的回答是中文的。如果用户说其他语言，你应该用中文回答。（Speak Chinese only）",
+  quiz: {
+    title: "用IO寻找房产",
+    intro: {
+      title: "欢迎来到IO房产测验",
+      subtitle: "让我们一起找到您的完美房产！我将通过几个问题来了解您的需求。",
+      discover: {
+        title: "我们将了解：",
+        items: [
+          "租赁或购买偏好",
+          "预算范围",
+          "房产类型偏好",
+          "理想位置",
+          "必备功能"
+        ]
+      },
+      aiPowered: {
+        title: "AI驱动指导：",
+        items: [
+          "语音或文字聊天",
+          "个性化推荐",
+          "实时房产匹配",
+          "专家建议"
+        ]
+      },
+      ready: "准备好找到您的梦想房产了吗？让我们开始旅程！"
+    },
+    steps: {
+      purpose: {
+        title: "租赁还是购买？",
+        subtitle: "您是在寻找租赁房产还是购买房产？这将帮助我调整推荐。",
+        rent: {
+          title: "租赁",
+          description: "灵活居住，前期成本较低，购买前先试用"
+        },
+        buy: {
+          title: "购买",
+          description: "长期投资，建立资产，创造您的永久家园"
+        }
+      },
+      budget: {
+        title: "预算范围",
+        subtitle: "您的租赁/购买预算是多少？",
+        custom: "自定义"
+      },
+      propertyType: {
+        title: "房产类型",
+        subtitle: "您对什么类型的房产感兴趣？选择所有适用的选项。",
+        selected: "已选择："
+      },
+      location: {
+        title: "位置",
+        subtitle: "您想住在哪里？选择您偏好的区域。"
+      },
+      features: {
+        title: "必备功能",
+        subtitle: "选择对您重要的功能。您可以选择多个选项。"
+      },
+      results: {
+        title: "完美！这是您的个人资料",
+        subtitle: "根据您的偏好，这是您寻找的：",
+        purpose: "目的",
+        budget: "预算",
+        propertyTypes: "房产类型",
+        location: "位置",
+        features: "必备功能",
+        notSpecified: "未指定",
+        noFeatures: "未选择功能",
+        searchMessage: "现在让我搜索符合您标准的房产...",
+        startOver: "重新开始",
+        searchProperties: "搜索房产"
+      }
+    },
+    navigation: {
+      prev: "上一步",
+      next: "下一步",
+      skip: "跳过",
+      step: "步骤"
+    },
+    properties: {
+      allAvailable: "所有可用房产",
+      byPurpose: "按目的分类的房产",
+      byBudget: "您预算内的房产",
+      byType: "按类型分类的房产",
+      byArea: "您所在区域的房产",
+      byFeatures: "具有您所需功能的房产",
+      perfectMatches: "您的完美匹配",
+      matching: "匹配的房产",
+      found: "找到",
+      property: "房产",
+      properties: "房产",
+      noProperties: "未找到房产",
+      completeSteps: "完成更多步骤以查看个性化推荐",
+      adjustPreferences: "尝试调整您的偏好以查看更多结果",
+      selected: "已选择",
+      featured: "精选",
+      verified: "已验证",
+      rent: "租赁",
+      sale: "销售",
+      perMonth: "每月",
+      views: "查看",
+      reviews: "评论",
+      view: "查看"
+    }
+  },
   homepage: {
     title: "用AI找到您的梦想房产",
     hero: {

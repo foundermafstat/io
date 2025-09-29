@@ -159,6 +159,46 @@ const toolDefinitions = {
                 required: false
             }
         }
+    },
+    navigateToQuiz: {
+        description: 'Navigate to the property quiz with pre-filled filters based on user preferences',
+        parameters: {
+            city: {
+                type: 'string',
+                description: 'City where the user wants to find property (e.g., "Barcelona", "Madrid", "Rome")',
+                required: false
+            },
+            operationType: {
+                type: 'string',
+                description: 'Type of operation: "rent" or "buy"',
+                required: false
+            },
+            propertyTypes: {
+                type: 'string',
+                description: 'Comma-separated list of property types (e.g., "apartment,house,villa")',
+                required: false
+            },
+            minBudget: {
+                type: 'number',
+                description: 'Minimum budget for the property',
+                required: false
+            },
+            maxBudget: {
+                type: 'number',
+                description: 'Maximum budget for the property',
+                required: false
+            },
+            features: {
+                type: 'string',
+                description: 'Comma-separated list of desired features (e.g., "parking,balcony,pool")',
+                required: false
+            },
+            step: {
+                type: 'number',
+                description: 'Quiz step to start from (0-6, default: 1 for purpose step)',
+                required: false
+            }
+        }
     }
 } as const;
 

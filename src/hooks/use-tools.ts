@@ -383,6 +383,99 @@ export const useToolsFunctions = () => {
     }
   }
 
+  const navigateToQuiz = ({
+    city,
+    operationType,
+    propertyTypes,
+    minBudget,
+    maxBudget,
+    features,
+    step = 1
+  }: {
+    city?: string;
+    operationType?: string;
+    propertyTypes?: string;
+    minBudget?: number;
+    maxBudget?: number;
+    features?: string;
+    step?: number;
+  }) => {
+    try {
+      // Строим URL с параметрами для квиза
+      const params = new URLSearchParams();
+      
+      // Устанавливаем шаг квиза
+      params.set('step', step.toString());
+      
+      // Добавляем фильтры если они предоставлены
+      if (city) {
+        params.set('city', city);
+        params.set('location', city);
+      }
+      
+      if (operationType) {
+        params.set('purpose', operationType);
+        params.set('operationType', operationType === 'buy' ? 'sale' : operationType);
+      }
+      
+      if (propertyTypes) {
+        const types = propertyTypes.split(',').map(t => t.trim());
+        params.set('propertyTypes', types.join(','));
+      }
+      
+      if (minBudget !== undefined && maxBudget !== undefined) {
+        params.set('minBudget', minBudget.toString());
+        params.set('maxBudget', maxBudget.toString());
+      }
+      
+      if (features) {
+        const featureList = features.split(',').map(f => f.trim());
+        params.set('features', featureList.join(','));
+      }
+
+      // Строим URL для квиза
+      const quizUrl = `/quiz?${params.toString()}`;
+
+      // Сохраняем состояние голосовой сессии
+      localStorage.setItem('voice-chat-navigation', JSON.stringify({
+        path: quizUrl,
+        timestamp: Date.now(),
+        wasActive: true
+      }));
+
+      localStorage.setItem('voice-chat-session-state', JSON.stringify({
+        isActive: true,
+        timestamp: Date.now(),
+        targetPath: quizUrl,
+        shouldRestore: true
+      }));
+
+      // Переходим к квизу
+      window.location.href = quizUrl;
+
+      // Формируем сообщение для пользователя
+      let message = `Переход к квизу по поиску недвижимости`;
+      if (city) message += ` в ${city}`;
+      if (operationType) message += ` для ${operationType === 'buy' ? 'покупки' : 'аренды'}`;
+      if (propertyTypes) message += ` типа ${propertyTypes}`;
+
+      toast.success("Переход к квизу", {
+        description: message,
+      });
+
+      return {
+        success: true,
+        quizUrl,
+        message: `Navigating to property quiz${city ? ` for ${city}` : ''}${operationType ? ` for ${operationType}` : ''}. The quiz will be pre-filled with your preferences and show matching properties.`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error navigating to quiz: ${error}`
+      };
+    }
+  }
+
   return {
     timeFunction,
     backgroundFunction,
@@ -392,6 +485,7 @@ export const useToolsFunctions = () => {
     scrapeWebsite,
     navigateToPage,
     findProperty,
-    getPropertyDetails
+    getPropertyDetails,
+    navigateToQuiz
   }
 }

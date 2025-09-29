@@ -152,6 +152,110 @@ export const en = {
     },
     language: "English",
     languagePrompt: "Speak and respond only in English. It is crucial that you maintain your responses in English. If the user speaks in other languages, you should still respond in English.",
+    quiz: {
+        title: "Find estate with IO",
+        intro: {
+            title: "Welcome to IO Property Quiz",
+            subtitle: "Let's find your perfect property together! I'll guide you through a few questions to understand your needs.",
+            discover: {
+                title: "What we'll discover:",
+                items: [
+                    "Rent or Buy preference",
+                    "Budget range", 
+                    "Property type preferences",
+                    "Ideal location",
+                    "Must-have features"
+                ]
+            },
+            aiPowered: {
+                title: "AI-Powered Guidance:",
+                items: [
+                    "Voice or text chat",
+                    "Personalized recommendations", 
+                    "Real-time property matching",
+                    "Expert insights"
+                ]
+            },
+            ready: "Ready to find your dream property? Let's start the journey!"
+        },
+        steps: {
+            purpose: {
+                title: "Rent or Buy?",
+                subtitle: "Are you looking to rent a property or buy one? This will help me tailor the recommendations.",
+                rent: {
+                    title: "Rent",
+                    description: "Flexible living, lower upfront costs, try before you buy"
+                },
+                buy: {
+                    title: "Buy", 
+                    description: "Long-term investment, build equity, create your forever home"
+                }
+            },
+            budget: {
+                title: "Budget Range",
+                subtitle: "What's your budget for rent/purchase?",
+                custom: "Custom"
+            },
+            propertyType: {
+                title: "Property Type",
+                subtitle: "What type of property are you interested in? Select all that apply.",
+                selected: "Selected:"
+            },
+            location: {
+                title: "Location",
+                subtitle: "Where would you like to live? Choose your preferred area."
+            },
+            features: {
+                title: "Must-Have Features",
+                subtitle: "Select features that are important to you. You can choose multiple options."
+            },
+            results: {
+                title: "Perfect! Here's Your Profile",
+                subtitle: "Based on your preferences, here's what you're looking for:",
+                purpose: "Purpose",
+                budget: "Budget",
+                propertyTypes: "Property Types",
+                location: "Location",
+                features: "Must-Have Features",
+                notSpecified: "Not specified",
+                noFeatures: "No features selected",
+                searchMessage: "Now let me search for properties that match your criteria...",
+                startOver: "Start Over",
+                searchProperties: "Search Properties"
+            }
+        },
+        navigation: {
+            prev: "Prev",
+            next: "Next",
+            skip: "Skip",
+            step: "Step"
+        },
+        properties: {
+            allAvailable: "All Available Properties",
+            byPurpose: "Properties by Purpose", 
+            byBudget: "Properties in Your Budget",
+            byType: "Properties by Type",
+            byArea: "Properties in Your Area",
+            byFeatures: "Properties with Your Features",
+            perfectMatches: "Your Perfect Matches",
+            matching: "Matching Properties",
+            found: "found",
+            property: "property",
+            properties: "properties",
+            noProperties: "No properties found",
+            completeSteps: "Complete more steps to see personalized recommendations",
+            adjustPreferences: "Try adjusting your preferences to see more results",
+            selected: "Selected",
+            featured: "Featured",
+            verified: "Verified",
+            rent: "Rent",
+            sale: "Sale",
+            perMonth: "per month",
+            views: "views",
+            reviews: "reviews",
+            view: "View"
+        }
+    },
     homepage: {
         title: "Find Your Dream Property with AI",
         hero: {

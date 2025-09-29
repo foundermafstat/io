@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { QuizProvider, useQuiz } from '@/lib/quiz-context';
+import { QuizUrlProvider, useQuizUrl } from '@/lib/quiz-url-context';
 import { QuizProgressBadges } from '@/components/quiz-progress-badges';
 import { QuizPropertyGrid } from '@/components/quiz-property-grid';
 import VoiceChatInterface from '@/components/voice-chat-interface';
@@ -10,43 +10,46 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, ArrowRight, Home, RotateCcw } from 'lucide-react';
 import { Property } from '@/types/property';
+import { useDynamicFilters } from '@/hooks/use-dynamic-filters';
+import { useTranslations } from '@/components/translations-context';
+import { TranslationsProvider } from '@/components/translations-context';
+
 
 // Step content components (defined outside QuizContent for proper exports)
 function IntroStep() {
+	const { t, getTranslation } = useTranslations();
+	
 	return (
 		<div className="w-full max-w-3xl mx-auto">
 			<Card className="w-full">
 				<CardHeader className="text-center pb-4">
-					<CardTitle className="text-xl">🏠 Welcome to IO Property Quiz</CardTitle>
+					<CardTitle className="text-xl">{t('quiz.intro.title')}</CardTitle>
 					<CardDescription>
-						Let's find your perfect property together! I'll guide you through a few questions to understand your needs.
+						{t('quiz.intro.subtitle')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<Card className="p-3 border-2 border-dashed">
-							<h3 className="font-semibold mb-2 text-sm">🎯 What we'll discover:</h3>
+							<h3 className="font-semibold mb-2 text-sm">{t('quiz.intro.discover.title')}</h3>
 							<ul className="text-xs space-y-1">
-								<li>• Rent or Buy preference</li>
-								<li>• Budget range</li>
-								<li>• Property type preferences</li>
-								<li>• Ideal location</li>
-								<li>• Must-have features</li>
+								{getTranslation('quiz.intro.discover.items').map((item: string, index: number) => (
+									<li key={index}>• {item}</li>
+								))}
 							</ul>
 						</Card>
 						<Card className="p-3 border-2 border-dashed">
-							<h3 className="font-semibold mb-2 text-sm">🤖 AI-Powered Guidance:</h3>
+							<h3 className="font-semibold mb-2 text-sm">{t('quiz.intro.aiPowered.title')}</h3>
 							<ul className="text-xs space-y-1">
-								<li>• Voice or text chat</li>
-								<li>• Personalized recommendations</li>
-								<li>• Real-time property matching</li>
-								<li>• Expert insights</li>
+								{(getTranslation('quiz.intro.aiPowered.items') as string[]).map((item: string, index: number) => (
+									<li key={index}>• {item}</li>
+								))}
 							</ul>
 						</Card>
 					</div>
 					<div className="text-center">
 						<p className="text-muted-foreground text-sm">
-							Ready to find your dream property? Let's start the journey!
+							{t('quiz.intro.ready')}
 						</p>
 					</div>
 				</CardContent>
@@ -56,13 +59,15 @@ function IntroStep() {
 }
 
 function PurposeStep({ onChoice }: { onChoice: (purpose: 'rent' | 'buy') => void }) {
+	const { t } = useTranslations();
+	
 	return (
 		<div className="w-full max-w-2xl mx-auto">
 			<Card className="w-full">
 				<CardHeader className="text-center pb-4">
-					<CardTitle className="text-xl">🏡 Rent or Buy?</CardTitle>
+					<CardTitle className="text-xl">{t('quiz.steps.purpose.title')}</CardTitle>
 					<CardDescription>
-						Are you looking to rent a property or buy one? This will help me tailor the recommendations.
+						{t('quiz.steps.purpose.subtitle')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -72,10 +77,9 @@ function PurposeStep({ onChoice }: { onChoice: (purpose: 'rent' | 'buy') => void
 							onClick={() => onChoice('rent')}
 						>
 							<div className="text-center space-y-2">
-								<div className="text-3xl">🏠</div>
-								<h3 className="text-lg font-semibold">Rent</h3>
+								<h3 className="text-lg font-semibold">{t('quiz.steps.purpose.rent.title')}</h3>
 								<p className="text-xs text-muted-foreground">
-									Flexible living, lower upfront costs, try before you buy
+									{t('quiz.steps.purpose.rent.description')}
 								</p>
 							</div>
 						</Card>
@@ -84,10 +88,9 @@ function PurposeStep({ onChoice }: { onChoice: (purpose: 'rent' | 'buy') => void
 							onClick={() => onChoice('buy')}
 						>
 							<div className="text-center space-y-2">
-								<div className="text-3xl">🏘️</div>
-								<h3 className="text-lg font-semibold">Buy</h3>
+								<h3 className="text-lg font-semibold">{t('quiz.steps.purpose.buy.title')}</h3>
 								<p className="text-xs text-muted-foreground">
-									Long-term investment, build equity, create your forever home
+									{t('quiz.steps.purpose.buy.description')}
 								</p>
 							</div>
 						</Card>
@@ -98,36 +101,43 @@ function PurposeStep({ onChoice }: { onChoice: (purpose: 'rent' | 'buy') => void
 	);
 }
 
-function BudgetStep({ onBudgetSelect }: { onBudgetSelect: (min: number, max: number) => void }) {
+function BudgetStep({ onBudgetSelect, budgetRanges }: { 
+	onBudgetSelect: (min: number, max: number) => void;
+	budgetRanges: Array<{ label: string; min: number; max: number; count: number }>;
+}) {
+	const { t } = useTranslations();
+	
 	return (
 		<div className="w-full max-w-3xl mx-auto">
 			<Card className="w-full">
 				<CardHeader className="text-center pb-4">
-					<CardTitle className="text-xl">💰 Budget Range</CardTitle>
+					<CardTitle className="text-xl">{t('quiz.steps.budget.title')}</CardTitle>
 					<CardDescription>
-						What's your monthly budget for rent/mortgage?
+						{t('quiz.steps.budget.subtitle')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-						{[
-							{ label: '€500-€1,000', min: 500, max: 1000 },
-							{ label: '€1,000-€2,000', min: 1000, max: 2000 },
-							{ label: '€2,000-€3,500', min: 2000, max: 3500 },
-							{ label: '€3,500-€5,000', min: 3500, max: 5000 },
-							{ label: '€5,000+', min: 5000, max: 100000 },
-							{ label: 'Custom', min: 0, max: 0 },
-						].map((budget) => (
+						{budgetRanges.map((budget) => (
 							<Button
 								key={budget.label}
 								variant="outline"
 								size="sm"
-								className="p-3 h-auto flex-col"
+								className="p-3 h-auto flex-col gap-1"
 								onClick={() => onBudgetSelect(budget.min, budget.max)}
 							>
 								<span className="font-semibold text-xs">{budget.label}</span>
+								<span className="text-xs text-muted-foreground">({budget.count})</span>
 							</Button>
 						))}
+						<Button
+							variant="outline"
+							size="sm"
+							className="p-3 h-auto flex-col gap-1"
+							onClick={() => onBudgetSelect(0, 0)}
+						>
+							<span className="font-semibold text-xs">{t('quiz.steps.budget.custom')}</span>
+						</Button>
 					</div>
 				</CardContent>
 			</Card>
@@ -135,25 +145,19 @@ function BudgetStep({ onBudgetSelect }: { onBudgetSelect: (min: number, max: num
 	);
 }
 
-function PropertyTypeStep({ onTypeSelect, selectedTypes }: {
+function PropertyTypeStep({ onTypeSelect, selectedTypes, propertyTypes }: {
 	onTypeSelect: (typeId: string) => void;
 	selectedTypes: string[];
+	propertyTypes: Array<{ id: string; label: string; icon: string; count: number }>;
 }) {
-	const propertyTypes = [
-		{ id: 'apartment', label: 'Apartment', icon: '🏢' },
-		{ id: 'house', label: 'House', icon: '🏠' },
-		{ id: 'studio', label: 'Studio', icon: '🏠' },
-		{ id: 'loft', label: 'Loft', icon: '🏭' },
-		{ id: 'townhouse', label: 'Townhouse', icon: '🏘️' },
-		{ id: 'condo', label: 'Condo', icon: '🏙️' },
-	];
-
+	const { t } = useTranslations();
+	
 	return (
-		<Card className="w-full">
+		<Card className="w-full max-w-3xl mx-auto">
 			<CardHeader className="text-center">
-				<CardTitle className="text-2xl">🏗️ Property Type</CardTitle>
+				<CardTitle className="text-2xl">{t('quiz.steps.propertyType.title')}</CardTitle>
 				<CardDescription>
-					What type of property are you interested in? Select all that apply.
+					{t('quiz.steps.propertyType.subtitle')}
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
@@ -169,6 +173,7 @@ function PropertyTypeStep({ onTypeSelect, selectedTypes }: {
 							>
 								<span className="text-2xl">{type.icon}</span>
 								<span className="font-medium">{type.label}</span>
+								<span className="text-xs text-muted-foreground">({type.count})</span>
 							</Button>
 						);
 					})}
@@ -176,7 +181,7 @@ function PropertyTypeStep({ onTypeSelect, selectedTypes }: {
 				{selectedTypes.length > 0 && (
 					<div className="mt-4 text-center">
 						<p className="text-sm text-muted-foreground">
-							Selected: {selectedTypes.join(', ')}
+							{t('quiz.steps.propertyType.selected')} {selectedTypes.join(', ')}
 						</p>
 					</div>
 				)}
@@ -185,32 +190,33 @@ function PropertyTypeStep({ onTypeSelect, selectedTypes }: {
 	);
 }
 
-function LocationStep({ onLocationSelect }: { onLocationSelect: (location: string) => void }) {
-	const locations = [
-		'City Center', 'Suburbs', 'Beach Area', 'Mountains',
-		'University Area', 'Business District', 'Historic Center', 'Green Areas'
-	];
-
+function LocationStep({ onLocationSelect, locations }: { 
+	onLocationSelect: (location: string) => void;
+	locations: Array<{ value: string; label: string; count: number }>;
+}) {
+	const { t } = useTranslations();
+	
 	return (
 		<div className="w-full max-w-3xl mx-auto">
 			<Card className="w-full">
 				<CardHeader className="text-center pb-4">
-					<CardTitle className="text-xl">📍 Location</CardTitle>
+					<CardTitle className="text-xl">{t('quiz.steps.location.title')}</CardTitle>
 					<CardDescription>
-						Where would you like to live? Choose your preferred area type.
+						{t('quiz.steps.location.subtitle')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-2">
 						{locations.map((location) => (
 							<Button
-								key={location}
+								key={location.value}
 								variant="outline"
 								size="sm"
-								className="p-2 h-auto text-xs"
-								onClick={() => onLocationSelect(location)}
+								className="p-2 h-auto text-xs flex flex-col gap-1"
+								onClick={() => onLocationSelect(location.value)}
 							>
-								{location}
+								<span>{location.label}</span>
+								<span className="text-muted-foreground">({location.count})</span>
 							</Button>
 						))}
 					</div>
@@ -220,28 +226,20 @@ function LocationStep({ onLocationSelect }: { onLocationSelect: (location: strin
 	);
 }
 
-function FeaturesStep({ onFeatureSelect, selectedFeatures }: {
+function FeaturesStep({ onFeatureSelect, selectedFeatures, features }: {
 	onFeatureSelect: (featureId: string) => void;
 	selectedFeatures: string[];
+	features: Array<{ id: string; label: string; icon: string; count: number }>;
 }) {
-	const features = [
-		{ id: 'balcony', label: 'Balcony', icon: '🌅' },
-		{ id: 'parking', label: 'Parking', icon: '🅿️' },
-		{ id: 'garden', label: 'Garden', icon: '🌳' },
-		{ id: 'gym', label: 'Gym', icon: '💪' },
-		{ id: 'pool', label: 'Swimming Pool', icon: '🏊' },
-		{ id: 'security', label: '24/7 Security', icon: '🔒' },
-		{ id: 'pet_friendly', label: 'Pet Friendly', icon: '🐕' },
-		{ id: 'elevator', label: 'Elevator', icon: '⚡' },
-	];
-
+	const { t } = useTranslations();
+	
 	return (
 		<div className="w-full max-w-3xl mx-auto">
 			<Card className="w-full">
 				<CardHeader className="text-center pb-4">
-					<CardTitle className="text-xl">✨ Must-Have Features</CardTitle>
+					<CardTitle className="text-xl">{t('quiz.steps.features.title')}</CardTitle>
 					<CardDescription>
-						Select features that are important to you. You can choose multiple options.
+						{t('quiz.steps.features.subtitle')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -258,6 +256,7 @@ function FeaturesStep({ onFeatureSelect, selectedFeatures }: {
 								>
 									<span className="text-lg">{feature.icon}</span>
 									<span className="text-xs">{feature.label}</span>
+									<span className="text-xs text-muted-foreground">({feature.count})</span>
 								</Button>
 							);
 						})}
@@ -285,71 +284,73 @@ function ResultsStep({ preferences, purpose, onReset }: {
 	purpose: string;
 	onReset: () => void;
 }) {
+	const { t } = useTranslations();
+	
 	return (
 		<div className="w-full max-w-3xl mx-auto">
 			<Card className="w-full">
 				<CardHeader className="text-center pb-4">
-					<CardTitle className="text-xl">🎉 Perfect! Here's Your Profile</CardTitle>
+					<CardTitle className="text-xl">{t('quiz.steps.results.title')}</CardTitle>
 					<CardDescription>
-						Based on your preferences, here's what you're looking for:
+						{t('quiz.steps.results.subtitle')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<div className="space-y-1">
-							<h3 className="font-semibold text-sm">Purpose</h3>
+							<h3 className="font-semibold text-sm">{t('quiz.steps.results.purpose')}</h3>
 							<Badge variant="outline" className="text-sm p-1">
-								{purpose === 'renting' ? '🏠' : '🏘️'} {purpose.charAt(0).toUpperCase() + purpose.slice(1)}
+								{purpose.charAt(0).toUpperCase() + purpose.slice(1)}
 							</Badge>
 						</div>
 						<div className="space-y-1">
-							<h3 className="font-semibold text-sm">Budget</h3>
+							<h3 className="font-semibold text-sm">{t('quiz.steps.results.budget')}</h3>
 							<Badge variant="outline" className="text-sm p-1">
-								💰 {preferences.budget ? `€${preferences.budget.min}-€${preferences.budget.max}` : 'Not specified'}
+								{preferences.budget ? `€${preferences.budget.min}-€${preferences.budget.max}` : t('quiz.steps.results.notSpecified')}
 							</Badge>
 						</div>
 						<div className="space-y-1">
-							<h3 className="font-semibold text-sm">Property Types</h3>
+							<h3 className="font-semibold text-sm">{t('quiz.steps.results.propertyTypes')}</h3>
 							<div className="flex flex-wrap gap-1">
 								{preferences.propertyType?.map((type: string) => (
 									<Badge key={type} variant="secondary" className="text-xs">
 										{type}
 									</Badge>
-								)) || <Badge variant="outline" className="text-xs">Not specified</Badge>}
+								)) || <Badge variant="outline" className="text-xs">{t('quiz.steps.results.notSpecified')}</Badge>}
 							</div>
 						</div>
 						<div className="space-y-1">
-							<h3 className="font-semibold text-sm">Location</h3>
+							<h3 className="font-semibold text-sm">{t('quiz.steps.results.location')}</h3>
 							<Badge variant="outline" className="text-sm p-1">
-								📍 {preferences.location || 'Not specified'}
+								{preferences.location || t('quiz.steps.results.notSpecified')}
 							</Badge>
 						</div>
 					</div>
 
 					<div className="space-y-1">
-						<h3 className="font-semibold text-sm">Must-Have Features</h3>
+						<h3 className="font-semibold text-sm">{t('quiz.steps.results.features')}</h3>
 						<div className="flex flex-wrap gap-1">
 							{preferences.features?.map((feature: string) => (
 								<Badge key={feature} variant="secondary" className="text-xs">
 									{feature.replace('_', ' ')}
 								</Badge>
-							)) || <Badge variant="outline" className="text-xs">No features selected</Badge>}
+							)) || <Badge variant="outline" className="text-xs">{t('quiz.steps.results.noFeatures')}</Badge>}
 						</div>
 					</div>
 
 					<div className="bg-muted p-3 rounded-lg">
 						<p className="text-center text-muted-foreground text-sm">
-							🤖 Now let me search for properties that match your criteria...
+							{t('quiz.steps.results.searchMessage')}
 						</p>
 					</div>
 
 					<div className="flex gap-2 justify-center">
 						<Button onClick={onReset} variant="outline" size="sm">
 							<RotateCcw className="w-4 h-4 mr-1" />
-							Start Over
+							{t('quiz.steps.results.startOver')}
 						</Button>
 						<Button size="sm">
-							🔍 Search Properties
+							{t('quiz.steps.results.searchProperties')}
 						</Button>
 					</div>
 				</CardContent>
@@ -364,29 +365,33 @@ function IntroStepWrapper() {
 }
 
 function PurposeStepWrapper() {
-	const { updatePreferences, nextStep } = useQuiz();
+	const { state, updatePreferences, nextStep, updateFilters } = useQuizUrl();
 
 	const handleChoice = (purpose: 'rent' | 'buy') => {
-		updatePreferences({ purpose });
-		nextStep();
+		// Обновляем предпочтения пользователя и переходим к следующему шагу одновременно
+		const nextStepIndex = state.currentStepIndex + 1;
+		updatePreferences({ purpose }, nextStepIndex);
+		// Обновляем фильтры для отображения объектов
+		updateFilters({ operationType: purpose === 'buy' ? 'sale' : purpose });
 	};
 
 	return <PurposeStep onChoice={handleChoice} />;
 }
 
-function BudgetStepWrapper() {
-	const { updatePreferences, nextStep } = useQuiz();
+function BudgetStepWrapper({ budgetRanges }: { budgetRanges: Array<{ label: string; min: number; max: number; count: number }> }) {
+	const { state, updatePreferences, nextStep } = useQuizUrl();
 
 	const handleBudgetSelect = (min: number, max: number) => {
-		updatePreferences({ budget: { min, max } });
-		nextStep();
+		// Обновляем предпочтения пользователя и переходим к следующему шагу одновременно
+		const nextStepIndex = state.currentStepIndex + 1;
+		updatePreferences({ budget: { min, max } }, nextStepIndex);
 	};
 
-	return <BudgetStep onBudgetSelect={handleBudgetSelect} />;
+	return <BudgetStep onBudgetSelect={handleBudgetSelect} budgetRanges={budgetRanges} />;
 }
 
-function PropertyTypeStepWrapper() {
-	const { state, updatePreferences, nextStep } = useQuiz();
+function PropertyTypeStepWrapper({ propertyTypes }: { propertyTypes: Array<{ id: string; label: string; icon: string; count: number }> }) {
+	const { state, updatePreferences, nextStep, updateFilters } = useQuizUrl();
 
 	const handleTypeSelect = (typeId: string) => {
 		const currentTypes = state.userPreferences.propertyType || [];
@@ -394,8 +399,12 @@ function PropertyTypeStepWrapper() {
 			? currentTypes.filter(t => t !== typeId)
 			: [...currentTypes, typeId];
 
+		// Обновляем предпочтения пользователя (это автоматически обновит URL)
 		updatePreferences({ propertyType: newTypes });
+		// Обновляем фильтры для отображения объектов
+		updateFilters({ propertyTypes: newTypes });
 
+		// Переходим к следующему шагу только если выбраны типы
 		if (newTypes.length > 0) {
 			setTimeout(() => nextStep(), 300);
 		}
@@ -403,22 +412,25 @@ function PropertyTypeStepWrapper() {
 
 	const selectedTypes = state.userPreferences.propertyType || [];
 
-	return <PropertyTypeStep onTypeSelect={handleTypeSelect} selectedTypes={selectedTypes} />;
+	return <PropertyTypeStep onTypeSelect={handleTypeSelect} selectedTypes={selectedTypes} propertyTypes={propertyTypes} />;
 }
 
-function LocationStepWrapper() {
-	const { updatePreferences, nextStep } = useQuiz();
+function LocationStepWrapper({ locations }: { locations: Array<{ value: string; label: string; count: number }> }) {
+	const { state, updatePreferences, nextStep, updateFilters } = useQuizUrl();
 
 	const handleLocationSelect = (location: string) => {
-		updatePreferences({ location });
-		nextStep();
+		// Обновляем предпочтения пользователя и переходим к следующему шагу одновременно
+		const nextStepIndex = state.currentStepIndex + 1;
+		updatePreferences({ location }, nextStepIndex);
+		// Обновляем фильтры для отображения объектов
+		updateFilters({ city: location });
 	};
 
-	return <LocationStep onLocationSelect={handleLocationSelect} />;
+	return <LocationStep onLocationSelect={handleLocationSelect} locations={locations} />;
 }
 
-function FeaturesStepWrapper() {
-	const { state, updatePreferences } = useQuiz();
+function FeaturesStepWrapper({ features }: { features: Array<{ id: string; label: string; icon: string; count: number }> }) {
+	const { state, updatePreferences, nextStep } = useQuizUrl();
 
 	const handleFeatureSelect = (featureId: string) => {
 		const currentFeatures = state.userPreferences.features || [];
@@ -426,16 +438,20 @@ function FeaturesStepWrapper() {
 			? currentFeatures.filter(f => f !== featureId)
 			: [...currentFeatures, featureId];
 
+		// Обновляем предпочтения пользователя (это автоматически обновит URL)
 		updatePreferences({ features: newFeatures });
+		
+		// Переходим к следующему шагу после выбора особенностей
+		setTimeout(() => nextStep(), 300);
 	};
 
 	const selectedFeatures = state.userPreferences.features || [];
 
-	return <FeaturesStep onFeatureSelect={handleFeatureSelect} selectedFeatures={selectedFeatures} />;
+	return <FeaturesStep onFeatureSelect={handleFeatureSelect} selectedFeatures={selectedFeatures} features={features} />;
 }
 
 function ResultsStepWrapper() {
-	const { state, resetQuiz } = useQuiz();
+	const { state, resetQuiz } = useQuizUrl();
 
 	const preferences = state.userPreferences;
 	const purpose = preferences.purpose === 'rent' ? 'renting' : 'buying';
@@ -445,33 +461,115 @@ function ResultsStepWrapper() {
 
 // Main quiz content component
 function QuizContent() {
-	const { state, nextStep, prevStep } = useQuiz();
+	const { state, nextStep, prevStep, setStep, completeStep, updatePreferences, selectProperty, resetQuiz, updateFilters } = useQuizUrl();
+	const { t } = useTranslations();
 	const [properties, setProperties] = React.useState<Property[]>([]);
 	const [loading, setLoading] = React.useState(false);
 
 	const currentStepIndex = state.currentStepIndex;
+	
+	// Получаем динамические фильтры на основе текущих объектов
+	const { dynamicFilters } = useDynamicFilters(properties);
 
-	// Функция для загрузки недвижимости на основе текущих предпочтений
+	// Функция для загрузки недвижимости - по умолчанию ВСЕ объекты
 	const loadProperties = React.useCallback(async () => {
 		setLoading(true);
 		try {
-			const response = await fetch('/api/properties/quiz-search', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					preferences: state.userPreferences,
-					currentStep: currentStepIndex,
-				}),
-			});
+			// Создаем фильтры - по умолчанию только статус AVAILABLE
+			const filters: any = {
+				status: 'AVAILABLE'
+			};
 
-			const data = await response.json();
+			// Добавляем фильтры из URL только если они есть
+			if (state.filters.city) {
+				filters.city = state.filters.city;
+			}
 			
-			if (data.success) {
-				setProperties(data.data.properties || []);
+			if (state.filters.operationType && state.filters.operationType !== 'both') {
+				filters.operationType = state.filters.operationType.toUpperCase();
+			}
+			
+			if (state.filters.propertyTypes.length > 0) {
+				filters.propertyTypes = state.filters.propertyTypes;
+			}
+
+			// Добавляем фильтры из предпочтений пользователя только если они есть
+			if (state.userPreferences.purpose) {
+				filters.operationType = state.userPreferences.purpose.toUpperCase();
+			}
+			
+			if (state.userPreferences.location) {
+				filters.city = state.userPreferences.location;
+			}
+			
+			if (state.userPreferences.propertyType.length > 0) {
+				filters.propertyTypes = state.userPreferences.propertyType;
+			}
+
+			// Если есть бюджет, добавляем его
+			if (state.userPreferences.budget) {
+				if (state.userPreferences.purpose === 'rent') {
+					filters.minRentPrice = state.userPreferences.budget.min;
+					filters.maxRentPrice = state.userPreferences.budget.max;
+				} else {
+					filters.minSalePrice = state.userPreferences.budget.min;
+					filters.maxSalePrice = state.userPreferences.budget.max;
+				}
+			}
+
+			// Создаем URL с параметрами для GET запроса
+			const searchParams = new URLSearchParams();
+			
+			// Добавляем только определенные фильтры
+			if (filters.city) searchParams.set('city', filters.city);
+			if (filters.operationType) searchParams.set('operationType', filters.operationType);
+			if (filters.propertyTypes && filters.propertyTypes.length > 0) {
+				searchParams.set('propertyTypes', filters.propertyTypes.join(','));
+			}
+			if (filters.minRentPrice) searchParams.set('minPrice', filters.minRentPrice.toString());
+			if (filters.maxRentPrice) searchParams.set('maxPrice', filters.maxRentPrice.toString());
+			if (filters.minSalePrice) searchParams.set('minPrice', filters.minSalePrice.toString());
+			if (filters.maxSalePrice) searchParams.set('maxPrice', filters.maxSalePrice.toString());
+			
+			// Увеличиваем лимит для отображения большего количества объектов
+			searchParams.set('limit', '100');
+
+			const url = `/api/properties?${searchParams.toString()}`;
+			console.log('Fetching properties from:', url);
+			
+			const response = await fetch(url);
+
+			// Проверяем статус ответа
+			if (!response.ok) {
+				console.error('API response not OK:', response.status, response.statusText);
+				setProperties([]);
+				return;
+			}
+
+			// Проверяем, что ответ не пустой
+			const text = await response.text();
+			if (!text) {
+				console.warn('Empty response from API');
+				setProperties([]);
+				return;
+			}
+
+			let data;
+			try {
+				data = JSON.parse(text);
+				console.log('Parsed API response:', data);
+			} catch (parseError) {
+				console.error('Failed to parse JSON response:', parseError);
+				console.error('Response text:', text);
+				setProperties([]);
+				return;
+			}
+			
+			if (data.properties) {
+				console.log('Properties loaded:', data.properties.length);
+				setProperties(data.properties || []);
 			} else {
-				console.error('Failed to load properties:', data.error);
+				console.error('No properties in response:', data);
 				setProperties([]);
 			}
 		} catch (error) {
@@ -480,43 +578,47 @@ function QuizContent() {
 		} finally {
 			setLoading(false);
 		}
-	}, [state.userPreferences, currentStepIndex]);
+	}, [state.filters, state.userPreferences]);
 
-	// Загружаем недвижимость при изменении предпочтений или этапа
+	// Загружаем недвижимость при изменении фильтров или предпочтений
 	React.useEffect(() => {
-		// Загружаем только если есть хотя бы одно предпочтение
-		const hasPreferences = Object.values(state.userPreferences).some(value => 
-			value !== null && value !== undefined && 
-			(Array.isArray(value) ? value.length > 0 : true)
-		);
+		// Загружаем ВСЕГДА - по умолчанию все объекты, с фильтрацией если есть предпочтения
+		loadProperties();
+	}, [loadProperties]);
 
-		if (hasPreferences) {
-			loadProperties();
-		} else {
-			setProperties([]);
-		}
-	}, [loadProperties, state.userPreferences, currentStepIndex]);
+	// Загружаем все объекты при инициализации компонента
+	React.useEffect(() => {
+		loadProperties();
+	}, []); // Пустой массив зависимостей - выполняется только при монтировании
 
 	// Render the appropriate step component based on current step
 	const renderCurrentStep = () => {
-		switch (currentStepIndex) {
-			case 0:
-				return <IntroStepWrapper />;
-			case 1:
-				return <PurposeStepWrapper />;
-			case 2:
-				return <BudgetStepWrapper />;
-			case 3:
-				return <PropertyTypeStepWrapper />;
-			case 4:
-				return <LocationStepWrapper />;
-			case 5:
-				return <FeaturesStepWrapper />;
-			case 6:
-				return <ResultsStepWrapper />;
-			default:
-				return <IntroStepWrapper />;
-		}
+		const stepContent = (() => {
+			switch (currentStepIndex) {
+				case 0:
+					return <IntroStepWrapper />;
+				case 1:
+					return <PurposeStepWrapper />;
+				case 2:
+					return <BudgetStepWrapper budgetRanges={dynamicFilters.budgetRanges} />;
+				case 3:
+					return <PropertyTypeStepWrapper propertyTypes={dynamicFilters.propertyTypes} />;
+				case 4:
+					return <LocationStepWrapper locations={dynamicFilters.locations} />;
+				case 5:
+					return <FeaturesStepWrapper features={dynamicFilters.features} />;
+				case 6:
+					return <ResultsStepWrapper />;
+				default:
+					return <IntroStepWrapper />;
+			}
+		})();
+
+		return (
+			<div className="w-full">
+				{stepContent}
+			</div>
+		);
 	};
 
 	return (
@@ -529,20 +631,17 @@ function QuizContent() {
 							<Button variant="ghost" size="sm" onClick={() => window.history.back()}>
 								<ArrowLeft className="w-4 h-4" />
 							</Button>
-							<h1 className="text-lg font-bold">Property Quiz</h1>
+							<h1 className="text-lg font-bold">{t('quiz.title')}</h1>
 						</div>
-						<Button variant="ghost" size="sm" onClick={() => window.location.href = '/'}>
-							<Home className="w-4 h-4" />
-						</Button>
+						<QuizProgressBadges />
 					</div>
-					<QuizProgressBadges />
 				</div>
 			</div>
 
 			{/* Main content area - без вертикальной прокрутки */}
 			<div className="flex-1 flex flex-col overflow-hidden">
 				{/* Properties grid - фиксированная высота */}
-				<div className="w-full px-4 py-4 h-80 flex-shrink-0">
+				<div className="w-full px-6 py-4 h-80 flex-shrink-0">
 					<QuizPropertyGrid 
 						properties={properties}
 						loading={loading}
@@ -552,7 +651,7 @@ function QuizContent() {
 
 				{/* Quiz content - занимает оставшееся место без прокрутки */}
 				<div className="flex-1 w-full px-4 py-4 overflow-hidden">
-					<div className="h-full flex items-center justify-center">
+					<div className="h-full flex items-end justify-center pb-2">
 						{renderCurrentStep()}
 					</div>
 				</div>
@@ -560,7 +659,7 @@ function QuizContent() {
 
 			{/* Navigation - прижата к низу страницы */}
 			<div className="border-t bg-background/95 backdrop-blur flex-shrink-0">
-				<div className="w-full px-4 py-3">
+				<div className="w-full max-w-2xl mx-auto px-4 py-3">
 					<div className="flex items-center justify-between">
 						<Button
 							variant="outline"
@@ -569,7 +668,7 @@ function QuizContent() {
 							disabled={state.currentStepIndex === 0}
 						>
 							<ArrowLeft className="w-4 h-4 mr-1" />
-							Prev
+							{t('quiz.navigation.prev')}
 						</Button>
 
 						<div className="flex items-center gap-3">
@@ -585,14 +684,14 @@ function QuizContent() {
 									onClick={nextStep}
 									className="text-muted-foreground hover:text-foreground text-xs"
 								>
-									Skip
+									{t('quiz.navigation.skip')}
 								</Button>
 							)}
 						</div>
 
 						{state.currentStepIndex < 6 ? (
 							<Button size="sm" onClick={nextStep}>
-								Next
+								{t('quiz.navigation.next')}
 								<ArrowRight className="w-4 h-4 ml-1" />
 							</Button>
 						) : (
@@ -613,8 +712,10 @@ function QuizContent() {
 // Main page component with provider
 export default function QuizPage() {
 	return (
-		<QuizProvider>
-			<QuizContent />
-		</QuizProvider>
+		<QuizUrlProvider>
+			<TranslationsProvider>
+				<QuizContent />
+			</TranslationsProvider>
+		</QuizUrlProvider>
 	);
 }

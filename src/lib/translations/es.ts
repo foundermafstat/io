@@ -151,6 +151,110 @@ export const es = {
   },
   language: "Spanish",
   languagePrompt: "Habla y responde solo en español. Es crucial que mantengas tus respuestas en español. Si el usuario habla en otros idiomas, deberías responder en español. (Spanish only)",
+  quiz: {
+    title: "Encuentra inmuebles con IO",
+    intro: {
+      title: "Bienvenido al Quiz de Propiedades IO",
+      subtitle: "¡Encontremos tu propiedad perfecta juntos! Te guiaré a través de algunas preguntas para entender tus necesidades.",
+      discover: {
+        title: "Lo que descubriremos:",
+        items: [
+          "Preferencia de alquiler o compra",
+          "Rango de presupuesto",
+          "Preferencias de tipo de propiedad",
+          "Ubicación ideal",
+          "Características imprescindibles"
+        ]
+      },
+      aiPowered: {
+        title: "Guía impulsada por IA:",
+        items: [
+          "Chat de voz o texto",
+          "Recomendaciones personalizadas",
+          "Búsqueda de propiedades en tiempo real",
+          "Consejos de expertos"
+        ]
+      },
+      ready: "¿Listo para encontrar tu propiedad ideal? ¡Comencemos el viaje!"
+    },
+    steps: {
+      purpose: {
+        title: "¿Alquilar o Comprar?",
+        subtitle: "¿Estás buscando alquilar una propiedad o comprarla? Esto me ayudará a adaptar las recomendaciones.",
+        rent: {
+          title: "Alquilar",
+          description: "Vida flexible, costos iniciales más bajos, prueba antes de comprar"
+        },
+        buy: {
+          title: "Comprar",
+          description: "Inversión a largo plazo, construir patrimonio, crear tu hogar para siempre"
+        }
+      },
+      budget: {
+        title: "Rango de Presupuesto",
+        subtitle: "¿Cuál es tu presupuesto para alquiler/compra?",
+        custom: "Personalizado"
+      },
+      propertyType: {
+        title: "Tipo de Propiedad",
+        subtitle: "¿Qué tipo de propiedad te interesa? Selecciona todas las que apliquen.",
+        selected: "Seleccionado:"
+      },
+      location: {
+        title: "Ubicación",
+        subtitle: "¿Dónde te gustaría vivir? Elige tu área preferida."
+      },
+      features: {
+        title: "Características Imprescindibles",
+        subtitle: "Selecciona características que son importantes para ti. Puedes elegir múltiples opciones."
+      },
+      results: {
+        title: "¡Perfecto! Aquí está tu Perfil",
+        subtitle: "Basado en tus preferencias, esto es lo que buscas:",
+        purpose: "Propósito",
+        budget: "Presupuesto",
+        propertyTypes: "Tipos de Propiedad",
+        location: "Ubicación",
+        features: "Características Imprescindibles",
+        notSpecified: "No especificado",
+        noFeatures: "No se seleccionaron características",
+        searchMessage: "Ahora déjame buscar propiedades que coincidan con tus criterios...",
+        startOver: "Empezar de Nuevo",
+        searchProperties: "Buscar Propiedades"
+      }
+    },
+    navigation: {
+      prev: "Anterior",
+      next: "Siguiente",
+      skip: "Omitir",
+      step: "Paso"
+    },
+    properties: {
+      allAvailable: "Todas las Propiedades Disponibles",
+      byPurpose: "Propiedades por Propósito",
+      byBudget: "Propiedades en tu Presupuesto",
+      byType: "Propiedades por Tipo",
+      byArea: "Propiedades en tu Área",
+      byFeatures: "Propiedades con tus Características",
+      perfectMatches: "Tus Coincidencias Perfectas",
+      matching: "Propiedades Coincidentes",
+      found: "encontradas",
+      property: "propiedad",
+      properties: "propiedades",
+      noProperties: "No se encontraron propiedades",
+      completeSteps: "Completa más pasos para ver recomendaciones personalizadas",
+      adjustPreferences: "Intenta ajustar tus preferencias para ver más resultados",
+      selected: "Seleccionado",
+      featured: "Destacado",
+      verified: "Verificado",
+      rent: "Alquiler",
+      sale: "Venta",
+      perMonth: "por mes",
+      views: "vistas",
+      reviews: "reseñas",
+      view: "Ver"
+    }
+  },
   homepage: {
     title: "Encuentra tu Propiedad Ideal con IA",
     hero: {

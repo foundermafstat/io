@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshCcw } from "lucide-react"
-import { fetchReplicas } from "@/lib/api/sensay-replicas-client"
-import type { SensayReplica } from "@/lib/api/sensay-replicas-client"
+import { useReplicas, useActiveReplicas, type SensayReplica } from "@/lib/replicas-context"
 import { useToast } from "@/hooks/use-toast"
 
 interface ReplicaSelectProps {
@@ -17,37 +16,32 @@ interface ReplicaSelectProps {
 }
 
 export default function ReplicaSelect({ value, onChange, className }: ReplicaSelectProps) {
-  const [replicas, setReplicas] = useState<SensayReplica[]>([])
-  const [loading, setLoading] = useState(false)
+  const { state: replicasState, refetchReplicas } = useReplicas()
+  const replicas = useActiveReplicas()
   const { toast } = useToast()
 
-  // Функция для загрузки списка реплик
-  const fetchReplicasList = async () => {
+  const loading = replicasState.loading
+
+  // Функция для обновления списка реплик
+  const handleRefresh = async () => {
     try {
-      setLoading(true)
-      const replicasList = await fetchReplicas()
-      setReplicas(replicasList)
-      
-      if (replicasList.length > 0 && !value) {
-        // Автоматически выбрать первую реплику если нет выбранной
-        onChange(replicasList[0].uuid)
-      }
+      await refetchReplicas()
     } catch (error) {
-      console.error("Error fetching replicas:", error)
+      console.error("Error refreshing replicas:", error)
       toast({
         title: "Error",
-        description: "Failed to load replicas. Please check your API settings.",
+        description: "Failed to refresh replicas. Please try again.",
         variant: "destructive",
       })
-    } finally {
-      setLoading(false)
     }
   }
 
-  // Загружаем реплики при первом рендере
+  // Автоматически выбрать первую реплику если нет выбранной
   useEffect(() => {
-    fetchReplicasList()
-  }, [])
+    if (replicas.length > 0 && !value) {
+      onChange(replicas[0].uuid)
+    }
+  }, [replicas, value, onChange])
 
   return (
     <div className={className}>
@@ -79,7 +73,7 @@ export default function ReplicaSelect({ value, onChange, className }: ReplicaSel
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={fetchReplicasList}
+            onClick={handleRefresh}
             disabled={loading}
             className="w-full"
           >

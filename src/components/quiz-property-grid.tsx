@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MapPin, Bed, Bath, Square, Euro, Star, Eye, ChevronLeft, ChevronRight, Mic } from 'lucide-react';
 import Image from 'next/image';
 import { useQuiz } from '@/lib/quiz-context';
+import { useTranslations } from '@/components/translations-context';
 
 interface QuizPropertyGridProps {
   properties: Property[];
@@ -23,6 +24,7 @@ export function QuizPropertyGrid({
   currentStep, 
   className 
 }: QuizPropertyGridProps) {
+  const { t } = useTranslations();
   const [scrollPosition, setScrollPosition] = React.useState(0);
   const [maxScroll, setMaxScroll] = React.useState(0);
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -71,7 +73,7 @@ export function QuizPropertyGrid({
           
           {/* Scrollable carousel */}
           <div className="overflow-x-auto scrollbar-hide carousel-container">
-            <div className="flex gap-4 pb-2 property-grid property-grid-loading" style={{ width: 'max-content' }}>
+            <div className="flex gap-4 pb-8 property-grid property-grid-loading" style={{ width: 'max-content' }}>
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="flex-shrink-0 w-80">
                   <Card className="overflow-hidden animate-pulse">
@@ -100,11 +102,11 @@ export function QuizPropertyGrid({
       <div className={`text-center py-8 ${className} property-grid-empty animate-in fade-in-50 duration-300`}>
         <div className="text-muted-foreground">
           <MapPin className="w-12 h-12 mx-auto mb-4 opacity-50" />
-          <h3 className="text-lg font-semibold mb-2">No properties found</h3>
+          <h3 className="text-lg font-semibold mb-2">{t('quiz.properties.noProperties')}</h3>
           <p className="text-sm">
             {currentStep <= 2 
-              ? "Complete more steps to see personalized recommendations"
-              : "Try adjusting your preferences to see more results"
+              ? t('quiz.properties.completeSteps')
+              : t('quiz.properties.adjustPreferences')
             }
           </p>
         </div>
@@ -115,21 +117,21 @@ export function QuizPropertyGrid({
   const getStepTitle = (step: number) => {
     switch (step) {
       case 0:
-        return "All Available Properties";
+        return t('quiz.properties.allAvailable');
       case 1:
-        return "Properties by Purpose";
+        return t('quiz.properties.byPurpose');
       case 2:
-        return "Properties in Your Budget";
+        return t('quiz.properties.byBudget');
       case 3:
-        return "Properties by Type";
+        return t('quiz.properties.byType');
       case 4:
-        return "Properties in Your Area";
+        return t('quiz.properties.byArea');
       case 5:
-        return "Properties with Your Features";
+        return t('quiz.properties.byFeatures');
       case 6:
-        return "Your Perfect Matches";
+        return t('quiz.properties.perfectMatches');
       default:
-        return "Matching Properties";
+        return t('quiz.properties.matching');
     }
   };
 
@@ -139,11 +141,11 @@ export function QuizPropertyGrid({
         <div>
           <h2 className="text-xl font-semibold">{getStepTitle(currentStep)}</h2>
           <p className="text-sm text-muted-foreground">
-            {properties.length} {properties.length === 1 ? 'property' : 'properties'} found
+            {properties.length} {properties.length === 1 ? t('quiz.properties.property') : t('quiz.properties.properties')} {t('quiz.properties.found')}
           </p>
         </div>
         <Badge variant="outline" className="text-xs">
-          Step {currentStep + 1} Results
+          {t('quiz.navigation.step')} {currentStep + 1} {t('quiz.properties.found')}
         </Badge>
       </div>
 
@@ -182,7 +184,7 @@ export function QuizPropertyGrid({
           ref={scrollRef}
           className="overflow-x-auto scrollbar-hide carousel-container"
         >
-          <div className="flex gap-4 pb-2 property-grid property-grid-loaded" style={{ width: 'max-content' }}>
+          <div className="flex gap-4 pb-8 property-grid property-grid-loaded" style={{ width: 'max-content' }}>
             {properties.map((property, index) => (
               <div
                 key={property.id}
@@ -216,6 +218,7 @@ export function QuizPropertyGrid({
 
 function PropertyCard({ property }: { property: Property }) {
   const { state, selectProperty } = useQuiz();
+  const { t } = useTranslations();
   const [imageLoading, setImageLoading] = React.useState(true);
   const [imageError, setImageError] = React.useState(false);
   
@@ -223,7 +226,7 @@ function PropertyCard({ property }: { property: Property }) {
     ? property.rentPrice 
     : property.salePrice;
   
-  const priceLabel = property.operationType === 'RENT' ? 'per month' : '';
+  const priceLabel = property.operationType === 'RENT' ? t('quiz.properties.perMonth') : '';
   const isSelected = state.selectedProperty === property.id;
 
   const handleImageLoad = () => {
@@ -282,18 +285,18 @@ function PropertyCard({ property }: { property: Property }) {
           {isSelected && (
             <Badge variant="default" className="text-xs bg-primary">
               <Mic className="w-3 h-3 mr-1" />
-              Selected
+              {t('quiz.properties.selected')}
             </Badge>
           )}
           {property.isFeatured && (
             <Badge variant="default" className="text-xs">
               <Star className="w-3 h-3 mr-1" />
-              Featured
+              {t('quiz.properties.featured')}
             </Badge>
           )}
           {property.isVerified && (
             <Badge variant="secondary" className="text-xs">
-              Verified
+              {t('quiz.properties.verified')}
             </Badge>
           )}
         </div>
@@ -301,7 +304,7 @@ function PropertyCard({ property }: { property: Property }) {
         {/* Operation type */}
         <div className="absolute top-2 right-2">
           <Badge variant={property.operationType === 'RENT' ? 'default' : 'outline'}>
-            {property.operationType === 'RENT' ? 'Rent' : 'Sale'}
+            {property.operationType === 'RENT' ? t('quiz.properties.rent') : t('quiz.properties.sale')}
           </Badge>
         </div>
       </div>
@@ -377,15 +380,15 @@ function PropertyCard({ property }: { property: Property }) {
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
               <Eye className="w-4 h-4 mr-1" />
-              View
+              {t('quiz.properties.view')}
             </Button>
           </div>
         </div>
 
         {/* Stats */}
         <div className="flex items-center justify-between text-xs text-muted-foreground mt-2 pt-2 border-t">
-          <span>{property.views || 0} views</span>
-          <span>{Array.isArray(property.reviews) ? property.reviews.length : 0} reviews</span>
+          <span>{property.views || 0} {t('quiz.properties.views')}</span>
+          <span>{Array.isArray(property.reviews) ? property.reviews.length : 0} {t('quiz.properties.reviews')}</span>
         </div>
       </CardContent>
     </Card>

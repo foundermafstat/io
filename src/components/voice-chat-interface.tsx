@@ -18,7 +18,7 @@ import { StatusDisplay } from "./status-display"
 import { ToolsEducation } from "./tools-education"
 import { useBroadcast } from "./broadcast-context"
 import { tools } from "@/lib/tools"
-import { fetchReplicas, type SensayReplica } from "@/lib/api/sensay-replicas-client"
+import { useReplicas, useActiveReplicas, type SensayReplica } from "@/lib/replicas-context"
 import { useToolsFunctions } from "@/hooks/use-tools"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
@@ -33,8 +33,11 @@ export default function VoiceChatInterface() {
   const router = useRouter()
   const [voice, setVoice] = useState("ash")
   const [selectedReplicaForVoice, setSelectedReplicaForVoice] = useState<string>("")
-  const [availableReplicas, setAvailableReplicas] = useState<SensayReplica[]>([])
-  const [isLoadingReplicas, setIsLoadingReplicas] = useState(false)
+  
+  // Используем глобальное состояние реплик
+  const { state: replicasState } = useReplicas()
+  const availableReplicas = useActiveReplicas()
+  const isLoadingReplicas = replicasState.loading
 
   // Получаем функции инструментов
   const toolFunctions = useToolsFunctions()
@@ -60,27 +63,12 @@ export default function VoiceChatInterface() {
     voiceReplica?.system_message
   )
 
-  // Загружаем доступные реплики при монтировании компонента
+  // Устанавливаем первую реплику по умолчанию, если она есть
   useEffect(() => {
-    const loadReplicas = async () => {
-      try {
-        setIsLoadingReplicas(true)
-        const replicas = await fetchReplicas()
-        setAvailableReplicas(replicas)
-
-        // Устанавливаем первую реплику по умолчанию, если она есть
-        if (replicas.length > 0 && !selectedReplicaForVoice) {
-          setSelectedReplicaForVoice(replicas[0].uuid)
-        }
-      } catch (error) {
-        console.error("Error loading replicas:", error)
-      } finally {
-        setIsLoadingReplicas(false)
-      }
+    if (availableReplicas.length > 0 && !selectedReplicaForVoice) {
+      setSelectedReplicaForVoice(availableReplicas[0].uuid)
     }
-
-    loadReplicas()
-  }, [selectedReplicaForVoice])
+  }, [availableReplicas, selectedReplicaForVoice])
 
   // Проверяем и восстанавливаем состояние сессии при загрузке
   useEffect(() => {

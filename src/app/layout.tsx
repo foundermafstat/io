@@ -26,6 +26,7 @@ export const metadata: Metadata = {
 
 import { HeaderProvider } from '@/components/header-context';
 import { QuizProvider } from '@/lib/quiz-context';
+import { ReplicasProvider } from '@/lib/replicas-context';
 
 export default function RootLayout({
 	children,
@@ -42,13 +43,14 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<TranslationsProvider>
-					<HeaderProvider>
-						<QuizProvider>
-							<BroadcastProvider>
-								<ChatVisibilityProvider>
-									<ReplicaProvider>
-										<ChatProvider>
-											<ChatTabProvider>
+					<ReplicasProvider>
+						<HeaderProvider>
+							<QuizProvider>
+								<BroadcastProvider>
+									<ChatVisibilityProvider>
+										<ReplicaProvider>
+											<ChatProvider>
+												<ChatTabProvider>
 											<div className="flex flex-col h-full">
 												<Header />
 												<main className="flex-1 flex overflow-hidden">
@@ -64,7 +66,8 @@ export default function RootLayout({
 							</BroadcastProvider>
 						</QuizProvider>
 					</HeaderProvider>
-					</TranslationsProvider>
+					</ReplicasProvider>
+				</TranslationsProvider>
 				</ThemeProvider>
 				{/* <Script 
 					src="https://chat-widget.sensay.io/b4d138ab-41ad-4830-b193-166db4d5b124/embed-script.js" 

@@ -33,16 +33,18 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-import { SensayReplica, ReplicaCreateUpdateData } from "@/lib/api/sensay-replicas-client"
-import { fetchReplicas, fetchReplicaById, createReplica, updateReplica, deleteReplica } from "@/lib/api/sensay-replicas-client"
+import { SensayReplica } from "@/lib/replicas-context"
+import { useReplicas } from "@/lib/replicas-context"
+import { fetchReplicaById, createReplica, updateReplica, deleteReplica } from "@/lib/api/sensay-replicas-client"
 import ReplicaDetail from "@/components/replica-detail"
 import ReplicaForm from "@/components/replica-form"
 import { format } from "date-fns"
 
 export default function ReplicasPage() {
-  const [replicas, setReplicas] = useState<SensayReplica[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { state: replicasState, refetchReplicas } = useReplicas()
+  const replicas = replicasState.replicas
+  const loading = replicasState.loading
+  const error = replicasState.error
   const [selectedReplica, setSelectedReplica] = useState<SensayReplica | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -51,29 +53,20 @@ export default function ReplicasPage() {
   const [formLoading, setFormLoading] = useState(false)
   const { toast } = useToast()
 
-  // Fetch replicas
-  const fetchReplicasData = useCallback(async () => {
+  // Обертка для обновления реплик
+  const handleRefresh = useCallback(async () => {
     try {
-      setLoading(true)
-      setError(null)
-      console.log('Fetching replicas...');
-
-      const data = await fetchReplicas()
-      console.log('Replicas fetched successfully:', data.length, 'items');
-      setReplicas(data)
+      await refetchReplicas()
     } catch (error) {
-      console.error("Error fetching replicas:", error)
-      const errorMessage = error instanceof Error ? error.message : "Failed to fetch replicas"
-      setError(errorMessage)
+      console.error("Error refreshing replicas:", error)
+      const errorMessage = error instanceof Error ? error.message : "Failed to refresh replicas"
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       })
-    } finally {
-      setLoading(false)
     }
-  }, [toast])
+  }, [refetchReplicas, toast])
   
   // Get replica details
   const handleViewReplica = async (replicaId: string) => {
@@ -104,7 +97,7 @@ export default function ReplicasPage() {
         title: "Success",
         description: `Replica "${newReplica.name}" created successfully`,
       })
-      await fetchReplicasData()
+      await handleRefresh()
       setIsCreateDialogOpen(false)
     } catch (error) {
       console.error("Error creating replica:", error)
@@ -149,7 +142,7 @@ export default function ReplicasPage() {
         title: "Success",
         description: `Replica "${data.name}" updated successfully`,
       })
-      await fetchReplicasData()
+      await handleRefresh()
       setIsEditDialogOpen(false)
     } catch (error) {
       console.error("Error updating replica:", error)
@@ -180,7 +173,7 @@ export default function ReplicasPage() {
         title: "Success",
         description: `Replica "${selectedReplica.name}" deleted successfully`,
       })
-      await fetchReplicasData()
+      await handleRefresh()
       setIsDeleteDialogOpen(false)
     } catch (error) {
       console.error("Error deleting replica:", error)
@@ -203,10 +196,7 @@ export default function ReplicasPage() {
     });
   };
 
-  // Initial fetch
-  useEffect(() => {
-    fetchReplicasData()
-  }, [fetchReplicasData])
+  // Реплики уже загружены в глобальном состоянии
 
   // UI Elements for replicas table
   const replicasTable = replicas.length > 0 ? (
@@ -382,7 +372,7 @@ export default function ReplicasPage() {
             Create Replica
           </Button>
           <Button 
-            onClick={fetchReplicasData} 
+            onClick={handleRefresh} 
             disabled={loading} 
             variant="outline"
             className="border-border bg-muted text-foreground"

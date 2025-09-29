@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import type { SensayReplica } from "@/lib/api/sensay-replicas-client";
-import { fetchReplicas } from "@/lib/api/sensay-replicas-client";
+import type { SensayReplica } from "@/lib/replicas-context";
+import { useReplicas } from "@/lib/replicas-context";
 import { useToast } from "@/hooks/use-toast";
 
 const LOCAL_STORAGE_KEY = "selected_replica_uuid";
@@ -19,12 +19,34 @@ interface ReplicaContextType {
 const ReplicaContext = createContext<ReplicaContextType | undefined>(undefined);
 
 export function ReplicaProvider({ children }: { children: React.ReactNode }) {
+  console.log('ReplicaProvider - Component mounted');
+  
   const [selectedReplicaUuid, setSelectedReplicaUuid] = useState<string>("");
-  const [replicas, setReplicas] = useState<SensayReplica[]>([]);
-  const [loading, setLoading] = useState(false);
+  
+  let replicasState, refetchReplicas;
+  try {
+    const replicasContext = useReplicas();
+    replicasState = replicasContext.state;
+    refetchReplicas = replicasContext.refetchReplicas;
+    console.log('ReplicaProvider - Successfully connected to ReplicasProvider');
+  } catch (error) {
+    console.error('ReplicaProvider - Failed to connect to ReplicasProvider:', error);
+    // Fallback state
+    replicasState = { replicas: [], loading: false, error: 'ReplicasProvider not available', lastFetched: null };
+    refetchReplicas = async () => {};
+  }
+  
   const { toast } = useToast();
 
+  const replicas = replicasState.replicas;
+  const loading = replicasState.loading;
   const selectedReplica = replicas.find(replica => replica.uuid === selectedReplicaUuid);
+
+  // Отладочная информация
+  console.log('ReplicaProvider - replicasState:', replicasState);
+  console.log('ReplicaProvider - replicas count:', replicas.length);
+  console.log('ReplicaProvider - loading:', loading);
+  console.log('ReplicaProvider - error:', replicasState.error);
 
   // Load saved replica from localStorage on initialization
   useEffect(() => {
@@ -41,53 +63,43 @@ export function ReplicaProvider({ children }: { children: React.ReactNode }) {
     }
   }, [selectedReplicaUuid]);
 
-  // Fetch replicas on component mount (only on client side)
+  // Проверяем, существует ли сохраненная реплика в полученном списке
   useEffect(() => {
-    // Only fetch on client side to avoid SSR issues
-    if (typeof window !== 'undefined') {
-      refreshReplicas();
-    }
-  }, []);
-
-  // Function to fetch replicas from API
-  const refreshReplicas = async () => {
-    // Only fetch on client side
-    if (typeof window === 'undefined') {
-      return;
-    }
-    
-    try {
-      setLoading(true);
-      const replicasList = await fetchReplicas();
-      setReplicas(replicasList);
-      
-      // Проверяем текущий выбранный UUID
+    console.log('ReplicaProvider - replicas changed, count:', replicas.length);
+    if (replicas.length > 0) {
       const savedUuid = selectedReplicaUuid || localStorage.getItem(LOCAL_STORAGE_KEY);
+      const replicaExists = replicas.some(replica => replica.uuid === savedUuid);
       
-      // Проверяем, существует ли сохраненная реплика в полученном списке
-      const replicaExists = replicasList.some(replica => replica.uuid === savedUuid);
+      console.log('ReplicaProvider - savedUuid:', savedUuid);
+      console.log('ReplicaProvider - replicaExists:', replicaExists);
       
-      if (replicasList.length > 0) {
+      if (replicas.length > 0) {
         if (replicaExists && savedUuid) {
           // Если сохраненная реплика существует, используем ее
           if (savedUuid !== selectedReplicaUuid) {
+            console.log('ReplicaProvider - Setting saved replica:', savedUuid);
             setSelectedReplicaUuid(savedUuid);
           }
         } else {
           // Если сохраненная реплика не существует или не выбрана, выбираем первую в списке
-          console.log('Saved replica not found or not selected, using first available replica');
-          setSelectedReplicaUuid(replicasList[0].uuid);
+          console.log('ReplicaProvider - Saved replica not found, using first available:', replicas[0].uuid);
+          setSelectedReplicaUuid(replicas[0].uuid);
         }
       }
+    }
+  }, [replicas, selectedReplicaUuid]);
+
+  // Обертка для refetchReplicas из глобального контекста
+  const refreshReplicas = async () => {
+    try {
+      await refetchReplicas();
     } catch (error) {
-      console.error("Error fetching replicas:", error);
+      console.error("Error refreshing replicas:", error);
       toast({
         title: "Error",
-        description: "Failed to load replicas. Please check your API settings.",
+        description: "Failed to refresh replicas. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
