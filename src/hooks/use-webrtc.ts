@@ -359,15 +359,16 @@ export default function useWebRTCAudioSession(
   }
 
   /**
-   * Load property data for AI context
+   * Load property data for AI context - загружаем ВСЕ объекты недвижимости
    */
   async function loadPropertyContext() {
     try {
-      const response = await fetch("/api/properties/ai-context?limit=20&featured=true");
+      console.log("Загружаем полный контекст недвижимости...");
+      const response = await fetch("/api/properties/ai-context?limit=1000");
       if (response.ok) {
         const contextData = await response.json();
         setPropertyContext(contextData);
-        console.log("Property context loaded:", contextData.totalProperties, "properties");
+        console.log("✅ Полный контекст недвижимости загружен:", contextData.totalProperties, "объектов");
         return contextData;
       } else {
         console.warn("Failed to load property context:", response.status);
