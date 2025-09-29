@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 };
 
 import { HeaderProvider } from '@/components/header-context';
+import { QuizProvider } from '@/lib/quiz-context';
 
 export default function RootLayout({
 	children,
@@ -42,24 +43,26 @@ export default function RootLayout({
 				>
 					<TranslationsProvider>
 					<HeaderProvider>
-						<BroadcastProvider>
-							<ChatVisibilityProvider>
-								<ReplicaProvider>
-									<ChatProvider>
-										<ChatTabProvider>
-										<div className="flex flex-col h-full">
-											<Header />
-											<main className="flex-1 flex overflow-hidden">
-												<ResizablePanel>{children}</ResizablePanel>
-											</main>
-										</div>
+						<QuizProvider>
+							<BroadcastProvider>
+								<ChatVisibilityProvider>
+									<ReplicaProvider>
+										<ChatProvider>
+											<ChatTabProvider>
+											<div className="flex flex-col h-full">
+												<Header />
+												<main className="flex-1 flex overflow-hidden">
+													<ResizablePanel>{children}</ResizablePanel>
+												</main>
+											</div>
 
-										<Toaster />
-									</ChatTabProvider>
-								</ChatProvider>
-							</ReplicaProvider>
-						</ChatVisibilityProvider>
-						</BroadcastProvider>
+											<Toaster />
+										</ChatTabProvider>
+									</ChatProvider>
+								</ReplicaProvider>
+							</ChatVisibilityProvider>
+							</BroadcastProvider>
+						</QuizProvider>
 					</HeaderProvider>
 					</TranslationsProvider>
 				</ThemeProvider>

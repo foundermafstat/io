@@ -181,11 +181,11 @@ export const useToolsFunctions = () => {
       const app = new FirecrawlApp({ apiKey: apiKey });
       const scrapeResult = await app.scrape(url, { formats: ['markdown', 'html'] }) as CrawlResponse;
 
-      if (!scrapeResult.success) {
-        console.log(scrapeResult.error)
+      if (!(scrapeResult as any).success) {
+        console.log((scrapeResult as any).error)
         return {
           success: false,
-          message: `Failed to scrape: ${scrapeResult.error}`
+          message: `Failed to scrape: ${(scrapeResult as any).error}`
         };
       }
 
@@ -323,6 +323,66 @@ export const useToolsFunctions = () => {
     }
   }
 
+  const getPropertyDetails = async ({ propertyId }: { propertyId: string }) => {
+    try {
+      // Получаем детали недвижимости через API
+      const response = await fetch(`/api/properties/${propertyId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const property = await response.json();
+      
+      if (!property.success) {
+        throw new Error(property.error || 'Failed to fetch property details');
+      }
+
+      const propertyData = property.data;
+      
+      // Формируем подробное описание недвижимости
+      const description = `
+        Подробная информация о недвижимости:
+        
+        🏠 Название: ${propertyData.title}
+        📍 Расположение: ${propertyData.city}, ${propertyData.state}, ${propertyData.country}
+        💰 Цена: €${propertyData.operationType === 'RENT' ? propertyData.rentPrice : propertyData.salePrice}${propertyData.operationType === 'RENT' ? ' в месяц' : ''}
+        🏗️ Тип операции: ${propertyData.operationType === 'RENT' ? 'Аренда' : 'Продажа'}
+        
+        📐 Характеристики:
+        • Спальни: ${propertyData.bedrooms || 'Не указано'}
+        • Ванные комнаты: ${propertyData.bathrooms || 'Не указано'}
+        • Площадь: ${propertyData.area ? propertyData.area + ' м²' : 'Не указано'}
+        
+        ✨ Особенности: ${propertyData.features && propertyData.features.length > 0 ? propertyData.features.join(', ') : 'Не указаны'}
+        
+        📊 Дополнительная информация:
+        • Просмотры: ${propertyData.views || 0}
+        • Отзывы: ${Array.isArray(propertyData.reviews) ? propertyData.reviews.length : 0}
+        • Статус: ${propertyData.isFeatured ? 'Рекомендуемое' : 'Обычное'}${propertyData.isVerified ? ', Проверенное' : ''}
+        
+        ${propertyData.description ? `\n📝 Описание: ${propertyData.description}` : ''}
+      `;
+
+      toast.success("Детали недвижимости получены", {
+        description: `Информация о ${propertyData.title} загружена`,
+      });
+
+      return {
+        success: true,
+        property: propertyData,
+        description: description.trim(),
+        message: `Получена подробная информация о недвижимости "${propertyData.title}". ${description.trim()}`
+      };
+    } catch (error) {
+      console.error('Error fetching property details:', error);
+      return {
+        success: false,
+        message: `Ошибка при получении деталей недвижимости: ${error}`
+      };
+    }
+  }
+
   return {
     timeFunction,
     backgroundFunction,
@@ -331,6 +391,7 @@ export const useToolsFunctions = () => {
     copyToClipboard,
     scrapeWebsite,
     navigateToPage,
-    findProperty
+    findProperty,
+    getPropertyDetails
   }
 }

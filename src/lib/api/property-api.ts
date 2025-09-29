@@ -17,6 +17,19 @@ const prisma = new PrismaClient();
 export class PropertyAPI {
   // Создание недвижимости
   static async createProperty(data: CreatePropertyDto): Promise<Property> {
+    // Проверяем, существует ли пользователь
+    let userExists = false;
+    if (data.ownerId) {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { id: data.ownerId },
+        });
+        userExists = !!user;
+      } catch (error) {
+        console.warn('Error checking user existence:', error);
+      }
+    }
+
     const property = await prisma.property.create({
       data: {
         title: data.title,
@@ -44,9 +57,9 @@ export class PropertyAPI {
         images: data.images || [],
         isFeatured: data.isFeatured || false,
         isVerified: data.isVerified || false,
-        ownerId: data.ownerId,
-        agentId: data.agentId,
-        locationId: data.locationId,
+        ...(userExists && data.ownerId ? { ownerId: data.ownerId } : {}),
+        ...(data.agentId ? { agentId: data.agentId } : {}),
+        ...(data.locationId ? { locationId: data.locationId } : {}),
       },
       include: {
         owner: true,
@@ -455,15 +468,15 @@ export class PropertyAPI {
     // Используем формулу гаверсинуса для точного расчета расстояния
     const [properties, totalCount] = await Promise.all([
       prisma.$queryRaw`
-        SELECT p.*, 
-               (6371 * acos(cos(radians(${latitude})) * cos(radians(p.latitude)) * 
-                cos(radians(p.longitude) - radians(${longitude})) + 
+        SELECT p.*,
+               (6371 * acos(cos(radians(${latitude})) * cos(radians(p.latitude)) *
+                cos(radians(p.longitude) - radians(${longitude})) +
                 sin(radians(${latitude})) * sin(radians(p.latitude)))) AS distance
         FROM properties p
-        WHERE p.latitude IS NOT NULL 
+        WHERE p.latitude IS NOT NULL
           AND p.longitude IS NOT NULL
-          AND (6371 * acos(cos(radians(${latitude})) * cos(radians(p.latitude)) * 
-               cos(radians(p.longitude) - radians(${longitude})) + 
+          AND (6371 * acos(cos(radians(${latitude})) * cos(radians(p.latitude)) *
+               cos(radians(p.longitude) - radians(${longitude})) +
                sin(radians(${latitude})) * sin(radians(p.latitude)))) <= ${radius}
         ORDER BY distance ASC
         LIMIT ${limit} OFFSET ${skip}
@@ -471,10 +484,10 @@ export class PropertyAPI {
       prisma.$queryRaw`
         SELECT COUNT(*) as count
         FROM properties p
-        WHERE p.latitude IS NOT NULL 
+        WHERE p.latitude IS NOT NULL
           AND p.longitude IS NOT NULL
-          AND (6371 * acos(cos(radians(${latitude})) * cos(radians(p.latitude)) * 
-               cos(radians(p.longitude) - radians(${longitude})) + 
+          AND (6371 * acos(cos(radians(${latitude})) * cos(radians(p.latitude)) *
+               cos(radians(p.longitude) - radians(${longitude})) +
                sin(radians(${latitude})) * sin(radians(p.latitude)))) <= ${radius}
       `,
     ]);
@@ -487,5 +500,108 @@ export class PropertyAPI {
       hasMore: skip + limit < (totalCount as any)[0].count,
       filters: { latitude, longitude, radius },
     };
+  }
+
+  // Получение популярных типов недвижимости
+  static async getPopularPropertyTypes(limit: number = 10) {
+    const typeCounts = await prisma.property.groupBy({
+      by: ['propertyType'],
+      where: {
+        status: PropertyStatus.AVAILABLE,
+      },
+      _count: {
+        propertyType: true,
+      },
+      orderBy: {
+        _count: {
+          propertyType: 'desc',
+        },
+      },
+      take: limit,
+    });
+
+    return typeCounts.map(item => ({
+      type: item.propertyType,
+      count: item._count.propertyType,
+    }));
+  }
+
+  // Получение популярных локаций
+  static async getPopularLocations(limit: number = 10) {
+    const locationCounts = await prisma.property.groupBy({
+      by: ['city', 'state', 'country'],
+      where: {
+        status: PropertyStatus.AVAILABLE,
+        city: {
+          not: null,
+        },
+      },
+      _count: {
+        city: true,
+      },
+      orderBy: {
+        _count: {
+          city: 'desc',
+        },
+      },
+      take: limit,
+    });
+
+    return locationCounts
+      .filter(item => item.city) // Фильтруем записи с заполненным городом
+      .map(item => ({
+        city: item.city,
+        state: item.state,
+        country: item.country,
+        count: item._count.city,
+      }));
+  }
+
+  // Получение объектов для главной страницы
+  static async getHomepageProperties() {
+    const [featured, recent] = await Promise.all([
+      this.getFeaturedProperties(8),
+      this.getRecentProperties(8),
+    ]);
+
+    return {
+      featured,
+      recent,
+    };
+  }
+
+  // Получение статистики по городам
+  static async getCityStats() {
+    const cityStats = await prisma.property.groupBy({
+      by: ['city'],
+      where: {
+        status: PropertyStatus.AVAILABLE,
+        city: {
+          not: null,
+        },
+      },
+      _count: {
+        city: true,
+      },
+      _avg: {
+        rentPrice: true,
+        salePrice: true,
+      },
+      orderBy: {
+        _count: {
+          city: 'desc',
+        },
+      },
+      take: 8,
+    });
+
+    return cityStats
+      .filter(item => item.city) // Фильтруем записи с заполненным городом
+      .map(item => ({
+        city: item.city!,
+        propertyCount: item._count.city,
+        averageRentPrice: item._avg.rentPrice || 0,
+        averageSalePrice: item._avg.salePrice || 0,
+      }));
   }
 }

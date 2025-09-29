@@ -150,5 +150,87 @@ export const fr = {
     selectVoice: "Sélectionner une Voix"
   },
   language: "Français",
-  languagePrompt: "Parlez et répondez uniquement en français. Il est crucial que vous mainteniez vos réponses en français. Si l'utilisateur parle dans d'autres langues, vous devriez toujours répondre en français. (French only)"
+  languagePrompt: "Parlez et répondez uniquement en français. Il est crucial que vous mainteniez vos réponses en français. Si l'utilisateur parle dans d'autres langues, vous devriez toujours répondre en français. (French only)",
+  homepage: {
+    title: "Trouvez Votre Propriété de Rêve avec l'IA",
+    hero: {
+      title: "Trouvez Votre Propriété de Rêve avec l'IA",
+      subtitle: "Découvrez des propriétés avec l'assistance intelligente de l'IA",
+      callToAction: "Appeler pour Réserver votre Propriété",
+      locationPlaceholder: "Les emplacements seront disponibles après avoir ajouté des propriétés",
+      propertyLogos: ["Luxe", "Moderne", "Classique", "Villa", "Penthouse", "Maison de Ville", "Manoir", "Propriété"]
+    },
+    popularTypes: {
+      title: "Types de Propriétés Populaires",
+      placeholder: "Les types de propriétés seront disponibles après avoir ajouté des propriétés",
+      objects: "objets"
+    },
+    trending: {
+      title: "Directions Tendance : Meilleurs Emplacements",
+      placeholder: "Les données des villes seront disponibles après avoir ajouté des propriétés immobilières",
+      objects: "objets",
+      from: "À partir de"
+    },
+    features: {
+      title: "Pourquoi Nous Choisir",
+      convenientSearch: {
+        title: "Recherche Pratique",
+        description: "Processus de recherche de propriétés intuitif avec l'IA. Obtenez des recommandations personnalisées et trouvez instantanément de bonnes affaires."
+      },
+      secureTransactions: {
+        title: "Transactions Sécurisées",
+        description: "Vérification approfondie, conditions transparentes et documentation complète. Propriétés vérifiées et services fiables sécurisés."
+      },
+      smartNavigation: {
+        title: "Navigation Intelligente",
+        description: "Analyse des emplacements avec l'IA et recherche détaillée des quartiers pour trouver la propriété parfaite, rendant le processus de recherche simple et agréable."
+      }
+    },
+    testimonials: {
+      title: "Avis des Utilisateurs",
+      reviews: [
+        {
+          name: "Olivia Parker",
+          handle: "@oliviaparker",
+          text: "Meilleure Expérience de Recherche de Propriétés ! L'interface IA est intuitive, facilitant la recherche de la propriété idéale... Hautement recommandé !"
+        },
+        {
+          name: "Emma Thompson",
+          handle: "@emmathompson",
+          text: "Une Expérience Parfaite ! Cette plateforme a rendu la recherche de propriétés facile... Service 5 étoiles !"
+        },
+        {
+          name: "Sophia Rodriguez",
+          handle: "@sophiarodriguez",
+          text: "Fiable et Abordable ! J'ai utilisé plusieurs plateformes immobilières auparavant, mais celle-ci se distingue... Je reviendrai pour toutes mes futures recherches."
+        },
+        {
+          name: "Daniel Johnson",
+          handle: "@danieljohnson",
+          text: "Service Exceptionnel ! De la recherche à la clôture, tout s'est déroulé sans problème... Je recommanderai définitivement à des amis !"
+        }
+      ]
+    },
+    cta: {
+      title: "Votre voyage dans le monde de l'immobilier commence ici. Débloquez des possibilités infinies !",
+      button: "Voir les Propriétés >"
+    },
+    footer: {
+      company: "Sensay.io",
+      sections: {
+        destinations: "Destinations",
+        destinationsItems: ["Propriétés de Plage", "Quartiers Historiques", "Vie Urbaine", "Stations de Montagne", "Villas de Luxe", "Propriétés d'Investissement"],
+        resources: "Ressources",
+        resourcesItems: ["Blog", "Guide Immobilier", "Analyse de Marché", "Conseils d'Investissement", "Types de Propriétés"],
+        policies: "Politiques",
+        policiesItems: ["Confidentialité", "Conditions d'Utilisation", "Paramètres de Cookies"],
+        newsletter: "Newsletter",
+        newsletterText: "Rejoignez notre communauté ! Recevez des offres exclusives et des analyses de marché.",
+        newsletterPlaceholder: "you@domain.com",
+        newsletterButton: "S'abonner"
+      },
+      copyright: "Le code source est disponible sur GitHub.",
+      phone: "Téléphone"
+    }
+  }
 }

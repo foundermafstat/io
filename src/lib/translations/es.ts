@@ -150,5 +150,87 @@ export const es = {
     selectVoice: "Seleccionar Voz"
   },
   language: "Spanish",
-  languagePrompt: "Habla y responde solo en español. Es crucial que mantengas tus respuestas en español. Si el usuario habla en otros idiomas, deberías responder en español. (Spanish only)"
+  languagePrompt: "Habla y responde solo en español. Es crucial que mantengas tus respuestas en español. Si el usuario habla en otros idiomas, deberías responder en español. (Spanish only)",
+  homepage: {
+    title: "Encuentra tu Propiedad Ideal con IA",
+    hero: {
+      title: "Encuentra tu Propiedad Ideal con IA",
+      subtitle: "Descubre propiedades con asistencia inteligente de IA",
+      callToAction: "Llamar para Reservar tu Propiedad",
+      locationPlaceholder: "Las ubicaciones estarán disponibles después de agregar propiedades",
+      propertyLogos: ["Lujo", "Moderno", "Clásico", "Villa", "Penthouse", "Casa Adosada", "Mansión", "Propiedad"]
+    },
+    popularTypes: {
+      title: "Tipos de Propiedades Populares",
+      placeholder: "Los tipos de propiedades estarán disponibles después de agregar propiedades",
+      objects: "objetos"
+    },
+    trending: {
+      title: "Direcciones en Tendencia: Mejores Ubicaciones",
+      placeholder: "Los datos de ciudades estarán disponibles después de agregar propiedades inmobiliarias",
+      objects: "objetos",
+      from: "Desde"
+    },
+    features: {
+      title: "Por Qué Elegirnos",
+      convenientSearch: {
+        title: "Búsqueda Conveniente",
+        description: "Proceso de búsqueda de propiedades intuitivo con IA. Obtén recomendaciones personalizadas e instantáneas de grandes ofertas."
+      },
+      secureTransactions: {
+        title: "Transacciones Seguras",
+        description: "Verificación exhaustiva, términos transparentes y documentación completa. Propiedades verificadas y servicios seguros confiables."
+      },
+      smartNavigation: {
+        title: "Navegación Inteligente",
+        description: "Análisis de ubicaciones con IA e investigación detallada de vecindarios para encontrar la propiedad perfecta, haciendo que el proceso de búsqueda sea simple y agradable."
+      }
+    },
+    testimonials: {
+      title: "Reseñas de Usuarios",
+      reviews: [
+        {
+          name: "Olivia Parker",
+          handle: "@oliviaparker",
+          text: "¡Mejor Experiencia de Búsqueda de Propiedades! La interfaz de IA es intuitiva, facilitando encontrar la propiedad ideal... ¡Altamente recomendado!"
+        },
+        {
+          name: "Emma Thompson",
+          handle: "@emmathompson",
+          text: "¡Una Experiencia Perfecta! Esta plataforma hizo que encontrar propiedades fuera fácil... ¡Servicio de 5 estrellas!"
+        },
+        {
+          name: "Sophia Rodriguez",
+          handle: "@sophiarodriguez",
+          text: "¡Confiable y Asequible! He usado varias plataformas de propiedades antes, pero esta destaca... Volveré para todas mis búsquedas futuras."
+        },
+        {
+          name: "Daniel Johnson",
+          handle: "@danieljohnson",
+          text: "¡Servicio Excepcional! Desde la búsqueda hasta el cierre, todo fue suave y fácil... ¡Definitivamente recomendaré a amigos!"
+        }
+      ]
+    },
+    cta: {
+      title: "¡Tu viaje al mundo inmobiliario comienza aquí. ¡Desbloquea infinitas posibilidades!",
+      button: "Ver Propiedades >"
+    },
+    footer: {
+      company: "Sensay.io",
+      sections: {
+        destinations: "Destinos",
+        destinationsItems: ["Propiedades de Playa", "Distritos Históricos", "Vida Urbana", "Resorts de Montaña", "Villas de Lujo", "Propiedades de Inversión"],
+        resources: "Recursos",
+        resourcesItems: ["Blog", "Guía de Bienes Raíces", "Análisis de Mercado", "Consejos de Inversión", "Tipos de Propiedades"],
+        policies: "Políticas",
+        policiesItems: ["Privacidad", "Términos de Uso", "Configuración de Cookies"],
+        newsletter: "Boletín",
+        newsletterText: "¡Únete a nuestra comunidad! Obtén ofertas exclusivas y análisis de mercado.",
+        newsletterPlaceholder: "you@domain.com",
+        newsletterButton: "Suscribirse"
+      },
+      copyright: "El código fuente está disponible en GitHub.",
+      phone: "Teléfono"
+    }
+  }
 } 

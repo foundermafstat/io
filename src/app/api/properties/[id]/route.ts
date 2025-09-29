@@ -18,15 +18,57 @@ export async function GET(
     }
 
     const property = await PropertyAPI.getPropertyById(id);
-    
+
     if (!property) {
       return NextResponse.json(
         { error: 'Недвижимость не найдена' },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json(property);
+
+    // Format property data for AI context
+    const formattedProperty = {
+      id: property.id,
+      title: property.title,
+      description: property.description,
+      type: property.propertyType,
+      operation: property.operationType,
+      status: property.status,
+      location: {
+        address: property.address,
+        city: property.city,
+        state: property.state,
+        country: property.country,
+        postalCode: property.postalCode,
+        latitude: property.latitude,
+        longitude: property.longitude
+      },
+      price: {
+        rent: property.rentPrice,
+        sale: property.salePrice,
+        currency: property.currency
+      },
+      details: {
+        bedrooms: property.bedrooms,
+        bathrooms: property.bathrooms,
+        area: property.area,
+        floor: property.floor,
+        totalFloors: property.totalFloors,
+        yearBuilt: property.yearBuilt
+      },
+      features: property.features || [],
+      amenities: property.amenities || [],
+      images: property.images || [],
+      metadata: {
+        isFeatured: property.isFeatured,
+        isVerified: property.isVerified,
+        views: property.views,
+        createdAt: property.createdAt,
+        updatedAt: property.updatedAt
+      }
+    };
+
+    return NextResponse.json(formattedProperty);
   } catch (error) {
     console.error('Error getting property:', error);
     return NextResponse.json(

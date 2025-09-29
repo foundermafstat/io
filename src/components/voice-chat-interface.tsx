@@ -22,11 +22,14 @@ import { fetchReplicas, type SensayReplica } from "@/lib/api/sensay-replicas-cli
 import { useToolsFunctions } from "@/hooks/use-tools"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { useQuiz } from "@/lib/quiz-context"
+import { Mic } from "lucide-react"
 
 export default function VoiceChatInterface() {
   const { t } = useTranslations()
   const { selectedReplicaUuid } = useReplica()
   const { currentQuestion, hasUserAnswered, hasAgentNeededInfo } = useBroadcast()
+  const { state: quizState } = useQuiz()
   const router = useRouter()
   const [voice, setVoice] = useState("ash")
   const [selectedReplicaForVoice, setSelectedReplicaForVoice] = useState<string>("")
@@ -145,6 +148,25 @@ export default function VoiceChatInterface() {
     }
   }, [registerFunction, toolFunctions])
 
+  // Автоматически получаем детали выделенного объекта
+  useEffect(() => {
+    if (quizState.selectedProperty && isSessionActive && toolFunctions.getPropertyDetails) {
+      // Небольшая задержка для плавности
+      const timer = setTimeout(async () => {
+        try {
+          await toolFunctions.getPropertyDetails({ propertyId: quizState.selectedProperty! });
+        } catch (error) {
+          console.error('Error fetching property details:', error);
+          toast.error("Ошибка загрузки деталей недвижимости", {
+            description: "Не удалось загрузить информацию о выделенном объекте"
+          });
+        }
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [quizState.selectedProperty, isSessionActive, toolFunctions.getPropertyDetails])
+
   // Handle start/stop session
   const handleStartStopClick = () => {
     if (isSessionActive) {
@@ -162,7 +184,7 @@ export default function VoiceChatInterface() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full max-w-md mx-auto bg-background">
       <ScrollArea className="flex-1 p-2">
         <div className="flex flex-col items-center justify-center min-h-full">
           <motion.div
@@ -205,7 +227,7 @@ export default function VoiceChatInterface() {
               />
             </div>
 
-            {msgs.length > 4 && <TokenUsageDisplay messages={msgs} />}
+            {msgs.length > 4 && <TokenUsageDisplay />}
 
             {status && (
               <motion.div
@@ -225,6 +247,28 @@ export default function VoiceChatInterface() {
           </motion.div>
 
             {status && <StatusDisplay status={status} />}
+
+            {/* Индикатор выделенного объекта */}
+            {quizState.selectedProperty && (
+              <motion.div
+                className="w-full bg-card text-card-foreground rounded-lg border shadow-sm p-3"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-medium">Выделенный объект</h3>
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary/10 text-primary">
+                    <Mic className="w-3 h-3 mr-1" />
+                    Готов к обсуждению
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Объект недвижимости выделен. Голосовой агент готов рассказать подробности.
+                </p>
+              </motion.div>
+            )}
 
             {/* Индикатор состояния трансляции */}
             {isSessionActive && (
@@ -264,9 +308,6 @@ export default function VoiceChatInterface() {
               </motion.div>
             )}
 
-          <div className="w-full flex flex-col items-center gap-3">
-            <ToolsEducation />
-          </div>
         </div>
       </ScrollArea>
     </div>

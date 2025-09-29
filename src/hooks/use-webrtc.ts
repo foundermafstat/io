@@ -46,6 +46,9 @@ export default function useWebRTCAudioSession(
   const [status, setStatus] = useState("");
   const [isSessionActive, setIsSessionActive] = useState(false);
 
+  // Property data for AI context
+  const [propertyContext, setPropertyContext] = useState<any>(null);
+
   // Audio references for local mic
   // Approach A: explicitly typed as HTMLDivElement | null
   const audioIndicatorRef = useRef<HTMLDivElement | null>(null);
@@ -250,7 +253,9 @@ export default function useWebRTCAudioSession(
 
           // Отмечаем все ожидающие вопросы как отвеченные
           // В будущем можно добавить более умную логику для сопоставления конкретных вопросов
-          broadcastRef.current.markQuestionAnswered("current", userResponse);
+          setTimeout(() => {
+            broadcastRef.current.markQuestionAnswered("current", userResponse);
+          }, 0);
           break;
         }
 
@@ -294,15 +299,20 @@ export default function useWebRTCAudioSession(
             const lastMessage = updated[updated.length - 1];
             lastMessage.isFinal = true;
 
-            // Проверяем, является ли сообщение вопросом и добавляем в broadcast context
-            if (lastMessage.text && isQuestion(lastMessage.text)) {
+            return updated;
+          });
+
+          // Проверяем, является ли сообщение вопросом и добавляем в broadcast context
+          // Делаем это асинхронно, чтобы избежать обновления состояния во время рендеринга
+          setTimeout(() => {
+            const lastMessage = conversation[conversation.length - 1];
+            if (lastMessage && lastMessage.text && isQuestion(lastMessage.text)) {
               broadcastRef.current.addPendingQuestion({
                 question: lastMessage.text,
               });
             }
+          }, 0);
 
-            return updated;
-          });
           break;
         }
 
@@ -349,17 +359,54 @@ export default function useWebRTCAudioSession(
   }
 
   /**
+   * Load property data for AI context
+   */
+  async function loadPropertyContext() {
+    try {
+      const response = await fetch("/api/properties/ai-context?limit=20&featured=true");
+      if (response.ok) {
+        const contextData = await response.json();
+        setPropertyContext(contextData);
+        console.log("Property context loaded:", contextData.totalProperties, "properties");
+        return contextData;
+      } else {
+        console.warn("Failed to load property context:", response.status);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error loading property context:", error);
+      return null;
+    }
+  }
+
+  /**
    * Fetch ephemeral token from your Next.js endpoint
    */
   async function getEphemeralToken() {
     try {
+      // Load property context first
+      const propertyData = await loadPropertyContext();
+
+      // Prepare enhanced instructions with property context
+      let instructions = "Start conversation with the user by saying 'Hello, how can I help you today?' Use the available tools when relevant. After executing a tool, you will need to respond (create a subsequent conversation item) to the user sharing the function result or error. If you do not respond with additional message with function result, user will not know you successfully executed the tool. Speak and respond in the language of the user.";
+
+      if (replicaUuid && replicaInstructions) {
+        instructions = replicaInstructions;
+      }
+
+      // Add property context to instructions if available
+      if (propertyData && propertyData.totalProperties > 0) {
+        const propertySummary = generatePropertySummary(propertyData);
+        instructions = `${instructions}\n\nADDITIONAL CONTEXT: You have access to ${propertyData.totalProperties} properties in your knowledge base. ${propertySummary} Use this information to help users find suitable properties for rent or purchase. When users ask about available properties, reference specific properties from your knowledge base and provide detailed information about them.`;
+      }
+
       const response = await fetch("/api/openai/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           voice,
           replicaUuid,
-          replicaInstructions,
+          replicaInstructions: instructions,
         }),
       });
       if (!response.ok) {
@@ -371,6 +418,46 @@ export default function useWebRTCAudioSession(
       console.error("getEphemeralToken error:", err);
       throw err;
     }
+  }
+
+  /**
+   * Generate a summary of available properties for AI context
+   */
+  function generatePropertySummary(propertyData: any): string {
+    const { properties, totalProperties } = propertyData;
+
+    if (totalProperties === 0) return "No properties available.";
+
+    // Group properties by type and operation
+    const byType: Record<string, any[]> = {};
+    const byOperation: Record<string, number> = { RENT: 0, SALE: 0 };
+
+    properties.forEach((prop: any) => {
+      const type = prop.type || 'OTHER';
+      if (!byType[type]) byType[type] = [];
+      byType[type].push(prop);
+
+      if (prop.operation === 'RENT' && prop.price.rent) byOperation.RENT++;
+      if (prop.operation === 'SALE' && prop.price.sale) byOperation.SALE++;
+    });
+
+    let summary = `Available properties summary:\n`;
+    summary += `- Total: ${totalProperties} properties\n`;
+    summary += `- For rent: ${byOperation.RENT} properties\n`;
+    summary += `- For sale: ${byOperation.SALE} properties\n\n`;
+
+    // Add property type breakdown
+    Object.entries(byType).forEach(([type, props]) => {
+      summary += `${type}: ${props.length} properties\n`;
+    });
+
+    // Add featured properties mention
+    const featuredCount = properties.filter((p: any) => p.isFeatured).length;
+    if (featuredCount > 0) {
+      summary += `\nFeatured properties: ${featuredCount} premium listings\n`;
+    }
+
+    return summary;
   }
 
   /**

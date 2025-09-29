@@ -23,6 +23,7 @@ const translations: { [key: string]: Translations } = {
 
 type TranslationsContextType = {
   t: (key: string) => string
+  getTranslation: (key: string) => any
   locale: string
   setLocale: (locale: string) => void
 }
@@ -35,7 +36,7 @@ export function TranslationsProvider({ children }: { children: ReactNode }) {
   const t = (key: string): string => {
     const keys = key.split('.')
     let value: TranslationValue = translations[locale]
-    
+
     for (const k of keys) {
       if (value === undefined) return key
       value = typeof value === 'object' ? value[k] : key
@@ -44,8 +45,20 @@ export function TranslationsProvider({ children }: { children: ReactNode }) {
     return typeof value === 'string' ? value : key
   }
 
+  const getTranslation = (key: string): any => {
+    const keys = key.split('.')
+    let value: TranslationValue = translations[locale]
+
+    for (const k of keys) {
+      if (value === undefined) return key
+      value = typeof value === 'object' ? value[k] : key
+    }
+
+    return value
+  }
+
   return (
-    <TranslationsContext.Provider value={{ t, locale, setLocale }}>
+    <TranslationsContext.Provider value={{ t, getTranslation, locale, setLocale }}>
       {children}
     </TranslationsContext.Provider>
   )

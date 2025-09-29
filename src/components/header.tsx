@@ -68,9 +68,15 @@ function HeaderInner() {
 	const { headerState } = useHeader();
 	return (
 		<header className="border-b bg-background text-foreground">
-			<div className="px-4 py-3 flex items-center justify-between">
-				<div className="flex items-center gap-4">
-					<h1 className="text-xl font-bold">IO</h1>
+		<div className="flex items-center justify-between">
+			<div className="flex items-center gap-4">
+				<div className="w-20 h-20 bg-white flex items-center justify-center">
+					<img 
+						src="/io-logo.png" 
+						alt="IO Logo" 
+						className="w-12 h-12"
+					/>
+				</div>
 
 					<nav className="hidden md:flex items-center gap-6">
 						<Link
@@ -80,6 +86,14 @@ function HeaderInner() {
 							}`}
 						>
 							{t('header.home')}
+						</Link>
+						<Link
+							href="/quiz"
+							className={`text-sm font-medium transition-colors hover:text-primary ${
+								pathname === '/quiz' ? 'text-primary' : 'text-foreground'
+							}`}
+						>
+							Property Quiz
 						</Link>
 
 						{/* Dropdown menu for Real Estate Application */}

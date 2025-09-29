@@ -151,5 +151,87 @@ export const en = {
         selectVoice: "Select Voice"
     },
     language: "English",
-    languagePrompt: "Speak and respond only in English. It is crucial that you maintain your responses in English. If the user speaks in other languages, you should still respond in English."
+    languagePrompt: "Speak and respond only in English. It is crucial that you maintain your responses in English. If the user speaks in other languages, you should still respond in English.",
+    homepage: {
+        title: "Find Your Dream Property with AI",
+        hero: {
+            title: "Find Your Dream Property with AI",
+            subtitle: "Discover properties with intelligent AI assistance",
+            callToAction: "Call to Reserve your Property",
+            locationPlaceholder: "Locations will be available after adding properties",
+            propertyLogos: ["Luxury", "Modern", "Classic", "Villa", "Penthouse", "Townhouse", "Mansion", "Estate"]
+        },
+        popularTypes: {
+            title: "Popular Property Types",
+            placeholder: "Property types will be available after adding properties",
+            objects: "objects"
+        },
+        trending: {
+            title: "Trending Directions: Best Locations",
+            placeholder: "City data will be available after adding properties",
+            objects: "objects",
+            from: "From"
+        },
+        features: {
+            title: "Why Choose Us",
+            convenientSearch: {
+                title: "Convenient Search",
+                description: "Intuitive property search process with AI. Get personalized recommendations and instantly find great deals."
+            },
+            secureTransactions: {
+                title: "Secure Transactions",
+                description: "Thorough verification, transparent terms and complete documentation. Verified properties and reliable services."
+            },
+            smartNavigation: {
+                title: "Smart Navigation",
+                description: "AI-powered location analysis and detailed neighborhood research to find the perfect property, making the search process simple and enjoyable."
+            }
+        },
+        testimonials: {
+            title: "User Reviews",
+            reviews: [
+                {
+                    name: "Olivia Parker",
+                    handle: "@oliviaparker",
+                    text: "Best Property Search Experience! The AI interface is intuitive, making it easy to find the ideal property... Highly recommended!"
+                },
+                {
+                    name: "Emma Thompson",
+                    handle: "@emmathompson",
+                    text: "A Seamless Experience! This platform made finding property hassle-free... 5-star service all the way!"
+                },
+                {
+                    name: "Sophia Rodriguez",
+                    handle: "@sophiarodriguez",
+                    text: "Reliable and Affordable! I've used several property platforms before, but this one stands out... I'll be coming back for all my future searches."
+                },
+                {
+                    name: "Daniel Johnson",
+                    handle: "@danieljohnson",
+                    text: "Exceptional Service! From search to closing, everything was smooth and easy... Will definitely recommend to friends!"
+                }
+            ]
+        },
+        cta: {
+            title: "Your journey into the world of real estate starts here. Unlock endless possibilities!",
+            button: "View Properties >"
+        },
+        footer: {
+            company: "Sensay.io",
+            sections: {
+                destinations: "Destinations",
+                destinationsItems: ["Beach Properties", "Historic Districts", "Urban Living", "Mountain Resorts", "Luxury Villas", "Investment Properties"],
+                resources: "Resources",
+                resourcesItems: ["Blog", "Real Estate Guide", "Market Analysis", "Investment Tips", "Property Types"],
+                policies: "Policies",
+                policiesItems: ["Privacy", "Terms of Use", "Cookie Settings"],
+                newsletter: "Newsletter",
+                newsletterText: "Join our community! Get exclusive offers and market insights.",
+                newsletterPlaceholder: "you@domain.com",
+                newsletterButton: "Subscribe"
+            },
+            copyright: "The source code is available on GitHub.",
+            phone: "Phone"
+        }
+    }
 }

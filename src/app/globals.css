@@ -330,3 +330,170 @@
 .dark .markdown-content a {
 	color: #60a5fa;
 }
+
+/* Property card animations */
+.property-card-enter {
+	opacity: 0;
+	transform: translateY(20px) scale(0.95);
+	animation: property-card-enter 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes property-card-enter {
+	0% {
+		opacity: 0;
+		transform: translateY(20px) scale(0.95);
+	}
+	50% {
+		opacity: 0.8;
+		transform: translateY(-2px) scale(1.02);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.property-card-exit {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	animation: property-card-exit 0.3s ease-in forwards;
+}
+
+@keyframes property-card-exit {
+	to {
+		opacity: 0;
+		transform: translateY(-20px) scale(0.95);
+	}
+}
+
+/* Smooth grid transitions */
+.property-grid {
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.property-grid-empty {
+	min-height: 200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease-in-out;
+}
+
+/* Grid state transitions */
+.property-grid-loading {
+	opacity: 0.7;
+	transform: scale(0.98);
+}
+
+.property-grid-loaded {
+	opacity: 1;
+	transform: scale(1);
+}
+
+/* Image loading states */
+.property-image {
+	transition: opacity 0.3s ease-in-out;
+}
+
+.property-image-loading {
+	opacity: 0.7;
+	filter: blur(2px);
+}
+
+.property-image-loaded {
+	opacity: 1;
+	filter: none;
+}
+
+/* Carousel styles */
+.scrollbar-hide {
+	-ms-overflow-style: none;  /* Internet Explorer 10+ */
+	scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;  /* Safari and Chrome */
+}
+
+/* Smooth scrolling for carousel */
+.carousel-container {
+	scroll-behavior: smooth;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* Carousel gradient overlays */
+.carousel-gradient-left {
+	background: linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%);
+}
+
+.carousel-gradient-right {
+	background: linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%);
+}
+
+/* Dark mode gradients */
+.dark .carousel-gradient-left {
+	background: linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%);
+}
+
+.dark .carousel-gradient-right {
+	background: linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%);
+}
+
+/* Carousel card styles */
+.carousel-card {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Touch scrolling improvements */
+.carousel-container {
+	scroll-snap-type: x mandatory;
+	scroll-padding: 1rem;
+}
+
+.carousel-card {
+	scroll-snap-align: start;
+}
+
+/* Scroll indicators */
+.scroll-indicator {
+	position: absolute;
+	bottom: 0.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 0.25rem;
+	z-index: 20;
+}
+
+.scroll-dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background-color: hsl(var(--muted-foreground) / 0.3);
+	transition: all 0.3s ease;
+}
+
+.scroll-dot.active {
+	background-color: hsl(var(--primary));
+	transform: scale(1.2);
+}
+
+/* Navigation buttons */
+.carousel-nav-button {
+	opacity: 0;
+	transition: all 0.3s ease;
+}
+
+.carousel-container:hover .carousel-nav-button {
+	opacity: 1;
+}
+
+.carousel-nav-button:hover {
+	transform: scale(1.1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

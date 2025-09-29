@@ -95,6 +95,70 @@ const toolDefinitions = {
                 required: false
             }
         }
+    },
+    getPropertyDetails: {
+        description: 'Get detailed information about a specific property by ID',
+        parameters: {
+            propertyId: {
+                type: 'string',
+                description: 'The unique ID of the property to get details for'
+            }
+        }
+    },
+    searchProperties: {
+        description: 'Search for properties based on various criteria and return a list of matching properties',
+        parameters: {
+            city: {
+                type: 'string',
+                description: 'City to search in',
+                required: false
+            },
+            propertyType: {
+                type: 'string',
+                description: 'Type of property (APARTMENT, HOUSE, CONDO, etc.)',
+                required: false
+            },
+            operationType: {
+                type: 'string',
+                description: 'Operation type: RENT or SALE',
+                required: false
+            },
+            minPrice: {
+                type: 'number',
+                description: 'Minimum price',
+                required: false
+            },
+            maxPrice: {
+                type: 'number',
+                description: 'Maximum price',
+                required: false
+            },
+            bedrooms: {
+                type: 'number',
+                description: 'Number of bedrooms',
+                required: false
+            },
+            bathrooms: {
+                type: 'number',
+                description: 'Number of bathrooms',
+                required: false
+            },
+            minArea: {
+                type: 'number',
+                description: 'Minimum area in square meters',
+                required: false
+            },
+            maxArea: {
+                type: 'number',
+                description: 'Maximum area in square meters',
+                required: false
+            },
+            limit: {
+                type: 'number',
+                description: 'Maximum number of results to return (default: 20)',
+                required: false
+            }
+        }
     }
 } as const;
 
