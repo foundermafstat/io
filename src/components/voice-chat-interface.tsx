@@ -39,6 +39,27 @@ export default function VoiceChatInterface() {
   // Получаем функции инструментов
   const toolFunctions = useToolsFunctions()
 
+  // Получаем выбранную реплику для голосового чата
+  const voiceReplica = availableReplicas.find(r => r.uuid === selectedReplicaForVoice)
+
+  // WebRTC audio session hook - должен быть вызван до useEffect
+  const {
+    isSessionActive,
+    isLoadingContext,
+    startSession,
+    stopSession,
+    sendTextMessage,
+    registerFunction,
+    msgs: hookMsgs,
+    conversation: hookConversation,
+    status: hookStatus,
+  } = useWebRTCAudioSession(
+    voice,
+    tools,
+    selectedReplicaForVoice,
+    voiceReplica?.system_message
+  )
+
   // Загружаем доступные реплики при монтировании компонента
   useEffect(() => {
     const loadReplicas = async () => {
@@ -60,9 +81,6 @@ export default function VoiceChatInterface() {
 
     loadReplicas()
   }, [selectedReplicaForVoice])
-
-  // Получаем выбранную реплику для голосового чата
-  const voiceReplica = availableReplicas.find(r => r.uuid === selectedReplicaForVoice)
 
   // Проверяем и восстанавливаем состояние сессии при загрузке
   useEffect(() => {
@@ -86,23 +104,6 @@ export default function VoiceChatInterface() {
       }
     }
   }, []);
-
-  // WebRTC audio session hook
-  const {
-    isSessionActive,
-    startSession,
-    stopSession,
-    sendTextMessage,
-    registerFunction,
-    msgs: hookMsgs,
-    conversation: hookConversation,
-    status: hookStatus,
-  } = useWebRTCAudioSession(
-    voice,
-    tools,
-    selectedReplicaForVoice,
-    voiceReplica?.system_message
-  )
 
   // Use data from hook
   const msgs = hookMsgs
@@ -224,7 +225,28 @@ export default function VoiceChatInterface() {
               <BroadcastButton
                 isSessionActive={isSessionActive}
                 onClick={handleStartStopClick}
+                disabled={isLoadingContext}
               />
+              
+              {isLoadingContext && (
+                <motion.div
+                  className="w-full bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <span className="text-sm text-blue-800 dark:text-blue-200">
+                      Загружаем полную базу данных недвижимости...
+                    </span>
+                  </div>
+                  <p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
+                    ИИ агент получает доступ ко всем объектам для лучшей помощи
+                  </p>
+                </motion.div>
+              )}
             </div>
 
             {msgs.length > 4 && <TokenUsageDisplay />}

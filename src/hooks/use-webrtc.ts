@@ -19,6 +19,7 @@ export interface Tool {
 interface UseWebRTCAudioSessionReturn {
   status: string;
   isSessionActive: boolean;
+  isLoadingContext: boolean;
   audioIndicatorRef: React.RefObject<HTMLDivElement | null>;
   startSession: () => Promise<void>;
   stopSession: () => void;
@@ -45,6 +46,7 @@ export default function useWebRTCAudioSession(
   // Connection/session states
   const [status, setStatus] = useState("");
   const [isSessionActive, setIsSessionActive] = useState(false);
+  const [isLoadingContext, setIsLoadingContext] = useState(false);
 
   // Property data for AI context
   const [propertyContext, setPropertyContext] = useState<any>(null);
@@ -363,6 +365,7 @@ export default function useWebRTCAudioSession(
    */
   async function loadPropertyContext() {
     try {
+      setIsLoadingContext(true);
       console.log("Загружаем полный контекст недвижимости...");
       const response = await fetch("/api/properties/ai-context?limit=1000");
       if (response.ok) {
@@ -377,6 +380,8 @@ export default function useWebRTCAudioSession(
     } catch (error) {
       console.error("Error loading property context:", error);
       return null;
+    } finally {
+      setIsLoadingContext(false);
     }
   }
 
@@ -395,10 +400,10 @@ export default function useWebRTCAudioSession(
         instructions = replicaInstructions;
       }
 
-      // Add property context to instructions if available
+      // Add comprehensive property context to instructions if available
       if (propertyData && propertyData.totalProperties > 0) {
         const propertySummary = generatePropertySummary(propertyData);
-        instructions = `${instructions}\n\nADDITIONAL CONTEXT: You have access to ${propertyData.totalProperties} properties in your knowledge base. ${propertySummary} Use this information to help users find suitable properties for rent or purchase. When users ask about available properties, reference specific properties from your knowledge base and provide detailed information about them.`;
+        instructions = `${instructions}\n\n🏠 ПОЛНЫЙ ДОСТУП К БАЗЕ ДАННЫХ НЕДВИЖИМОСТИ:\n\n${propertySummary}\n\n🎯 ВАШИ ВОЗМОЖНОСТИ:\n- У вас есть полная информация о ВСЕХ ${propertyData.totalProperties} объектах недвижимости\n- Когда пользователь выделяет объект, вы можете мгновенно предоставить детальную информацию\n- Вы можете рекомендовать похожие объекты, сравнивать цены и характеристики\n- Используйте функцию getPropertyDetails для получения подробной информации о конкретном объекте\n- Помогайте пользователям найти оптимальный вариант недвижимости\n- Отвечайте на вопросы о ценах, расположении, характеристиках объектов\n- Предлагайте альтернативы и варианты для сравнения`;
       }
 
       const response = await fetch("/api/openai/session", {
@@ -422,7 +427,7 @@ export default function useWebRTCAudioSession(
   }
 
   /**
-   * Generate a summary of available properties for AI context
+   * Generate a comprehensive summary of available properties for AI context
    */
   function generatePropertySummary(propertyData: any): string {
     const { properties, totalProperties } = propertyData;
@@ -432,31 +437,80 @@ export default function useWebRTCAudioSession(
     // Group properties by type and operation
     const byType: Record<string, any[]> = {};
     const byOperation: Record<string, number> = { RENT: 0, SALE: 0 };
+    const byCity: Record<string, number> = {};
+    const priceRanges = { rent: { min: Infinity, max: 0 }, sale: { min: Infinity, max: 0 } };
 
     properties.forEach((prop: any) => {
       const type = prop.type || 'OTHER';
       if (!byType[type]) byType[type] = [];
       byType[type].push(prop);
 
-      if (prop.operation === 'RENT' && prop.price.rent) byOperation.RENT++;
-      if (prop.operation === 'SALE' && prop.price.sale) byOperation.SALE++;
+      if (prop.operation === 'RENT' && prop.price.rent) {
+        byOperation.RENT++;
+        priceRanges.rent.min = Math.min(priceRanges.rent.min, prop.price.rent);
+        priceRanges.rent.max = Math.max(priceRanges.rent.max, prop.price.rent);
+      }
+      if (prop.operation === 'SALE' && prop.price.sale) {
+        byOperation.SALE++;
+        priceRanges.sale.min = Math.min(priceRanges.sale.min, prop.price.sale);
+        priceRanges.sale.max = Math.max(priceRanges.sale.max, prop.price.sale);
+      }
+
+      // Group by city
+      const city = prop.location?.city || 'Unknown';
+      byCity[city] = (byCity[city] || 0) + 1;
     });
 
-    let summary = `Available properties summary:\n`;
-    summary += `- Total: ${totalProperties} properties\n`;
-    summary += `- For rent: ${byOperation.RENT} properties\n`;
-    summary += `- For sale: ${byOperation.SALE} properties\n\n`;
+    let summary = `🏠 ПОЛНАЯ БАЗА ДАННЫХ НЕДВИЖИМОСТИ:\n`;
+    summary += `📊 Общая статистика:\n`;
+    summary += `- Всего объектов: ${totalProperties}\n`;
+    summary += `- В аренду: ${byOperation.RENT} объектов\n`;
+    summary += `- На продажу: ${byOperation.SALE} объектов\n\n`;
 
-    // Add property type breakdown
+    // Price ranges
+    if (byOperation.RENT > 0) {
+      summary += `💰 Диапазон цен аренды: €${priceRanges.rent.min} - €${priceRanges.rent.max} в месяц\n`;
+    }
+    if (byOperation.SALE > 0) {
+      summary += `💰 Диапазон цен продажи: €${priceRanges.sale.min} - €${priceRanges.sale.max}\n`;
+    }
+
+    // Property types breakdown
+    summary += `\n🏗️ Типы недвижимости:\n`;
     Object.entries(byType).forEach(([type, props]) => {
-      summary += `${type}: ${props.length} properties\n`;
+      summary += `- ${type}: ${props.length} объектов\n`;
     });
 
-    // Add featured properties mention
+    // Cities breakdown
+    summary += `\n🌍 Расположение по городам:\n`;
+    Object.entries(byCity)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 10) // Top 10 cities
+      .forEach(([city, count]) => {
+        summary += `- ${city}: ${count} объектов\n`;
+      });
+
+    // Featured properties
     const featuredCount = properties.filter((p: any) => p.isFeatured).length;
     if (featuredCount > 0) {
-      summary += `\nFeatured properties: ${featuredCount} premium listings\n`;
+      summary += `\n⭐ Рекомендованные объекты: ${featuredCount} премиум-листингов\n`;
     }
+
+    // Sample properties for context
+    summary += `\n📋 ПРИМЕРЫ ДОСТУПНЫХ ОБЪЕКТОВ:\n`;
+    properties.slice(0, 5).forEach((prop: any, index: number) => {
+      summary += `${index + 1}. ${prop.title} (${prop.type})\n`;
+      summary += `   📍 ${prop.location?.city}, ${prop.location?.state}\n`;
+      summary += `   💰 ${prop.operation === 'RENT' ? `€${prop.price.rent}/мес` : `€${prop.price.sale}`}\n`;
+      if (prop.details?.bedrooms) summary += `   🛏️ ${prop.details.bedrooms} спален, ${prop.details.bathrooms} ванных\n`;
+      if (prop.details?.area) summary += `   📐 ${prop.details.area} м²\n`;
+      summary += `\n`;
+    });
+
+    summary += `\n💡 ВАЖНО: У вас есть доступ ко ВСЕМ ${totalProperties} объектам в базе данных. `;
+    summary += `Когда пользователь выделяет конкретный объект, вы можете предоставить детальную информацию о нем, `;
+    summary += `используя функцию getPropertyDetails. Вы можете рекомендовать похожие объекты, `;
+    summary += `сравнивать цены и характеристики, помогать с выбором оптимального варианта.`;
 
     return summary;
   }
@@ -693,6 +747,7 @@ export default function useWebRTCAudioSession(
   return {
     status,
     isSessionActive,
+    isLoadingContext,
     audioIndicatorRef,
     startSession,
     stopSession,
