@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import ChatTabs from './chat-tabs';
 import { useChatVisibility } from './chat-context';
+import { useChatTab } from './chat-tab-context';
 
 interface ResizablePanelProps {
 	children: React.ReactNode;
@@ -21,13 +22,34 @@ export default function ResizablePanel({
 	maxWidth = 600,
 }: ResizablePanelProps) {
 	const [width, setWidth] = useState(defaultWidth);
+
+	// Загружаем сохраненную ширину после монтирования на клиенте
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const savedWidth = localStorage.getItem('chat-panel-width');
+			if (savedWidth) {
+				const parsedWidth = parseInt(savedWidth, 10);
+				if (parsedWidth >= minWidth && parsedWidth <= maxWidth) {
+					setWidth(parsedWidth);
+				}
+			}
+		}
+	}, []);
 	const [isResizing, setIsResizing] = useState(false);
+	const { activeTab, isHydrated } = useChatTab();
 	const resizableRef = useRef<HTMLDivElement>(null);
 	const { isChatVisible } = useChatVisibility();
 
+	// Сохраняем ширину панели в localStorage при изменении
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('chat-panel-width', width.toString());
+		}
+	}, [width]);
+
 	useEffect(() => {
 		const handleMouseMove = (e: MouseEvent) => {
-			if (!isResizing) return;
+			if (!isResizing || activeTab === 'voice') return;
 
 			// Calculate new width based on mouse position from the right side
 			const newWidth = window.innerWidth - e.clientX;
@@ -55,10 +77,14 @@ export default function ResizablePanel({
 			window.removeEventListener('mousemove', handleMouseMove);
 			window.removeEventListener('mouseup', handleMouseUp);
 		};
-	}, [isResizing, minWidth, maxWidth]);
+	}, [isResizing, activeTab, minWidth, maxWidth]);
 
 	// Start resizing when the handle is clicked
 	const startResizing = () => {
+		// Блокируем ресайз при активном voice-табе
+		if (activeTab === 'voice') {
+			return;
+		}
 		setIsResizing(true);
 	};
 
@@ -83,7 +109,10 @@ export default function ResizablePanel({
 			>
 				{/* Resize handle */}
 				<div
-					className="absolute top-0 left-0 w-1 h-full bg-border hover:bg-accent cursor-ew-resize"
+					className={cn(
+						"absolute top-0 left-0 w-1 h-full bg-border hover:bg-accent",
+						(!isHydrated || activeTab === 'voice') ? "cursor-not-allowed" : "cursor-ew-resize"
+					)}
 					onMouseDown={startResizing}
 				/>
 				<ChatTabs />

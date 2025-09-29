@@ -92,13 +92,17 @@ export const en = {
                 description: 'Say "Start party mode" for a dynamic confetti animation!',
                 name: "Party Mode"
             },
-            themeSwitcher: {
+            backgroundFunction: {
                 description: 'Say "Change background" or "Switch to dark mode" or "Switch to light mode".',
                 name: "Theme Switcher"
             },
             scrapeWebsite: {
                 name: "Website Scraper",
                 description: 'Say "Scrape [website URL]" to extract content from a webpage.'
+            },
+            navigateToPage: {
+                name: "Navigate to Page",
+                description: 'Say "Go to [page]" or "Open [URL]" to navigate to a specific page.'
             }
         },
         clipboard: {
@@ -140,6 +144,11 @@ export const en = {
     chatTabs: {
         textChat: "Text Chat",
         voiceChat: "Voice Chat"
+    },
+    voiceChat: {
+        selectReplica: "Select Replica",
+        loadingReplicas: "Loading replicas...",
+        selectVoice: "Select Voice"
     },
     language: "English",
     languagePrompt: "Speak and respond only in English. It is crucial that you maintain your responses in English. If the user speaks in other languages, you should still respond in English."

@@ -1,6 +1,9 @@
+"use client"
+
 import dynamic from 'next/dynamic';
 import { MapSkeleton } from '@/components/skeletons';
 import { getLocations } from '@/db/queries';
+import { useEffect, useState } from 'react';
 
 const DynamicMap = dynamic(
   async () => {
@@ -13,8 +16,12 @@ const DynamicMap = dynamic(
   },
 );
 
-export async function MapContainer() {
-  const locations = await getLocations();
+export function MapContainer() {
+  const [locations, setLocations] = useState<any[]>([]);
+
+  useEffect(() => {
+    getLocations().then(setLocations);
+  }, []);
 
   return (
     <div className="z-1 sticky top-[var(--header-gap)] basis-auto">

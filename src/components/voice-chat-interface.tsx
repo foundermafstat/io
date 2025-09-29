@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useTranslations } from "./translations-context"
 import { useReplica } from "./replica-provider"
 import useWebRTCAudioSession from "@/hooks/use-webrtc"
@@ -15,14 +16,73 @@ import { TextInput } from "./text-input"
 import { TokenUsageDisplay } from "./token-usage-display"
 import { StatusDisplay } from "./status-display"
 import { ToolsEducation } from "./tools-education"
+import { useBroadcast } from "./broadcast-context"
 import { tools } from "@/lib/tools"
+import { fetchReplicas, type SensayReplica } from "@/lib/api/sensay-replicas-client"
+import { useToolsFunctions } from "@/hooks/use-tools"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export default function VoiceChatInterface() {
   const { t } = useTranslations()
   const { selectedReplicaUuid } = useReplica()
+  const { currentQuestion, hasUserAnswered, hasAgentNeededInfo } = useBroadcast()
+  const router = useRouter()
   const [voice, setVoice] = useState("ash")
+  const [selectedReplicaForVoice, setSelectedReplicaForVoice] = useState<string>("")
+  const [availableReplicas, setAvailableReplicas] = useState<SensayReplica[]>([])
+  const [isLoadingReplicas, setIsLoadingReplicas] = useState(false)
 
-  // Tools are imported from lib/tools
+  // Получаем функции инструментов
+  const toolFunctions = useToolsFunctions()
+
+  // Загружаем доступные реплики при монтировании компонента
+  useEffect(() => {
+    const loadReplicas = async () => {
+      try {
+        setIsLoadingReplicas(true)
+        const replicas = await fetchReplicas()
+        setAvailableReplicas(replicas)
+
+        // Устанавливаем первую реплику по умолчанию, если она есть
+        if (replicas.length > 0 && !selectedReplicaForVoice) {
+          setSelectedReplicaForVoice(replicas[0].uuid)
+        }
+      } catch (error) {
+        console.error("Error loading replicas:", error)
+      } finally {
+        setIsLoadingReplicas(false)
+      }
+    }
+
+    loadReplicas()
+  }, [selectedReplicaForVoice])
+
+  // Получаем выбранную реплику для голосового чата
+  const voiceReplica = availableReplicas.find(r => r.uuid === selectedReplicaForVoice)
+
+  // Проверяем и восстанавливаем состояние сессии при загрузке
+  useEffect(() => {
+    const sessionState = localStorage.getItem('voice-chat-session-state');
+    if (sessionState) {
+      try {
+        const state = JSON.parse(sessionState);
+        const timeDiff = Date.now() - state.timestamp;
+        // Восстанавливаем состояние только если прошло менее 30 секунд
+        if (timeDiff < 30000 && state.shouldRestore && state.isActive) {
+          console.log('Восстанавливаю состояние голосовой сессии после навигации');
+          toast.success("Сессия восстановлена", {
+            description: "Голосовая трансляция была активна и восстановлена.",
+          });
+        }
+        // Очищаем состояние после обработки
+        localStorage.removeItem('voice-chat-session-state');
+      } catch (error) {
+        console.error('Ошибка при восстановлении состояния сессии:', error);
+        localStorage.removeItem('voice-chat-session-state');
+      }
+    }
+  }, []);
 
   // WebRTC audio session hook
   const {
@@ -30,10 +90,60 @@ export default function VoiceChatInterface() {
     startSession,
     stopSession,
     sendTextMessage,
+    registerFunction,
     msgs: hookMsgs,
     conversation: hookConversation,
     status: hookStatus,
-  } = useWebRTCAudioSession(voice, tools)
+  } = useWebRTCAudioSession(
+    voice,
+    tools,
+    selectedReplicaForVoice,
+    voiceReplica?.system_message
+  )
+
+  // Use data from hook
+  const msgs = hookMsgs
+  const conversation = hookConversation
+  const status = hookStatus
+
+
+  // Проверяем информацию о продолжении голосового чата с предыдущей страницы
+  useEffect(() => {
+    const navigationInfo = localStorage.getItem('voice-chat-navigation')
+    if (navigationInfo) {
+      try {
+        const info = JSON.parse(navigationInfo)
+        const timeDiff = Date.now() - info.timestamp
+        // Показываем уведомление только если прошло менее 30 секунд
+        if (timeDiff < 30000 && info.wasActive) {
+          console.log('Пользователь перешел с голосовой трансляции с:', info.path)
+          // Показываем уведомление пользователю
+          setTimeout(() => {
+            toast.success("Навигация завершена", {
+              description: `Вы перешли на страницу ${info.path}. Голосовая трансляция была активна.`,
+            })
+          }, 1000)
+        }
+        // Очищаем информацию
+        localStorage.removeItem('voice-chat-navigation')
+      } catch (error) {
+        console.error('Ошибка при обработке информации о навигации:', error)
+        localStorage.removeItem('voice-chat-navigation')
+      }
+    }
+  }, [])
+
+  // Регистрируем функции инструментов
+  useEffect(() => {
+    if (registerFunction && toolFunctions) {
+      // Регистрируем все функции инструментов
+      Object.entries(toolFunctions).forEach(([name, fn]) => {
+        if (typeof fn === 'function') {
+          registerFunction(name, fn)
+        }
+      })
+    }
+  }, [registerFunction, toolFunctions])
 
   // Handle start/stop session
   const handleStartStopClick = () => {
@@ -51,34 +161,54 @@ export default function VoiceChatInterface() {
     }
   }
 
-  // Use data from hook
-  const msgs = hookMsgs
-  const conversation = hookConversation
-  const status = hookStatus
-
   return (
     <div className="flex flex-col h-full bg-background">
-      <ScrollArea className="flex-1 p-4">
+      <ScrollArea className="flex-1 p-2">
         <div className="flex flex-col items-center justify-center min-h-full">
-          <motion.div 
-            className="w-full max-w-md bg-card text-card-foreground rounded-xl border shadow-sm p-6 space-y-4"
+          <motion.div
+            className="w-full bg-card text-card-foreground rounded-xl border shadow-sm p-3 space-y-3"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">{t('voiceChat.selectReplica')}</label>
+              <Select
+                value={selectedReplicaForVoice}
+                onValueChange={setSelectedReplicaForVoice}
+                disabled={isLoadingReplicas}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={t('voiceChat.selectReplica')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableReplicas.map((replica) => (
+                    <SelectItem key={replica.uuid} value={replica.uuid}>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                          {replica.name.charAt(0)}
+                        </div>
+                        <span>{replica.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <VoiceSelector value={voice} onValueChange={setVoice} />
-            
-            <div className="flex flex-col items-center gap-4">
-              <BroadcastButton 
-                isSessionActive={isSessionActive} 
+
+            <div className="flex flex-col items-center gap-3">
+              <BroadcastButton
+                isSessionActive={isSessionActive}
                 onClick={handleStartStopClick}
               />
             </div>
-            
+
             {msgs.length > 4 && <TokenUsageDisplay messages={msgs} />}
-            
+
             {status && (
-              <motion.div 
+              <motion.div
                 className="w-full flex flex-col gap-2"
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
@@ -86,17 +216,55 @@ export default function VoiceChatInterface() {
                 transition={{ duration: 0.3 }}
               >
                 <MessageControls conversation={conversation} msgs={msgs} />
-                <TextInput 
+                <TextInput
                   onSubmit={handleTextSubmit}
                   disabled={!isSessionActive}
                 />
               </motion.div>
             )}
           </motion.div>
-          
-          {status && <StatusDisplay status={status} />}
-          
-          <div className="w-full flex flex-col items-center gap-4">
+
+            {status && <StatusDisplay status={status} />}
+
+            {/* Индикатор состояния трансляции */}
+            {isSessionActive && (
+              <motion.div
+                className="w-full bg-card text-card-foreground rounded-lg border shadow-sm p-3"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-medium">Состояние трансляции</h3>
+                  <div className="flex gap-2">
+                    {hasAgentNeededInfo && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                        Требуется информация
+                      </span>
+                    )}
+                    {hasUserAnswered && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        Пользователь ответил
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {currentQuestion && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-3">
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      <strong>Текущий вопрос:</strong> {currentQuestion.question}
+                    </p>
+                    <p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
+                      Статус: {currentQuestion.status === 'pending' ? 'Ожидает ответа' : 'Отвечен'}
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+          <div className="w-full flex flex-col items-center gap-3">
             <ToolsEducation />
           </div>
         </div>

@@ -99,6 +99,10 @@ export const fr = {
             scrapeWebsite: {
                 name: "Extracteur de Site Web",
                 description: 'Dites "Extraire le contenu de [URL du site]" pour récupérer le contenu d\'une page web.'
+            },
+            navigateToPage: {
+                name: "Naviguer vers la Page",
+                description: 'Dites "Aller à [page]" ou "Ouvrir [URL]" pour naviguer vers une page spécifique.'
             }
         },
         clipboard: {
@@ -136,10 +140,15 @@ export const fr = {
         sage: "Sage - Autoritaire et Calme",
         verse: "Verse - Dynamique et Expressive"
     },
-    chatTabs: {
-        textChat: "Chat Texte",
-        voiceChat: "Chat Vocal"
-    },
-    language: "Français",
-    languagePrompt: "Parlez et répondez uniquement en français. Il est crucial que vous mainteniez vos réponses en français. Si l'utilisateur parle dans d'autres langues, vous devriez toujours répondre en français. (French only)"
+  chatTabs: {
+    textChat: "Chat Texte",
+    voiceChat: "Chat Vocal"
+  },
+  voiceChat: {
+    selectReplica: "Sélectionner une Réplique",
+    loadingReplicas: "Chargement des répliques...",
+    selectVoice: "Sélectionner une Voix"
+  },
+  language: "Français",
+  languagePrompt: "Parlez et répondez uniquement en français. Il est crucial que vous mainteniez vos réponses en français. Si l'utilisateur parle dans d'autres langues, vous devriez toujours répondre en français. (French only)"
 }

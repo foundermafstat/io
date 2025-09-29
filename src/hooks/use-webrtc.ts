@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Conversation } from "@/lib/conversations";
 import { useTranslations } from "@/components/translations-context";
+import { useBroadcast } from "@/components/broadcast-context";
 
 export interface Tool {
   name: string;
@@ -35,8 +36,12 @@ interface UseWebRTCAudioSessionReturn {
 export default function useWebRTCAudioSession(
   voice: string,
   tools?: Tool[],
+  replicaUuid?: string,
+  replicaInstructions?: string,
 ): UseWebRTCAudioSessionReturn {
   const { t, locale } = useTranslations();
+  const { addPendingQuestion, markQuestionAnswered, resetBroadcastState } = useBroadcast();
+
   // Connection/session states
   const [status, setStatus] = useState("");
   const [isSessionActive, setIsSessionActive] = useState(false);
@@ -57,8 +62,21 @@ export default function useWebRTCAudioSession(
   // Main conversation state
   const [conversation, setConversation] = useState<Conversation[]>([]);
 
+  // Функция для определения, является ли текст вопросом
+  const isQuestion = (text: string): boolean => {
+    const questionWords = ['?', 'что', 'где', 'когда', 'почему', 'как', 'какой', 'какая', 'какое', 'какие', 'кто', 'сколько', 'можно', 'нужно', 'следует', 'хотите', 'можете', 'знаете'];
+    const lowerText = text.toLowerCase();
+    return questionWords.some(word => lowerText.includes(word)) || text.includes('?');
+  };
+
   // For function calls (AI "tools")
   const functionRegistry = useRef<Record<string, Function>>({});
+
+  // Ref для broadcast функций для использования в обработчиках
+  const broadcastRef = useRef({
+    addPendingQuestion,
+    markQuestionAnswered
+  });
 
   // Volume analysis (assistant inbound audio)
   const [currentVolume, setCurrentVolume] = useState(0);
@@ -221,12 +239,18 @@ export default function useWebRTCAudioSession(
          */
         case "conversation.item.input_audio_transcription.completed": {
           // console.log("Final user transcription:", msg.transcript);
+          const userResponse = msg.transcript || "";
+
           updateEphemeralUserMessage({
-            text: msg.transcript || "",
+            text: userResponse,
             isFinal: true,
             status: "final",
           });
           clearEphemeralUserMessage();
+
+          // Отмечаем все ожидающие вопросы как отвеченные
+          // В будущем можно добавить более умную логику для сопоставления конкретных вопросов
+          broadcastRef.current.markQuestionAnswered("current", userResponse);
           break;
         }
 
@@ -267,7 +291,16 @@ export default function useWebRTCAudioSession(
           setConversation((prev) => {
             if (prev.length === 0) return prev;
             const updated = [...prev];
-            updated[updated.length - 1].isFinal = true;
+            const lastMessage = updated[updated.length - 1];
+            lastMessage.isFinal = true;
+
+            // Проверяем, является ли сообщение вопросом и добавляем в broadcast context
+            if (lastMessage.text && isQuestion(lastMessage.text)) {
+              broadcastRef.current.addPendingQuestion({
+                question: lastMessage.text,
+              });
+            }
+
             return updated;
           });
           break;
@@ -323,6 +356,11 @@ export default function useWebRTCAudioSession(
       const response = await fetch("/api/openai/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          voice,
+          replicaUuid,
+          replicaInstructions,
+        }),
       });
       if (!response.ok) {
         throw new Error(`Failed to get ephemeral token: ${response.status}`);
@@ -497,6 +535,9 @@ export default function useWebRTCAudioSession(
     setStatus("Session stopped");
     setMsgs([]);
     setConversation([]);
+
+    // Очищаем состояние трансляции
+    resetBroadcastState();
   }
 
   /**

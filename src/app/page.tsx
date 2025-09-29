@@ -1,16 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-	MapPin, 
-	Phone, 
-	Shield, 
-	Navigation, 
+import {
+	MapPin,
+	Phone,
+	Shield,
+	Navigation,
 	Sparkles,
 	Star,
 	Building,
 	Home,
-	Villa,
 	Store,
 	Warehouse,
 	TreePine
@@ -90,7 +89,7 @@ export default function Home() {
 						{[
 							{ type: "Apartment", icon: Building },
 							{ type: "House", icon: Home },
-							{ type: "Villa", icon: Villa },
+							{ type: "Villa", icon: Home },
 							{ type: "Commercial", icon: Store },
 							{ type: "Industrial", icon: Warehouse },
 							{ type: "Land", icon: TreePine }

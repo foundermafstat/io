@@ -99,6 +99,10 @@ export const zh = {
             scrapeWebsite: {
                 name: "网页内容提取器",
                 description: '说"提取[网站URL]的内容"来获取网页内容。'
+            },
+            navigateToPage: {
+                name: "导航到页面",
+                description: '说"转到[页面]"或"打开[URL]"来导航到特定页面。'
             }
         },
         clipboard: {
@@ -136,10 +140,15 @@ export const zh = {
         sage: "Sage - 权威平静",
         verse: "Verse - 富有表现力"
     },
-    chatTabs: {
-        textChat: "文字聊天",
-        voiceChat: "语音聊天"
-    },
-    language: "Chinese",
-    languagePrompt: "只用中文说话和回答。你一定要保持你的回答是中文的。如果用户说其他语言，你应该用中文回答。（Speak Chinese only）"
+  chatTabs: {
+    textChat: "文字聊天",
+    voiceChat: "语音聊天"
+  },
+  voiceChat: {
+    selectReplica: "选择副本",
+    loadingReplicas: "正在加载副本...",
+    selectVoice: "选择语音"
+  },
+  language: "Chinese",
+  languagePrompt: "只用中文说话和回答。你一定要保持你的回答是中文的。如果用户说其他语言，你应该用中文回答。（Speak Chinese only）"
 }

@@ -96,10 +96,14 @@ export const es = {
         description: 'Di "Cambiar fondo" o "Cambiar a modo oscuro" o "Cambiar a modo claro".',
         name: "Cambiar Tema"
       },
-      scrapeWebsite: {
-        name: "Extractor de Sitios Web",
-        description: 'Di "Extraer contenido de [URL del sitio]" para obtener contenido de una página web.'
-      }
+            scrapeWebsite: {
+                name: "Extractor de Sitios Web",
+                description: 'Di "Extraer contenido de [URL del sitio]" para obtener contenido de una página web.'
+            },
+            navigateToPage: {
+                name: "Navegar a Página",
+                description: 'Di "Ir a [página]" o "Abrir [URL]" para navegar a una página específica.'
+            }
     },
     clipboard: {
       description: "Ahora puedes pegarlo en algún lugar.",
@@ -139,6 +143,11 @@ export const es = {
   chatTabs: {
     textChat: "Chat de Texto",
     voiceChat: "Chat de Voz"
+  },
+  voiceChat: {
+    selectReplica: "Seleccionar Réplica",
+    loadingReplicas: "Cargando réplicas...",
+    selectVoice: "Seleccionar Voz"
   },
   language: "Spanish",
   languagePrompt: "Habla y responde solo en español. Es crucial que mantengas tus respuestas en español. Si el usuario habla en otros idiomas, deberías responder en español. (Spanish only)"

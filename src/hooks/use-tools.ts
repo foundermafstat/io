@@ -4,7 +4,7 @@ import { toast } from "sonner"
 import confetti from 'canvas-confetti'
 import { animate as framerAnimate } from "framer-motion"
 import { useTranslations } from "@/components/translations-context"
-import FirecrawlApp, { ScrapeResponse } from '@mendable/firecrawl-js';
+import FirecrawlApp, { CrawlResponse } from '@mendable/firecrawl-js';
 
 export const useToolsFunctions = () => {
   const { t } = useTranslations();
@@ -21,26 +21,39 @@ export const useToolsFunctions = () => {
 
   const backgroundFunction = () => {
     try {
-      const html = document.documentElement;
-      const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+      // Используем next-themes для правильной смены темы
+      const event = new CustomEvent('themeToggle');
+      document.dispatchEvent(event);
+
+      // Альтернативно, можно использовать localStorage
+      const currentTheme = localStorage.getItem('theme') || 'system';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-      html.classList.remove(currentTheme);
-      html.classList.add(newTheme);
+      localStorage.setItem('theme', newTheme);
+
+      // Обновляем data-theme атрибут
+      document.documentElement.setAttribute('data-theme', newTheme);
+
+      // Обновляем классы
+      if (newTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
 
       toast(`Switched to ${newTheme} mode! 🌓`, {
         description: t('tools.switchTheme') + newTheme + ".",
       })
 
-      return { 
-        success: true, 
+      return {
+        success: true,
         theme: newTheme,
         message: t('tools.switchTheme') + newTheme + "."
       };
     } catch (error) {
-      return { 
-        success: false, 
-        message: t('tools.themeFailed') + ": " + error 
+      return {
+        success: false,
+        message: t('tools.themeFailed') + ": " + error
       };
     }
   }
@@ -69,20 +82,23 @@ export const useToolsFunctions = () => {
       const animate = () => {
         const now = Date.now()
         const end = now + duration
-        
-        const elements = document.querySelectorAll('div, p, button, h1, h2, h3')
-        elements.forEach((element) => {
-          framerAnimate(element, 
-            { 
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0],
-            }, 
-            { 
-              duration: 0.5,
-              repeat: 10,
-              ease: "easeInOut"
-            }
-          )
+
+        const elements = document.querySelectorAll('div, p, button, h1, h2, h3, span, a, img')
+        elements.forEach((element, index) => {
+          // Добавляем небольшую задержку для каждого элемента
+          setTimeout(() => {
+            framerAnimate(element,
+              {
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0],
+              },
+              {
+                duration: 0.5,
+                repeat: 3,
+                ease: "easeInOut"
+              }
+            )
+          }, index * 50) // 50ms задержка между элементами
         })
 
         const frame = () => {
@@ -163,7 +179,7 @@ export const useToolsFunctions = () => {
     const apiKey = process.env.NEXT_PUBLIC_FIRECRAWL_API_KEY;
     try {
       const app = new FirecrawlApp({ apiKey: apiKey });
-      const scrapeResult = await app.scrapeUrl(url, { formats: ['markdown', 'html'] }) as ScrapeResponse;
+      const scrapeResult = await app.scrape(url, { formats: ['markdown', 'html'] }) as CrawlResponse;
 
       if (!scrapeResult.success) {
         console.log(scrapeResult.error)
@@ -176,10 +192,10 @@ export const useToolsFunctions = () => {
       toast.success(t('tools.scrapeWebsite.toast') + " 📋", {
         description: t('tools.scrapeWebsite.success'),
       })
-    
+
       return {
         success: true,
-        message: "Here is the scraped website content: " + JSON.stringify(scrapeResult.markdown) + "Summarize and explain it to the user now in a response."
+        message: "Here is the scraped website content: " + JSON.stringify((scrapeResult as any).data?.markdown) + "Summarize and explain it to the user now in a response."
       };
 
     } catch (error) {
@@ -190,12 +206,131 @@ export const useToolsFunctions = () => {
     }
   }
 
+  const navigateToPage = ({ path }: { path: string }) => {
+    try {
+      if (path.startsWith('/')) {
+        // Внутренняя Next.js навигация - сохраняем состояние сессии
+        localStorage.setItem('voice-chat-navigation', JSON.stringify({
+          path,
+          timestamp: Date.now(),
+          wasActive: true
+        }));
+
+        // Сохраняем текущее состояние голосовой сессии
+        localStorage.setItem('voice-chat-session-state', JSON.stringify({
+          isActive: true,
+          timestamp: Date.now(),
+          targetPath: path,
+          shouldRestore: true
+        }));
+
+        // Используем обычную навигацию - Next.js SPA навигация не всегда работает
+        // для всех путей, особенно для главной страницы
+        window.location.href = path;
+
+        toast.success("Переход на страницу: " + path, {
+          description: "Трансляция не прервется - перенаправляю...",
+        })
+
+        return {
+          success: true,
+          path,
+          message: `Navigating to ${path}. Tell the user they are being redirected but the voice chat will continue uninterrupted.`
+        };
+      } else {
+        // Для внешних URL перезагрузка неизбежна
+        localStorage.setItem('voice-chat-continue', JSON.stringify({
+          path,
+          timestamp: Date.now(),
+          wasActive: true
+        }));
+
+        window.location.href = path;
+
+        toast("Переход на внешний сайт: " + path, {
+          description: "Трансляция будет прервана. Перенаправляю пользователя...",
+        })
+
+        return {
+          success: true,
+          path,
+          message: `Navigating to external site ${path}. The voice chat session will be interrupted. Tell the user they are being redirected and the session will end.`
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error navigating to page: ${error}`
+      };
+    }
+  }
+
+  const findProperty = async ({
+    city,
+    operationType,
+    budget,
+    propertyType,
+    specialRequirements,
+    checkInDate,
+    checkOutDate
+  }: {
+    city: string;
+    operationType: string;
+    budget: number;
+    propertyType: string;
+    specialRequirements: string;
+    checkInDate?: string;
+    checkOutDate?: string;
+  }) => {
+    try {
+      // Строим параметры для поиска
+      const searchParams = new URLSearchParams();
+      searchParams.append('city', city);
+      searchParams.append('operationType', operationType);
+      searchParams.append('budget', budget.toString());
+      searchParams.append('propertyType', propertyType);
+
+      if (specialRequirements) {
+        searchParams.append('specialRequirements', specialRequirements);
+      }
+      if (checkInDate) {
+        searchParams.append('checkInDate', checkInDate);
+      }
+      if (checkOutDate) {
+        searchParams.append('checkOutDate', checkOutDate);
+      }
+
+      // Переходим на страницу результатов
+      const resultsUrl = `/real-estate/results?${searchParams.toString()}`;
+
+      toast.success("Поиск недвижимости завершен", {
+        description: `Найдены подходящие варианты в ${city}`,
+      })
+
+      // Переходим на страницу с результатами
+      navigateToPage({ path: resultsUrl });
+
+      return {
+        success: true,
+        resultsUrl,
+        message: `Found properties in ${city} for ${operationType === 'RENT' ? 'rent' : 'purchase'} within budget of ${budget}. Redirecting to results page.`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error finding properties: ${error}`
+      };
+    }
+  }
+
   return {
     timeFunction,
     backgroundFunction,
     partyFunction,
     launchWebsite,
     copyToClipboard,
-    scrapeWebsite
+    scrapeWebsite,
+    navigateToPage,
+    findProperty
   }
 }

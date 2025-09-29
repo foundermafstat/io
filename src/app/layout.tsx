@@ -7,9 +7,12 @@ import { ThemeProvider } from '@/components/theme-provider';
 import Header from '@/components/header';
 import ChatProvider from '@/components/chat-provider';
 import { ChatProvider as ChatVisibilityProvider } from '@/components/chat-context';
+import { ChatTabProvider } from '@/components/chat-tab-context';
+import { BroadcastProvider } from '@/components/broadcast-context';
 import ReplicaProvider from '@/components/replica-provider';
 import ResizablePanel from '@/components/resizable-panel';
 import { TranslationsProvider } from '@/components/translations-context';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,18 +42,24 @@ export default function RootLayout({
 				>
 					<TranslationsProvider>
 					<HeaderProvider>
-						<ChatVisibilityProvider>
-							<ReplicaProvider>
-								<ChatProvider>
-									<div className="flex flex-col h-full">
-										<Header />
-										<main className="flex-1 flex overflow-hidden">
-											<ResizablePanel>{children}</ResizablePanel>
-										</main>
-									</div>
+						<BroadcastProvider>
+							<ChatVisibilityProvider>
+								<ReplicaProvider>
+									<ChatProvider>
+										<ChatTabProvider>
+										<div className="flex flex-col h-full">
+											<Header />
+											<main className="flex-1 flex overflow-hidden">
+												<ResizablePanel>{children}</ResizablePanel>
+											</main>
+										</div>
+
+										<Toaster />
+									</ChatTabProvider>
 								</ChatProvider>
 							</ReplicaProvider>
 						</ChatVisibilityProvider>
+						</BroadcastProvider>
 					</HeaderProvider>
 					</TranslationsProvider>
 				</ThemeProvider>

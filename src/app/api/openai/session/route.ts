@@ -1,11 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST() {
-    try {        
+export async function POST(request: NextRequest) {
+    try {
         if (!process.env.OPENAI_API_KEY){
             throw new Error(`OPENAI_API_KEY is not set`);
-
         }
+
+        const body = await request.json();
+        const { voice = "alloy", replicaUuid, replicaInstructions } = body;
+
+        // Если указана реплика, используем её инструкции
+        let instructions = "Start conversation with the user by saying 'Hello, how can I help you today?' Use the available tools when relevant. After executing a tool, you will need to respond (create a subsequent conversation item) to the user sharing the function result or error. If you do not respond with additional message with function result, user will not know you successfully executed the tool. Speak and respond in the language of the user.";
+
+        if (replicaUuid && replicaInstructions) {
+            instructions = replicaInstructions;
+        }
+
         const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
             method: "POST",
             headers: {
@@ -14,9 +24,9 @@ export async function POST() {
             },
             body: JSON.stringify({
                 model: "gpt-4o-realtime-preview-2024-12-17",
-                voice: "alloy",
+                voice: voice,
                 modalities: ["audio", "text"],
-                instructions:"Start conversation with the user by saying 'Hello, how can I help you today?' Use the available tools when relevant. After executing a tool, you will need to respond (create a subsequent conversation item) to the user sharing the function result or error. If you do not respond with additional message with function result, user will not know you successfully executed the tool. Speak and respond in the language of the user.",
+                instructions: instructions,
                 tool_choice: "auto",
             }),
         });
