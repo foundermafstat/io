@@ -17,7 +17,33 @@ export const en = {
         logo: "OpenAI Realtime Starter",
         system: "System",
         theme: "Toggle theme",
-        twitter: "Follow on"
+        twitter: "Follow on",
+        home: "Home",
+        realEstate: "Real Estate",
+        adminPanel: "Admin Panel",
+        development: "Development",
+        propertySearch: "Property Search & Purchase",
+        systemManagement: "System Management",
+        developmentTools: "Development Tools",
+        browseProperties: "Browse Properties",
+        smartSearch: "Smart Search",
+        compareProperties: "Compare Properties",
+        contactAgent: "Contact Agent",
+        bookViewing: "Book Viewing",
+        replicasManagement: "Replicas Management",
+        aiTraining: "AI Training",
+        databaseManagement: "Database Management",
+        settings: "Settings",
+        apiKeys: "API Keys",
+        chatHistory: "Chat History",
+        experimentalApi: "Experimental API",
+        activeReplica: "Active Replica",
+        refreshReplicas: "Refresh Replicas",
+        noReplicasAvailable: "No replicas available",
+        loadingReplicas: "Loading replicas...",
+        selectReplica: "Select Replica",
+        hideAiAssistant: "Hide AI Assistant",
+        showAiAssistant: "Show AI Assistant"
     },
     hero: {
         badge: "Next.js + shadcn/ui",
@@ -110,6 +136,10 @@ export const en = {
         coral: "Coral - Clear & Friendly",
         sage: "Sage - Authoritative & Calm",
         verse: "Verse - Dynamic & Expressive"
+    },
+    chatTabs: {
+        textChat: "Text Chat",
+        voiceChat: "Voice Chat"
     },
     language: "English",
     languagePrompt: "Speak and respond only in English. It is crucial that you maintain your responses in English. If the user speaks in other languages, you should still respond in English."

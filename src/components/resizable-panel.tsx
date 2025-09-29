@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import ChatInterface from './chat-interface';
+import ChatTabs from './chat-tabs';
 import { useChatVisibility } from './chat-context';
 
 interface ResizablePanelProps {
@@ -86,7 +86,7 @@ export default function ResizablePanel({
 					className="absolute top-0 left-0 w-1 h-full bg-border hover:bg-accent cursor-ew-resize"
 					onMouseDown={startResizing}
 				/>
-				<ChatInterface />
+				<ChatTabs />
 			</div>
 		</div>
 	);

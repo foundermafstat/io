@@ -17,7 +17,33 @@ export const es = {
     logo: "OpenAI Realtime Starter",
     system: "Sistema",
     theme: "Cambiar tema",
-    twitter: "Seguir en"
+    twitter: "Seguir en",
+    home: "Inicio",
+    realEstate: "Bienes Raíces",
+    adminPanel: "Panel de Administración",
+    development: "Desarrollo",
+    propertySearch: "Búsqueda y Compra de Propiedades",
+    systemManagement: "Gestión del Sistema",
+    developmentTools: "Herramientas de Desarrollo",
+    browseProperties: "Explorar Propiedades",
+    smartSearch: "Búsqueda Inteligente",
+    compareProperties: "Comparar Propiedades",
+    contactAgent: "Contactar Agente",
+    bookViewing: "Reservar Visita",
+    replicasManagement: "Gestión de Réplicas",
+    aiTraining: "Entrenamiento de IA",
+    databaseManagement: "Gestión de Base de Datos",
+    settings: "Configuración",
+    apiKeys: "Claves API",
+    chatHistory: "Historial de Chat",
+    experimentalApi: "API Experimental",
+    activeReplica: "Réplica Activa",
+    refreshReplicas: "Actualizar Réplicas",
+    noReplicasAvailable: "No hay réplicas disponibles",
+    loadingReplicas: "Cargando réplicas...",
+    selectReplica: "Seleccionar Réplica",
+    hideAiAssistant: "Ocultar Asistente de IA",
+    showAiAssistant: "Mostrar Asistente de IA"
   },
   hero: {
     badge: "Next.js + shadcn/ui",
@@ -109,6 +135,10 @@ export const es = {
     coral: "Coral - Clara y Amigable",
     sage: "Sage - Autoritaria y Tranquila",
     verse: "Verse - Dinámica y Expresiva"
+  },
+  chatTabs: {
+    textChat: "Chat de Texto",
+    voiceChat: "Chat de Voz"
   },
   language: "Spanish",
   languagePrompt: "Habla y responde solo en español. Es crucial que mantengas tus respuestas en español. Si el usuario habla en otros idiomas, deberías responder en español. (Spanish only)"

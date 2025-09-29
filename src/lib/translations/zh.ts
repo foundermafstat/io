@@ -17,7 +17,33 @@ export const zh = {
         logo: "OpenAI 实时启动器",
         system: "系统",
         theme: "切换主题",
-        twitter: "在推特上关注"
+        twitter: "在推特上关注",
+        home: "首页",
+        realEstate: "房地产",
+        adminPanel: "管理面板",
+        development: "开发",
+        propertySearch: "房产搜索与购买",
+        systemManagement: "系统管理",
+        developmentTools: "开发工具",
+        browseProperties: "浏览房产",
+        smartSearch: "智能搜索",
+        compareProperties: "比较房产",
+        contactAgent: "联系经纪人",
+        bookViewing: "预约看房",
+        replicasManagement: "副本管理",
+        aiTraining: "AI 训练",
+        databaseManagement: "数据库管理",
+        settings: "设置",
+        apiKeys: "API 密钥",
+        chatHistory: "聊天记录",
+        experimentalApi: "实验性 API",
+        activeReplica: "活跃副本",
+        refreshReplicas: "刷新副本",
+        noReplicasAvailable: "没有可用的副本",
+        loadingReplicas: "正在加载副本...",
+        selectReplica: "选择副本",
+        hideAiAssistant: "隐藏 AI 助手",
+        showAiAssistant: "显示 AI 助手"
     },
     hero: {
         badge: "Next.js + shadcn/ui",
@@ -109,6 +135,10 @@ export const zh = {
         coral: "Coral - 清晰友好",
         sage: "Sage - 权威平静",
         verse: "Verse - 富有表现力"
+    },
+    chatTabs: {
+        textChat: "文字聊天",
+        voiceChat: "语音聊天"
     },
     language: "Chinese",
     languagePrompt: "只用中文说话和回答。你一定要保持你的回答是中文的。如果用户说其他语言，你应该用中文回答。（Speak Chinese only）"

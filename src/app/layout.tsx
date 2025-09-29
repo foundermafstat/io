@@ -9,6 +9,7 @@ import ChatProvider from '@/components/chat-provider';
 import { ChatProvider as ChatVisibilityProvider } from '@/components/chat-context';
 import ReplicaProvider from '@/components/replica-provider';
 import ResizablePanel from '@/components/resizable-panel';
+import { TranslationsProvider } from '@/components/translations-context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
 					enableSystem={true}
 					disableTransitionOnChange
 				>
+					<TranslationsProvider>
 					<HeaderProvider>
 						<ChatVisibilityProvider>
 							<ReplicaProvider>
@@ -50,6 +52,7 @@ export default function RootLayout({
 							</ReplicaProvider>
 						</ChatVisibilityProvider>
 					</HeaderProvider>
+					</TranslationsProvider>
 				</ThemeProvider>
 				{/* <Script 
 					src="https://chat-widget.sensay.io/b4d138ab-41ad-4830-b193-166db4d5b124/embed-script.js" 

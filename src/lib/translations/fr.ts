@@ -17,7 +17,33 @@ export const fr = {
         logo: "OpenAI Realtime Starter",
         system: "Système",
         theme: "Changer le thème",
-        twitter: "Suivre sur"
+        twitter: "Suivre sur",
+        home: "Accueil",
+        realEstate: "Immobilier",
+        adminPanel: "Panneau d'Administration",
+        development: "Développement",
+        propertySearch: "Recherche et Achat de Propriétés",
+        systemManagement: "Gestion du Système",
+        developmentTools: "Outils de Développement",
+        browseProperties: "Parcourir les Propriétés",
+        smartSearch: "Recherche Intelligente",
+        compareProperties: "Comparer les Propriétés",
+        contactAgent: "Contacter l'Agent",
+        bookViewing: "Réserver une Visite",
+        replicasManagement: "Gestion des Répliques",
+        aiTraining: "Formation IA",
+        databaseManagement: "Gestion de Base de Données",
+        settings: "Paramètres",
+        apiKeys: "Clés API",
+        chatHistory: "Historique des Chats",
+        experimentalApi: "API Expérimentale",
+        activeReplica: "Réplique Active",
+        refreshReplicas: "Actualiser les Répliques",
+        noReplicasAvailable: "Aucune réplique disponible",
+        loadingReplicas: "Chargement des répliques...",
+        selectReplica: "Sélectionner une Réplique",
+        hideAiAssistant: "Masquer l'Assistant IA",
+        showAiAssistant: "Afficher l'Assistant IA"
     },
     hero: {
         badge: "Next.js + shadcn/ui",
@@ -109,6 +135,10 @@ export const fr = {
         coral: "Coral - Claire et Amicale",
         sage: "Sage - Autoritaire et Calme",
         verse: "Verse - Dynamique et Expressive"
+    },
+    chatTabs: {
+        textChat: "Chat Texte",
+        voiceChat: "Chat Vocal"
     },
     language: "Français",
     languagePrompt: "Parlez et répondez uniquement en français. Il est crucial que vous mainteniez vos réponses en français. Si l'utilisateur parle dans d'autres langues, vous devriez toujours répondre en français. (French only)"

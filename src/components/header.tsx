@@ -30,36 +30,39 @@ import { useHeader } from '@/components/header-context';
 import { useReplica } from './replica-context';
 import { useChatVisibility } from './chat-context';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LanguageSwitcher } from './language-switcher';
+import { useTranslations } from './translations-context';
 
 function HeaderInner() {
 	const pathname = usePathname();
 	const [playerName] = useState('User');
 	const { isChatVisible, toggleChat } = useChatVisibility();
+	const { t } = useTranslations();
 
 	// Navigation items divided by categories
 
 	// Real Estate Application Menu
 	const realEstateItems = [
-		{ name: 'Browse Properties', path: '/real-estate/browse' },
-		{ name: 'Smart Search', path: '/real-estate/search' },
-		{ name: 'Compare Properties', path: '/real-estate/compare' },
-		{ name: 'Contact Agent', path: '/real-estate/contact' },
-		{ name: 'Book Viewing', path: '/real-estate/booking' },
+		{ name: t('header.browseProperties'), path: '/real-estate/browse' },
+		{ name: t('header.smartSearch'), path: '/real-estate/search' },
+		{ name: t('header.compareProperties'), path: '/real-estate/compare' },
+		{ name: t('header.contactAgent'), path: '/real-estate/contact' },
+		{ name: t('header.bookViewing'), path: '/real-estate/booking' },
 	];
 
 	// Admin Panel Menu
 	const adminItems = [
-		{ name: 'Replicas Management', path: '/admin/replicas' },
-		{ name: 'AI Training', path: '/admin/training' },
-		{ name: 'Database Management', path: '/admin/database' },
-		{ name: 'Settings', path: '/admin/settings' },
+		{ name: t('header.replicasManagement'), path: '/admin/replicas' },
+		{ name: t('header.aiTraining'), path: '/admin/training' },
+		{ name: t('header.databaseManagement'), path: '/admin/database' },
+		{ name: t('header.settings'), path: '/admin/settings' },
 	];
 
 	// Legacy items (keeping for backward compatibility)
 	const legacyItems = [
-		{ name: 'API Keys', path: '/api-keys' },
-		{ name: 'Chat History', path: '/chat-history' },
-		{ name: 'Experimental API', path: '/experimental' },
+		{ name: t('header.apiKeys'), path: '/api-keys' },
+		{ name: t('header.chatHistory'), path: '/chat-history' },
+		{ name: t('header.experimentalApi'), path: '/experimental' },
 	];
 
 	const { headerState } = useHeader();
@@ -76,7 +79,7 @@ function HeaderInner() {
 								pathname === '/' ? 'text-primary' : 'text-foreground'
 							}`}
 						>
-							Home
+							{t('header.home')}
 						</Link>
 
 						{/* Dropdown menu for Real Estate Application */}
@@ -86,12 +89,12 @@ function HeaderInner() {
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">Real Estate</span>
+									<span className="text-sm font-medium">{t('header.realEstate')}</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>Property Search & Purchase</DropdownMenuLabel>
+								<DropdownMenuLabel>{t('header.propertySearch')}</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								{realEstateItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
@@ -117,12 +120,12 @@ function HeaderInner() {
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">Admin Panel</span>
+									<span className="text-sm font-medium">{t('header.adminPanel')}</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>System Management</DropdownMenuLabel>
+								<DropdownMenuLabel>{t('header.systemManagement')}</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								{adminItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
@@ -148,12 +151,12 @@ function HeaderInner() {
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">Development</span>
+									<span className="text-sm font-medium">{t('header.development')}</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>Development Tools</DropdownMenuLabel>
+								<DropdownMenuLabel>{t('header.developmentTools')}</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								{legacyItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
@@ -180,7 +183,7 @@ function HeaderInner() {
 						size="icon"
 						onClick={toggleChat}
 						className="text-foreground hover:bg-accent hover:text-accent-foreground"
-						title={isChatVisible ? 'Hide AI Assistant' : 'Show AI Assistant'}
+						title={isChatVisible ? t('header.hideAiAssistant') : t('header.showAiAssistant')}
 					>
 						<MessageSquare
 							className={isChatVisible ? 'text-primary' : 'text-white'}
@@ -188,6 +191,8 @@ function HeaderInner() {
 					</Button>
 
 					<ModeToggle />
+
+					<LanguageSwitcher />
 
 					{/* Replica Selection Dropdown */}
 					<ReplicaDropdown />
@@ -270,6 +275,7 @@ function ReplicaDropdown() {
 		refreshReplicas,
 		selectedReplica,
 	} = useReplica();
+	const { t } = useTranslations();
 
 	return (
 		<DropdownMenu>
@@ -281,16 +287,16 @@ function ReplicaDropdown() {
 					<Bot size={14} className="mr-1" />
 					<span className="text-sm font-medium">
 						{loading
-							? 'Loading replicas...'
+							? t('header.loadingReplicas')
 							: selectedReplica
 							? selectedReplica.name
-							: 'Select Replica'}
+							: t('header.selectReplica')}
 					</span>
 					<ChevronDown size={14} />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<DropdownMenuLabel>Active Replica</DropdownMenuLabel>
+				<DropdownMenuLabel>{t('header.activeReplica')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 
 				{loading ? (
@@ -315,13 +321,13 @@ function ReplicaDropdown() {
 						</DropdownMenuItem>
 					))
 				) : (
-					<DropdownMenuItem disabled>No replicas available</DropdownMenuItem>
+					<DropdownMenuItem disabled>{t('header.noReplicasAvailable')}</DropdownMenuItem>
 				)}
 
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={refreshReplicas}>
 					<RefreshCcw className="h-4 w-4 mr-2" />
-					Refresh Replicas
+					{t('header.refreshReplicas')}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
