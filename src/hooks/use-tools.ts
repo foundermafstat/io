@@ -476,6 +476,73 @@ export const useToolsFunctions = () => {
     }
   }
 
+  const navigateToProperty = async ({
+    propertyId,
+    propertyName
+  }: {
+    propertyId?: string;
+    propertyName?: string;
+  }) => {
+    try {
+      let targetPropertyId = propertyId;
+
+      // Если передан только name, ищем по названию
+      if (!propertyId && propertyName) {
+        const searchResponse = await fetch(`/api/properties?search=${encodeURIComponent(propertyName)}&limit=1`);
+        
+        if (searchResponse.ok) {
+          const searchData = await searchResponse.json();
+          if (searchData.success && searchData.properties && searchData.properties.length > 0) {
+            targetPropertyId = searchData.properties[0].id;
+          }
+        }
+      }
+
+      if (!targetPropertyId) {
+        return {
+          success: false,
+          message: `Property not found${propertyName ? ` with name "${propertyName}"` : ''}. Please check the property ID or name.`
+        };
+      }
+
+      // Строим URL для детальной страницы объекта
+      const propertyUrl = `/property/${targetPropertyId}`;
+
+      // Сохраняем состояние голосовой сессии
+      localStorage.setItem('voice-chat-navigation', JSON.stringify({
+        path: propertyUrl,
+        timestamp: Date.now(),
+        wasActive: true
+      }));
+
+      localStorage.setItem('voice-chat-session-state', JSON.stringify({
+        isActive: true,
+        timestamp: Date.now(),
+        targetPath: propertyUrl,
+        shouldRestore: true
+      }));
+
+      // Переходим к детальной странице объекта
+      window.location.href = propertyUrl;
+
+      toast.success("Переход к объекту", {
+        description: `Открываем детальную страницу объекта${propertyName ? ` "${propertyName}"` : ''}`,
+      });
+
+      return {
+        success: true,
+        propertyUrl,
+        propertyId: targetPropertyId,
+        message: `Navigating to property details${propertyName ? ` for "${propertyName}"` : ''}. You will see detailed information about the property including photos, specifications, and contact options.`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Error navigating to property: ${error}`
+      };
+    }
+  }
+
   return {
     timeFunction,
     backgroundFunction,
@@ -486,6 +553,7 @@ export const useToolsFunctions = () => {
     navigateToPage,
     findProperty,
     getPropertyDetails,
-    navigateToQuiz
+    navigateToQuiz,
+    navigateToProperty
   }
 }

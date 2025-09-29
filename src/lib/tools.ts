@@ -199,6 +199,21 @@ const toolDefinitions = {
                 required: false
             }
         }
+    },
+    navigateToProperty: {
+        description: 'Navigate to a detailed property page by property ID or name',
+        parameters: {
+            propertyId: {
+                type: 'string',
+                description: 'The unique ID of the property to view details for',
+                required: false
+            },
+            propertyName: {
+                type: 'string',
+                description: 'The name or title of the property to search for',
+                required: false
+            }
+        }
     }
 } as const;
 

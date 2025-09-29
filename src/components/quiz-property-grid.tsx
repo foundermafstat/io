@@ -255,7 +255,7 @@ function PropertyCard({ property }: { property: Property }) {
       <div className="relative h-48 bg-muted">
         {!imageError ? (
           <Image
-            src="/placeholder.svg"
+            src={Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : "/placeholder.svg"}
             alt={property.title}
             fill
             className={`object-cover property-image ${imageLoading ? 'property-image-loading' : 'property-image-loaded'}`}
@@ -378,7 +378,11 @@ function PropertyCard({ property }: { property: Property }) {
           </div>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.location.href = `/property/${property.id}`}
+            >
               <Eye className="w-4 h-4 mr-1" />
               {t('quiz.properties.view')}
             </Button>
