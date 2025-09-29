@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { initDatabase } from '@/app/lib/db-init';
+import { initDatabase } from '@/lib/db-init';
 
 // GET /api/db-init - инициализировать базу данных
 export async function GET() {

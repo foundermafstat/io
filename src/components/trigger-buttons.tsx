@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Navigation, Moon, Sun, Palette, MessageSquare } from 'lucide-react';
 import { useHeader } from './header-context';
-import { ChatTrigger } from '@/app/lib/utils/parseTrigger';
+import { ChatTrigger } from '@/lib/utils/parseTrigger';
 import { SensayReplica } from '@/lib/api/sensay-replicas-client';
 import { useChat } from './chat-provider';
 

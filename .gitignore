@@ -109,3 +109,5 @@ Thumbs.db
 
 # Keys file (contains sensitive data)
 keys.txt
+
+generated/prisma/

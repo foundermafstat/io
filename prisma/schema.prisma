@@ -1,11 +1,11 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // Существующие модели
@@ -91,4 +91,291 @@ model Replica {
   apiSettings       ApiSettings   @relation(fields: [apiSettingsId], references: [id])
   
   @@map("replicas")
+}
+
+// ===== МОДЕЛИ ДЛЯ НЕДВИЖИМОСТИ =====
+
+// Типы недвижимости
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  CONDO
+  TOWNHOUSE
+  STUDIO
+  LOFT
+  PENTHOUSE
+  VILLA
+  COMMERCIAL
+  OFFICE
+  RETAIL
+  WAREHOUSE
+  LAND
+  FARM
+  OTHER
+}
+
+// Статусы недвижимости
+enum PropertyStatus {
+  AVAILABLE
+  RENTED
+  SOLD
+  PENDING
+  MAINTENANCE
+  UNAVAILABLE
+}
+
+// Типы операций
+enum OperationType {
+  RENT
+  SALE
+  BOTH
+}
+
+// Модель недвижимости
+model Property {
+  id                String        @id @default(cuid())
+  title             String        // Заголовок объявления
+  description       String        // Подробное описание
+  propertyType      PropertyType  // Тип недвижимости
+  operationType     OperationType // Тип операции (аренда/продажа)
+  status            PropertyStatus @default(AVAILABLE) // Статус
+  
+  // Адрес и местоположение
+  address           String        // Полный адрес
+  city              String        // Город
+  state             String        // Область/штат
+  country           String        // Страна
+  postalCode        String        // Почтовый индекс
+  latitude          Float?        // Широта
+  longitude         Float?        // Долгота
+  
+  // Основные характеристики
+  bedrooms          Int?          // Количество спален
+  bathrooms         Float?        // Количество ванных комнат
+  area              Float?        // Площадь в кв.м
+  floor             Int?          // Этаж
+  totalFloors       Int?          // Всего этажей в здании
+  yearBuilt         Int?          // Год постройки
+  
+  // Цены
+  rentPrice         Float?        // Цена аренды в месяц
+  salePrice         Float?        // Цена продажи
+  currency          String        @default("USD") // Валюта
+  
+  // Дополнительные характеристики
+  features          Json      // Особенности (кондиционер, бассейн, парковка и т.д.)
+  amenities         Json      // Удобства (спортзал, охрана, лифт и т.д.)
+  images            Json      // URL изображений
+  
+  // Метаданные
+  isFeatured        Boolean       @default(false) // Рекомендуемое
+  isVerified        Boolean       @default(false) // Проверенное
+  views             Int           @default(0) // Количество просмотров
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Связи
+  ownerId           String        // Владелец недвижимости
+  agentId           String?       // Агент по недвижимости
+  locationId        String?       // Связанная локация
+  
+  // Связанные модели
+  owner             User          @relation("PropertyOwner", fields: [ownerId], references: [id])
+  agent             User?         @relation("PropertyAgent", fields: [agentId], references: [id])
+  location          Location?     @relation(fields: [locationId], references: [id])
+  reservations      PropertyReservation[]
+  aiMemories        PropertyAIMemory[]
+  reviews           PropertyReview[]
+  favorites         PropertyFavorite[]
+  
+  @@map("properties")
+}
+
+// Модель резерваций недвижимости
+model PropertyReservation {
+  id                String        @id @default(cuid())
+  propertyId        String        // ID недвижимости
+  userId            String        // ID пользователя
+  operationType     OperationType // Аренда или покупка
+  
+  // Даты
+  startDate         DateTime      // Дата начала
+  endDate           DateTime?     // Дата окончания (для аренды)
+  moveInDate        DateTime?     // Дата заселения
+  moveOutDate       DateTime?     // Дата выселения
+  
+  // Цены и условия
+  totalPrice        Float         // Общая стоимость
+  monthlyRent       Float?        // Ежемесячная аренда
+  deposit           Float?        // Залог
+  currency          String        @default("USD")
+  
+  // Статус резервации
+  status            String        @default("PENDING") // PENDING, CONFIRMED, CANCELLED, COMPLETED
+  notes             String?       // Дополнительные заметки
+  
+  // Метаданные
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Связи
+  property          Property      @relation(fields: [propertyId], references: [id])
+  user              User          @relation("PropertyReservations", fields: [userId], references: [id])
+  
+  @@map("property_reservations")
+}
+
+// Модель для хранения памяти ИИ агента о недвижимости
+model PropertyAIMemory {
+  id                String        @id @default(cuid())
+  propertyId        String        // ID недвижимости
+  replicaId         String?       // ID реплики ИИ агента
+  
+  // Тип памяти
+  memoryType        String        // PREFERENCE, INTERACTION, FEEDBACK, ANALYSIS
+  title             String        // Заголовок памяти
+  content           String        // Содержание памяти
+  context           Json?         // Дополнительный контекст в JSON
+  
+  // Метаданные
+  importance        Int           @default(1) // Важность (1-10)
+  isActive          Boolean       @default(true) // Активна ли память
+  expiresAt         DateTime?     // Дата истечения памяти
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Связи
+  property          Property      @relation(fields: [propertyId], references: [id])
+  
+  @@map("property_ai_memories")
+}
+
+// Модель отзывов о недвижимости
+model PropertyReview {
+  id                String        @id @default(cuid())
+  propertyId        String        // ID недвижимости
+  userId            String        // ID пользователя
+  
+  // Оценка
+  rating            Int           // Оценка от 1 до 5
+  title             String        // Заголовок отзыва
+  comment           String        // Текст отзыва
+  
+  // Категории оценки
+  cleanliness       Int?          // Чистота (1-5)
+  location          Int?          // Расположение (1-5)
+  value             Int?          // Соотношение цена/качество (1-5)
+  communication     Int?          // Общение с владельцем (1-5)
+  
+  // Метаданные
+  isVerified        Boolean       @default(false) // Подтвержденный отзыв
+  helpfulVotes      Int           @default(0) // Полезные голоса
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Связи
+  property          Property      @relation(fields: [propertyId], references: [id])
+  user              User          @relation("PropertyReviews", fields: [userId], references: [id])
+  
+  @@map("property_reviews")
+}
+
+// Модель избранного
+model PropertyFavorite {
+  id                String        @id @default(cuid())
+  userId            String        // ID пользователя
+  propertyId        String        // ID недвижимости
+  createdAt         DateTime      @default(now())
+  
+  // Связи
+  user              User          @relation("PropertyFavorites", fields: [userId], references: [id])
+  property          Property      @relation(fields: [propertyId], references: [id])
+  
+  @@unique([userId, propertyId])
+  @@map("property_favorites")
+}
+
+// Модель поисковых запросов пользователей
+model PropertySearch {
+  id                String        @id @default(cuid())
+  userId            String        // ID пользователя
+  
+  // Параметры поиска
+  query             String?       // Текстовый запрос
+  propertyTypes     Json // Типы недвижимости
+  operationType     OperationType? // Тип операции
+  minPrice          Float?        // Минимальная цена
+  maxPrice          Float?        // Максимальная цена
+  minArea           Float?        // Минимальная площадь
+  maxArea           Float?        // Максимальная площадь
+  bedrooms          Int?          // Количество спален
+  bathrooms         Float?        // Количество ванных
+  city              String?       // Город
+  state             String?       // Область
+  country           String?       // Страна
+  
+  // Результаты поиска
+  resultCount       Int           @default(0) // Количество найденных результатов
+  isSaved           Boolean       @default(false) // Сохранен ли поиск
+  
+  // Метаданные
+  createdAt         DateTime      @default(now())
+  lastUsedAt        DateTime      @default(now())
+  
+  // Связи
+  user              User          @relation("PropertySearches", fields: [userId], references: [id])
+  
+  @@map("property_searches")
+}
+
+// Расширение модели User для недвижимости
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Новые поля для недвижимости
+  phone             String?       // Телефон
+  avatar            String?       // URL аватара
+  isAgent           Boolean       @default(false) // Является ли агентом
+  isVerified        Boolean       @default(false) // Верифицирован ли
+  bio               String?       // Биография
+  languages         Json      // Языки
+  specialties       Json      // Специализации агента
+  
+  // Связи с недвижимостью
+  ownedProperties   Property[]    @relation("PropertyOwner")
+  agentProperties   Property[]    @relation("PropertyAgent")
+  propertyReservations PropertyReservation[] @relation("PropertyReservations")
+  propertyReviews   PropertyReview[] @relation("PropertyReviews")
+  propertyFavorites PropertyFavorite[] @relation("PropertyFavorites")
+  propertySearches  PropertySearch[] @relation("PropertySearches")
+
+  @@map("users")
+}
+
+// Расширение модели Location для недвижимости
+model Location {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  latitude  Float
+  longitude Float
+  featured  Boolean  @default(false)
+  imageUrl  String?
+
+  // Новые поля
+  city      String?  // Город
+  state     String?  // Область/штат
+  country   String?  // Страна
+  description String? // Описание локации
+  
+  // Связи
+  properties Property[] // Недвижимость в этой локации
+
+  @@map("locations")
 }
