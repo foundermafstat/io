@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RefreshCw, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from '@/components/translations-context';
 
 interface PropertySearchResult {
 	properties: Property[];
@@ -21,6 +22,7 @@ interface PropertySearchResult {
 }
 
 export default function PropertiesPage() {
+	const { t } = useTranslations();
 	const searchParams = useSearchParams();
 	const [properties, setProperties] = useState<Property[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -66,14 +68,14 @@ export default function PropertiesPage() {
 			setHasMore(data.hasMore);
 			
 		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Произошла ошибка при загрузке объектов';
+			const errorMessage = err instanceof Error ? err.message : t('properties.errorLoading');
 			setError(errorMessage);
 			toast.error(errorMessage);
 			console.error('Error fetching properties:', err);
 		} finally {
 			setLoading(false);
 		}
-	}, []);
+	}, [t]);
 
 	// Обработчик изменения фильтров
 	const handleFiltersChange = useCallback((filters: PropertySearchFilters) => {
@@ -126,9 +128,9 @@ export default function PropertiesPage() {
 		<div className="container mx-auto px-4 py-8">
 			{/* Заголовок */}
 			<div className="mb-8">
-				<h1 className="text-3xl font-bold mb-2">Объекты недвижимости</h1>
+				<h1 className="text-3xl font-bold mb-2">{t('properties.title')}</h1>
 				<p className="text-gray-600">
-					Найдено объектов: {loading ? '...' : totalCount.toLocaleString()}
+					{t('properties.foundCount', { count: loading ? '...' : totalCount.toLocaleString() })}
 				</p>
 			</div>
 
@@ -145,12 +147,12 @@ export default function PropertiesPage() {
 						<CardContent className="p-6 text-center">
 							<AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
 							<h3 className="text-lg font-semibold text-red-800 mb-2">
-								Ошибка загрузки
+								{t('properties.errorTitle')}
 							</h3>
 							<p className="text-red-600 mb-4">{error}</p>
 							<Button onClick={refreshData} variant="outline">
 								<RefreshCw className="h-4 w-4 mr-2" />
-								Попробовать снова
+								{t('properties.tryAgain')}
 							</Button>
 						</CardContent>
 					</Card>
@@ -165,7 +167,7 @@ export default function PropertiesPage() {
 						{hasMore && !loading && (
 							<div className="text-center mt-8">
 								<Button onClick={loadMore} size="lg">
-									Загрузить еще
+									{t('properties.loadMore')}
 								</Button>
 							</div>
 						)}
@@ -175,7 +177,7 @@ export default function PropertiesPage() {
 							<div className="text-center mt-8">
 								<div className="flex items-center justify-center gap-2">
 									<RefreshCw className="h-4 w-4 animate-spin" />
-									<span>Загрузка...</span>
+									<span>{t('properties.loading')}</span>
 								</div>
 							</div>
 						)}

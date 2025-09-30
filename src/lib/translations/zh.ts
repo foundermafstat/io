@@ -336,5 +336,36 @@ export const zh = {
       copyright: "源代码可在GitHub上获取。",
       phone: "电话"
     }
+  },
+  properties: {
+    title: "房地产物业",
+    foundCount: "找到的物业：{count}",
+    errorLoading: "加载物业时发生错误",
+    errorTitle: "加载错误",
+    tryAgain: "重试",
+    loadMore: "加载更多",
+    loading: "加载中..."
+  },
+  propertyFilters: {
+    searchPlaceholder: "搜索物业...",
+    title: "筛选器",
+    clear: "清除",
+    operationType: "操作类型",
+    selectOperationType: "选择类型",
+    allTypes: "所有类型",
+    rent: "出租",
+    sale: "出售",
+    both: "出租和出售",
+    city: "城市",
+    selectCity: "选择城市",
+    allCities: "所有城市",
+    loading: "加载中...",
+    priceRange: "价格范围",
+    from: "从",
+    to: "到"
+  },
+  propertyGrid: {
+    noResults: "未找到物业",
+    tryDifferentFilters: "尝试更改您的搜索参数"
   }
 }

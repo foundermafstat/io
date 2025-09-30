@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from '@/components/translations-context';
 
 interface PropertyGridProps {
 	properties: Property[];
@@ -49,6 +50,7 @@ const OPERATION_TYPE_LABELS: Record<OperationType, string> = {
 };
 
 export default function PropertyGrid({ properties, loading = false, onPropertyClick }: PropertyGridProps) {
+	const { t } = useTranslations();
 	const formatPrice = (price: number, operationType: OperationType) => {
 		if (price >= 1000000) {
 			return `${(price / 1000000).toFixed(1)}М ₽`;
@@ -102,10 +104,10 @@ export default function PropertyGrid({ properties, loading = false, onPropertyCl
 		return (
 			<div className="text-center py-12">
 				<div className="text-gray-500 text-lg mb-4">
-					Объекты не найдены
+					{t('propertyGrid.noResults')}
 				</div>
 				<p className="text-gray-400">
-					Попробуйте изменить параметры поиска
+					{t('propertyGrid.tryDifferentFilters')}
 				</p>
 			</div>
 		);

@@ -336,5 +336,36 @@ export const fr = {
       copyright: "Le code source est disponible sur GitHub.",
       phone: "Téléphone"
     }
+  },
+  properties: {
+    title: "Propriétés Immobilières",
+    foundCount: "Propriétés trouvées : {count}",
+    errorLoading: "Une erreur s'est produite lors du chargement des propriétés",
+    errorTitle: "Erreur de Chargement",
+    tryAgain: "Réessayer",
+    loadMore: "Charger Plus",
+    loading: "Chargement..."
+  },
+  propertyFilters: {
+    searchPlaceholder: "Rechercher des propriétés...",
+    title: "Filtres",
+    clear: "Effacer",
+    operationType: "Type d'Opération",
+    selectOperationType: "Sélectionner le type",
+    allTypes: "Tous les Types",
+    rent: "Location",
+    sale: "Vente",
+    both: "Location et Vente",
+    city: "Ville",
+    selectCity: "Sélectionner la ville",
+    allCities: "Toutes les Villes",
+    loading: "Chargement...",
+    priceRange: "Gamme de Prix",
+    from: "De",
+    to: "À"
+  },
+  propertyGrid: {
+    noResults: "Aucune propriété trouvée",
+    tryDifferentFilters: "Essayez de modifier vos paramètres de recherche"
   }
 }

@@ -337,5 +337,36 @@ export const en = {
             copyright: "The source code is available on GitHub.",
             phone: "Phone"
         }
+    },
+    properties: {
+        title: "Real Estate Properties",
+        foundCount: "Found properties: {count}",
+        errorLoading: "An error occurred while loading properties",
+        errorTitle: "Loading Error",
+        tryAgain: "Try Again",
+        loadMore: "Load More",
+        loading: "Loading..."
+    },
+    propertyFilters: {
+        searchPlaceholder: "Search properties...",
+        title: "Filters",
+        clear: "Clear",
+        operationType: "Operation Type",
+        selectOperationType: "Select type",
+        allTypes: "All Types",
+        rent: "Rent",
+        sale: "Sale",
+        both: "Rent & Sale",
+        city: "City",
+        selectCity: "Select city",
+        allCities: "All Cities",
+        loading: "Loading...",
+        priceRange: "Price Range",
+        from: "From",
+        to: "To"
+    },
+    propertyGrid: {
+        noResults: "No properties found",
+        tryDifferentFilters: "Try changing your search parameters"
     }
 }

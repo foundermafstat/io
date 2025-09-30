@@ -337,5 +337,36 @@ export const ru = {
             copyright: "Исходный код доступен на GitHub.",
             phone: "Телефон"
         }
+    },
+    properties: {
+        title: "Объекты недвижимости",
+        foundCount: "Найдено объектов: {count}",
+        errorLoading: "Произошла ошибка при загрузке объектов",
+        errorTitle: "Ошибка загрузки",
+        tryAgain: "Попробовать снова",
+        loadMore: "Загрузить еще",
+        loading: "Загрузка..."
+    },
+    propertyFilters: {
+        searchPlaceholder: "Поиск недвижимости...",
+        title: "Фильтры",
+        clear: "Очистить",
+        operationType: "Тип операции",
+        selectOperationType: "Выберите тип",
+        allTypes: "Все типы",
+        rent: "Аренда",
+        sale: "Продажа",
+        both: "Аренда и продажа",
+        city: "Город",
+        selectCity: "Выберите город",
+        allCities: "Все города",
+        loading: "Загрузка...",
+        priceRange: "Диапазон цен",
+        from: "От",
+        to: "До"
+    },
+    propertyGrid: {
+        noResults: "Объекты не найдены",
+        tryDifferentFilters: "Попробуйте изменить параметры поиска"
     }
 }
