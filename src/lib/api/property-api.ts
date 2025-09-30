@@ -604,4 +604,74 @@ export class PropertyAPI {
         averageSalePrice: item._avg.salePrice || 0,
       }));
   }
+
+  // Получение списка городов
+  static async getCities(): Promise<string[]> {
+    const cities = await prisma.property.findMany({
+      select: {
+        city: true
+      },
+      distinct: ['city'],
+      orderBy: {
+        city: 'asc'
+      }
+    });
+
+    return cities.map(city => city.city).filter(Boolean);
+  }
+
+  // Получение объекта по ID
+  static async getPropertyById(id: string): Promise<Property | null> {
+    const property = await prisma.property.findUnique({
+      where: { id },
+      include: {
+        owner: true,
+        agent: true,
+        location: true,
+        reservations: true,
+        aiMemories: true,
+        reviews: true,
+        favorites: true
+      }
+    });
+
+    return property as Property | null;
+  }
+
+  // Увеличение счетчика просмотров
+  static async incrementViews(id: string): Promise<void> {
+    await prisma.property.update({
+      where: { id },
+      data: {
+        views: {
+          increment: 1
+        }
+      }
+    });
+  }
+
+  // Обновление объекта
+  static async updateProperty(id: string, data: Partial<CreatePropertyDto>): Promise<Property> {
+    const property = await prisma.property.update({
+      where: { id },
+      data: {
+        ...data,
+        updatedAt: new Date()
+      },
+      include: {
+        owner: true,
+        agent: true,
+        location: true
+      }
+    });
+
+    return property as Property;
+  }
+
+  // Удаление объекта
+  static async deleteProperty(id: string): Promise<void> {
+    await prisma.property.delete({
+      where: { id }
+    });
+  }
 }

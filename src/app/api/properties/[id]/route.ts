@@ -1,116 +1,103 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { PropertyAPI } from '@/lib/api/property-api';
 
-const prisma = new PrismaClient();
-
+// GET /api/properties/[id] - Получение конкретного объекта недвижимости
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: propertyId } = await params;
-
+    const propertyId = params.id;
+    
     if (!propertyId) {
       return NextResponse.json(
-        { success: false, error: 'Property ID is required' },
+        { error: 'ID объекта не указан' },
         { status: 400 }
       );
     }
 
-    // Получаем объект недвижимости из базы данных
-    const property = await prisma.property.findUnique({
-      where: {
-        id: propertyId
-      },
-      include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            phone: true,
-            avatar: true
-          }
-        },
-        agent: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            phone: true,
-            avatar: true,
-            bio: true
-          }
-        },
-        location: {
-          select: {
-            id: true,
-            name: true,
-            city: true,
-            state: true,
-            country: true
-          }
-        },
-        reviews: {
-          select: {
-            id: true,
-            rating: true,
-            title: true,
-            comment: true,
-            createdAt: true,
-            user: {
-              select: {
-                name: true,
-                avatar: true
-              }
-            }
-          },
-          orderBy: {
-            createdAt: 'desc'
-          },
-          take: 5
-        }
-      }
-    });
-
+    const property = await PropertyAPI.getPropertyById(propertyId);
+    
     if (!property) {
       return NextResponse.json(
-        { success: false, error: 'Property not found' },
+        { error: 'Объект не найден' },
         { status: 404 }
       );
     }
 
     // Увеличиваем счетчик просмотров
-    await prisma.property.update({
-      where: { id: propertyId },
-      data: { views: { increment: 1 } }
-    });
-
-    // Преобразуем данные для фронтенда
-    const propertyData = {
-      ...property,
-      features: Array.isArray(property.features) ? property.features : [],
-      amenities: Array.isArray(property.amenities) ? property.amenities : [],
-      images: Array.isArray(property.images) ? property.images : ['/placeholder.jpg'],
-      reviews: property.reviews || []
-    };
-
-    return NextResponse.json({
-      success: true,
-      data: propertyData
-    });
-
+    await PropertyAPI.incrementViews(propertyId);
+    
+    return NextResponse.json(property);
   } catch (error) {
     console.error('Error fetching property:', error);
     return NextResponse.json(
       { 
-        success: false, 
-        error: 'Internal server error',
+        error: 'Ошибка при получении объекта недвижимости',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
+  }
+}
+
+// PUT /api/properties/[id] - Обновление объекта недвижимости
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const propertyId = params.id;
+    const body = await request.json();
+    
+    if (!propertyId) {
+      return NextResponse.json(
+        { error: 'ID объекта не указан' },
+        { status: 400 }
+      );
+    }
+
+    const updatedProperty = await PropertyAPI.updateProperty(propertyId, body);
+    
+    return NextResponse.json(updatedProperty);
+  } catch (error) {
+    console.error('Error updating property:', error);
+    return NextResponse.json(
+      { 
+        error: 'Ошибка при обновлении объекта недвижимости',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE /api/properties/[id] - Удаление объекта недвижимости
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const propertyId = params.id;
+    
+    if (!propertyId) {
+      return NextResponse.json(
+        { error: 'ID объекта не указан' },
+        { status: 400 }
+      );
+    }
+
+    await PropertyAPI.deleteProperty(propertyId);
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting property:', error);
+    return NextResponse.json(
+      { 
+        error: 'Ошибка при удалении объекта недвижимости',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }
