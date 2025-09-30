@@ -2,7 +2,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Property, PropertySearchFilters, OperationType } from '@/types/property';
+import {
+	Property,
+	PropertySearchFilters,
+	OperationType,
+} from '@/types/property';
 import PropertyFilters from '@/components/property-filters';
 import PropertyGrid from '@/components/property-grid';
 import { Button } from '@/components/ui/button';
@@ -32,68 +36,86 @@ export default function PropertiesPage() {
 	const [hasMore, setHasMore] = useState(false);
 
 	// Функция для загрузки объектов
-	const fetchProperties = useCallback(async (filters: PropertySearchFilters, page: number = 1, append: boolean = false) => {
-		try {
-			setLoading(true);
-			setError(null);
+	const fetchProperties = useCallback(
+		async (
+			filters: PropertySearchFilters,
+			page: number = 1,
+			append: boolean = false
+		) => {
+			try {
+				setLoading(true);
+				setError(null);
 
-			// Создаем URL с параметрами
-			const params = new URLSearchParams();
-			
-			if (filters.query) params.set('query', filters.query);
-			if (filters.operationType) params.set('operationType', filters.operationType);
-			if (filters.city) params.set('city', filters.city);
-			if (filters.minPrice) params.set('minPrice', filters.minPrice.toString());
-			if (filters.maxPrice) params.set('maxPrice', filters.maxPrice.toString());
-			
-			params.set('page', page.toString());
-			params.set('limit', '20');
+				// Создаем URL с параметрами
+				const params = new URLSearchParams();
 
-			const response = await fetch(`/api/properties?${params.toString()}`);
-			
-			if (!response.ok) {
-				throw new Error(`Ошибка загрузки: ${response.status}`);
+				if (filters.query) params.set('query', filters.query);
+				if (filters.operationType)
+					params.set('operationType', filters.operationType);
+				if (filters.city) params.set('city', filters.city);
+				if (filters.minPrice)
+					params.set('minPrice', filters.minPrice.toString());
+				if (filters.maxPrice)
+					params.set('maxPrice', filters.maxPrice.toString());
+
+				params.set('page', page.toString());
+				params.set('limit', '20');
+
+				const response = await fetch(`/api/properties?${params.toString()}`);
+
+				if (!response.ok) {
+					throw new Error(`Ошибка загрузки: ${response.status}`);
+				}
+
+				const data: PropertySearchResult = await response.json();
+
+				if (append) {
+					setProperties((prev) => [...prev, ...data.properties]);
+				} else {
+					setProperties(data.properties);
+				}
+
+				setTotalCount(data.totalCount);
+				setCurrentPage(data.page);
+				setHasMore(data.hasMore);
+			} catch (err) {
+				const errorMessage =
+					err instanceof Error ? err.message : t('properties.errorLoading');
+				setError(errorMessage);
+				toast.error(errorMessage);
+				console.error('Error fetching properties:', err);
+			} finally {
+				setLoading(false);
 			}
-
-			const data: PropertySearchResult = await response.json();
-			
-			if (append) {
-				setProperties(prev => [...prev, ...data.properties]);
-			} else {
-				setProperties(data.properties);
-			}
-			
-			setTotalCount(data.totalCount);
-			setCurrentPage(data.page);
-			setHasMore(data.hasMore);
-			
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : t('properties.errorLoading');
-			setError(errorMessage);
-			toast.error(errorMessage);
-			console.error('Error fetching properties:', err);
-		} finally {
-			setLoading(false);
-		}
-	}, [t]);
+		},
+		[t]
+	);
 
 	// Обработчик изменения фильтров
-	const handleFiltersChange = useCallback((filters: PropertySearchFilters) => {
-		setCurrentPage(1);
-		fetchProperties(filters, 1, false);
-	}, [fetchProperties]);
+	const handleFiltersChange = useCallback(
+		(filters: PropertySearchFilters) => {
+			setCurrentPage(1);
+			fetchProperties(filters, 1, false);
+		},
+		[fetchProperties]
+	);
 
 	// Загрузка дополнительных объектов
 	const loadMore = useCallback(() => {
 		if (!loading && hasMore) {
 			const currentFilters: PropertySearchFilters = {
 				query: searchParams.get('query') || undefined,
-				operationType: (searchParams.get('operationType') as OperationType) || undefined,
+				operationType:
+					(searchParams.get('operationType') as OperationType) || undefined,
 				city: searchParams.get('city') || undefined,
-				minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
-				maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+				minPrice: searchParams.get('minPrice')
+					? Number(searchParams.get('minPrice'))
+					: undefined,
+				maxPrice: searchParams.get('maxPrice')
+					? Number(searchParams.get('maxPrice'))
+					: undefined,
 			};
-			
+
 			fetchProperties(currentFilters, currentPage + 1, true);
 		}
 	}, [loading, hasMore, currentPage, searchParams, fetchProperties]);
@@ -102,12 +124,17 @@ export default function PropertiesPage() {
 	const refreshData = useCallback(() => {
 		const currentFilters: PropertySearchFilters = {
 			query: searchParams.get('query') || undefined,
-			operationType: (searchParams.get('operationType') as OperationType) || undefined,
+			operationType:
+				(searchParams.get('operationType') as OperationType) || undefined,
 			city: searchParams.get('city') || undefined,
-			minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
-			maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+			minPrice: searchParams.get('minPrice')
+				? Number(searchParams.get('minPrice'))
+				: undefined,
+			maxPrice: searchParams.get('maxPrice')
+				? Number(searchParams.get('maxPrice'))
+				: undefined,
 		};
-		
+
 		fetchProperties(currentFilters, 1, false);
 	}, [searchParams, fetchProperties]);
 
@@ -115,12 +142,17 @@ export default function PropertiesPage() {
 	useEffect(() => {
 		const initialFilters: PropertySearchFilters = {
 			query: searchParams.get('query') || undefined,
-			operationType: (searchParams.get('operationType') as OperationType) || undefined,
+			operationType:
+				(searchParams.get('operationType') as OperationType) || undefined,
 			city: searchParams.get('city') || undefined,
-			minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
-			maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+			minPrice: searchParams.get('minPrice')
+				? Number(searchParams.get('minPrice'))
+				: undefined,
+			maxPrice: searchParams.get('maxPrice')
+				? Number(searchParams.get('maxPrice'))
+				: undefined,
 		};
-		
+
 		fetchProperties(initialFilters, 1, false);
 	}, [searchParams, fetchProperties]);
 
@@ -130,7 +162,9 @@ export default function PropertiesPage() {
 			<div className="mb-8">
 				<h1 className="text-3xl font-bold mb-2">{t('properties.title')}</h1>
 				<p className="text-gray-600">
-					{t('properties.foundCount', { count: loading ? '...' : totalCount.toLocaleString() })}
+					{loading
+						? t('properties.loading')
+						: t('properties.foundCount', { count: totalCount.toLocaleString() })}
 				</p>
 			</div>
 
@@ -158,10 +192,7 @@ export default function PropertiesPage() {
 					</Card>
 				) : (
 					<>
-						<PropertyGrid
-							properties={properties}
-							loading={loading}
-						/>
+						<PropertyGrid properties={properties} loading={loading} />
 
 						{/* Кнопка "Загрузить еще" */}
 						{hasMore && !loading && (

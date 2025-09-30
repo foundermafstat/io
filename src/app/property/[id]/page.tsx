@@ -185,10 +185,14 @@ export default function PropertyDetailPage() {
 							<h1 className="text-2xl font-bold mb-4">{property.title}</h1>
 							<div className="flex items-center gap-4 mb-4">
 								<Badge variant="outline">
-									{t(`propertyDetail.propertyType.${property.propertyType.toLowerCase()}`)}
+									{t(
+										`propertyDetail.propertyType.${property.propertyType.toLowerCase()}`
+									)}
 								</Badge>
 								<Badge variant="secondary">
-									{t(`propertyDetail.operationType.${property.operationType.toLowerCase()}`)}
+									{t(
+										`propertyDetail.operationType.${property.operationType.toLowerCase()}`
+									)}
 								</Badge>
 								{property.isFeatured && (
 									<Badge className="bg-yellow-500">
@@ -211,29 +215,39 @@ export default function PropertyDetailPage() {
 					{/* Характеристики */}
 					<Card>
 						<CardContent className="p-6">
-							<h2 className="text-xl font-semibold mb-4">{t('propertyDetail.characteristics')}</h2>
+							<h2 className="text-xl font-semibold mb-4">
+								{t('propertyDetail.characteristics')}
+							</h2>
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 								{property.bedrooms && (
 									<div className="flex items-center gap-2">
 										<Bed className="h-5 w-5 text-gray-400" />
-										<span>{property.bedrooms} {t('propertyDetail.bedrooms')}</span>
+										<span>
+											{property.bedrooms} {t('propertyDetail.bedrooms')}
+										</span>
 									</div>
 								)}
 								{property.bathrooms && (
 									<div className="flex items-center gap-2">
 										<Bath className="h-5 w-5 text-gray-400" />
-										<span>{property.bathrooms} {t('propertyDetail.bathrooms')}</span>
+										<span>
+											{property.bathrooms} {t('propertyDetail.bathrooms')}
+										</span>
 									</div>
 								)}
 								{property.area && (
 									<div className="flex items-center gap-2">
 										<Square className="h-5 w-5 text-gray-400" />
-										<span>{property.area} {t('propertyDetail.area')}</span>
+										<span>
+											{property.area} {t('propertyDetail.area')}
+										</span>
 									</div>
 								)}
 								{property.floor && (
 									<div className="flex items-center gap-2">
-										<span className="text-gray-400">{t('propertyDetail.floor')}:</span>
+										<span className="text-gray-400">
+											{t('propertyDetail.floor')}:
+										</span>
 										<span>{property.floor}</span>
 									</div>
 								)}
@@ -273,7 +287,9 @@ export default function PropertyDetailPage() {
 						<CardContent className="p-6">
 							<div className="flex items-center gap-2 text-sm text-gray-600">
 								<Eye className="h-4 w-4" />
-								<span>{property.views} {t('propertyDetail.views')}</span>
+								<span>
+									{property.views} {t('propertyDetail.views')}
+								</span>
 							</div>
 						</CardContent>
 					</Card>

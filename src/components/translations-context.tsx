@@ -22,7 +22,7 @@ const translations: { [key: string]: Translations } = {
 }
 
 type TranslationsContextType = {
-  t: (key: string) => string
+  t: (key: string, params?: Record<string, any>) => string
   getTranslation: (key: string) => any
   locale: string
   setLocale: (locale: string) => void
@@ -33,7 +33,7 @@ const TranslationsContext = createContext<TranslationsContextType | null>(null)
 export function TranslationsProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState('en')
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, any>): string => {
     const keys = key.split('.')
     let value: TranslationValue = translations[locale]
 
@@ -42,7 +42,17 @@ export function TranslationsProvider({ children }: { children: ReactNode }) {
       value = typeof value === 'object' ? value[k] : key
     }
 
-    return typeof value === 'string' ? value : key
+    let result = typeof value === 'string' ? value : key
+
+    // Интерполяция параметров
+    if (params) {
+      Object.keys(params).forEach(paramKey => {
+        const placeholder = `{${paramKey}}`
+        result = result.replace(new RegExp(placeholder, 'g'), params[paramKey])
+      })
+    }
+
+    return result
   }
 
   const getTranslation = (key: string): any => {
