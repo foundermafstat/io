@@ -369,6 +369,70 @@ export const ru = {
         noResults: "Объекты не найдены",
         tryDifferentFilters: "Попробуйте изменить параметры поиска",
         pricePerMonth: "/мес",
-        priceNotSpecified: "Цена не указана"
+        priceNotSpecified: "Цена не указана",
+        featured: "Рекомендуем",
+        verified: "Проверено",
+        operationType: {
+            rent: "Аренда",
+            sale: "Продажа",
+            both: "Аренда и продажа"
+        },
+        propertyType: {
+            apartment: "Квартира",
+            house: "Дом",
+            condo: "Кондо",
+            townhouse: "Таунхаус",
+            studio: "Студия",
+            loft: "Лофт",
+            penthouse: "Пентхаус",
+            villa: "Вилла",
+            commercial: "Коммерческая",
+            office: "Офис",
+            retail: "Торговая",
+            warehouse: "Склад",
+            land: "Земля",
+            farm: "Ферма",
+            other: "Другое"
+        },
+        bedrooms: "спален",
+        bathrooms: "ванных",
+        area: "м²",
+        views: "просмотров",
+        details: "Подробнее"
+    },
+    propertyDetail: {
+        characteristics: "Характеристики",
+        bedrooms: "спален",
+        bathrooms: "ванных",
+        area: "м²",
+        floor: "Этаж",
+        views: "просмотров",
+        contact: "Связаться",
+        addToFavorites: "В избранное",
+        share: "Поделиться",
+        featured: "Рекомендуем",
+        verified: "Проверено",
+        propertyType: {
+            apartment: "Квартира",
+            house: "Дом",
+            condo: "Кондо",
+            townhouse: "Таунхаус",
+            studio: "Студия",
+            loft: "Лофт",
+            penthouse: "Пентхаус",
+            villa: "Вилла",
+            commercial: "Коммерческая",
+            office: "Офис",
+            retail: "Торговая",
+            warehouse: "Склад",
+            land: "Земля",
+            farm: "Ферма",
+            other: "Другое"
+        },
+        operationType: {
+            rent: "Аренда",
+            sale: "Продажа",
+            both: "Аренда и продажа"
+        }
     }
 }

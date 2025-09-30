@@ -368,6 +368,70 @@ export const fr = {
     noResults: "Aucune propriété trouvée",
     tryDifferentFilters: "Essayez de modifier vos paramètres de recherche",
     pricePerMonth: "/mois",
-    priceNotSpecified: "Prix non spécifié"
+    priceNotSpecified: "Prix non spécifié",
+    featured: "En vedette",
+    verified: "Vérifié",
+    operationType: {
+      rent: "Location",
+      sale: "Vente",
+      both: "Location et Vente"
+    },
+    propertyType: {
+      apartment: "Appartement",
+      house: "Maison",
+      condo: "Condominium",
+      townhouse: "Maison de ville",
+      studio: "Studio",
+      loft: "Loft",
+      penthouse: "Penthouse",
+      villa: "Villa",
+      commercial: "Commercial",
+      office: "Bureau",
+      retail: "Commerce",
+      warehouse: "Entrepôt",
+      land: "Terrain",
+      farm: "Ferme",
+      other: "Autre"
+    },
+    bedrooms: "chambres",
+    bathrooms: "salles de bain",
+    area: "m²",
+    views: "vues",
+    details: "Détails"
+  },
+  propertyDetail: {
+    characteristics: "Caractéristiques",
+    bedrooms: "chambres",
+    bathrooms: "salles de bain",
+    area: "m²",
+    floor: "Étage",
+    views: "vues",
+    contact: "Contacter",
+    addToFavorites: "Ajouter aux Favoris",
+    share: "Partager",
+    featured: "En vedette",
+    verified: "Vérifié",
+    propertyType: {
+      apartment: "Appartement",
+      house: "Maison",
+      condo: "Condominium",
+      townhouse: "Maison de ville",
+      studio: "Studio",
+      loft: "Loft",
+      penthouse: "Penthouse",
+      villa: "Villa",
+      commercial: "Commercial",
+      office: "Bureau",
+      retail: "Commerce",
+      warehouse: "Entrepôt",
+      land: "Terrain",
+      farm: "Ferme",
+      other: "Autre"
+    },
+    operationType: {
+      rent: "Location",
+      sale: "Vente",
+      both: "Location et Vente"
+    }
   }
 }

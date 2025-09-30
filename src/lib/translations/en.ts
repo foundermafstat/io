@@ -369,6 +369,70 @@ export const en = {
         noResults: "No properties found",
         tryDifferentFilters: "Try changing your search parameters",
         pricePerMonth: "/month",
-        priceNotSpecified: "Price not specified"
+        priceNotSpecified: "Price not specified",
+        featured: "Featured",
+        verified: "Verified",
+        operationType: {
+            rent: "Rent",
+            sale: "Sale",
+            both: "Rent & Sale"
+        },
+        propertyType: {
+            apartment: "Apartment",
+            house: "House",
+            condo: "Condo",
+            townhouse: "Townhouse",
+            studio: "Studio",
+            loft: "Loft",
+            penthouse: "Penthouse",
+            villa: "Villa",
+            commercial: "Commercial",
+            office: "Office",
+            retail: "Retail",
+            warehouse: "Warehouse",
+            land: "Land",
+            farm: "Farm",
+            other: "Other"
+        },
+        bedrooms: "bedrooms",
+        bathrooms: "bathrooms",
+        area: "m²",
+        views: "views",
+        details: "Details"
+    },
+    propertyDetail: {
+        characteristics: "Characteristics",
+        bedrooms: "bedrooms",
+        bathrooms: "bathrooms",
+        area: "m²",
+        floor: "Floor",
+        views: "views",
+        contact: "Contact",
+        addToFavorites: "Add to Favorites",
+        share: "Share",
+        featured: "Featured",
+        verified: "Verified",
+        propertyType: {
+            apartment: "Apartment",
+            house: "House",
+            condo: "Condo",
+            townhouse: "Townhouse",
+            studio: "Studio",
+            loft: "Loft",
+            penthouse: "Penthouse",
+            villa: "Villa",
+            commercial: "Commercial",
+            office: "Office",
+            retail: "Retail",
+            warehouse: "Warehouse",
+            land: "Land",
+            farm: "Farm",
+            other: "Other"
+        },
+        operationType: {
+            rent: "Rent",
+            sale: "Sale",
+            both: "Rent & Sale"
+        }
     }
 }

@@ -368,6 +368,70 @@ export const es = {
     noResults: "No se encontraron propiedades",
     tryDifferentFilters: "Intenta cambiar tus parámetros de búsqueda",
     pricePerMonth: "/mes",
-    priceNotSpecified: "Precio no especificado"
+    priceNotSpecified: "Precio no especificado",
+    featured: "Destacado",
+    verified: "Verificado",
+    operationType: {
+      rent: "Alquiler",
+      sale: "Venta",
+      both: "Alquiler y Venta"
+    },
+    propertyType: {
+      apartment: "Apartamento",
+      house: "Casa",
+      condo: "Condominio",
+      townhouse: "Casa Adosada",
+      studio: "Estudio",
+      loft: "Loft",
+      penthouse: "Ático",
+      villa: "Villa",
+      commercial: "Comercial",
+      office: "Oficina",
+      retail: "Tienda",
+      warehouse: "Almacén",
+      land: "Terreno",
+      farm: "Granja",
+      other: "Otro"
+    },
+    bedrooms: "dormitorios",
+    bathrooms: "baños",
+    area: "m²",
+    views: "vistas",
+    details: "Detalles"
+  },
+  propertyDetail: {
+    characteristics: "Características",
+    bedrooms: "dormitorios",
+    bathrooms: "baños",
+    area: "m²",
+    floor: "Piso",
+    views: "vistas",
+    contact: "Contactar",
+    addToFavorites: "Agregar a Favoritos",
+    share: "Compartir",
+    featured: "Destacado",
+    verified: "Verificado",
+    propertyType: {
+      apartment: "Apartamento",
+      house: "Casa",
+      condo: "Condominio",
+      townhouse: "Casa Adosada",
+      studio: "Estudio",
+      loft: "Loft",
+      penthouse: "Ático",
+      villa: "Villa",
+      commercial: "Comercial",
+      office: "Oficina",
+      retail: "Tienda",
+      warehouse: "Almacén",
+      land: "Terreno",
+      farm: "Granja",
+      other: "Otro"
+    },
+    operationType: {
+      rent: "Alquiler",
+      sale: "Venta",
+      both: "Alquiler y Venta"
+    }
   }
 } 

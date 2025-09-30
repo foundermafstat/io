@@ -368,6 +368,70 @@ export const zh = {
     noResults: "未找到物业",
     tryDifferentFilters: "尝试更改您的搜索参数",
     pricePerMonth: "/月",
-    priceNotSpecified: "价格未指定"
+    priceNotSpecified: "价格未指定",
+    featured: "推荐",
+    verified: "已验证",
+    operationType: {
+      rent: "出租",
+      sale: "出售",
+      both: "出租和出售"
+    },
+    propertyType: {
+      apartment: "公寓",
+      house: "房屋",
+      condo: "公寓",
+      townhouse: "联排别墅",
+      studio: "工作室",
+      loft: "阁楼",
+      penthouse: "顶层公寓",
+      villa: "别墅",
+      commercial: "商业",
+      office: "办公室",
+      retail: "零售",
+      warehouse: "仓库",
+      land: "土地",
+      farm: "农场",
+      other: "其他"
+    },
+    bedrooms: "卧室",
+    bathrooms: "浴室",
+    area: "平方米",
+    views: "浏览",
+    details: "详情"
+  },
+  propertyDetail: {
+    characteristics: "特征",
+    bedrooms: "卧室",
+    bathrooms: "浴室",
+    area: "平方米",
+    floor: "楼层",
+    views: "浏览",
+    contact: "联系",
+    addToFavorites: "添加到收藏",
+    share: "分享",
+    featured: "推荐",
+    verified: "已验证",
+    propertyType: {
+      apartment: "公寓",
+      house: "房屋",
+      condo: "公寓",
+      townhouse: "联排别墅",
+      studio: "工作室",
+      loft: "阁楼",
+      penthouse: "顶层公寓",
+      villa: "别墅",
+      commercial: "商业",
+      office: "办公室",
+      retail: "零售",
+      warehouse: "仓库",
+      land: "土地",
+      farm: "农场",
+      other: "其他"
+    },
+    operationType: {
+      rent: "出租",
+      sale: "出售",
+      both: "出租和出售"
+    }
   }
 }
