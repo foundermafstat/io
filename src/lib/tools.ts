@@ -116,6 +116,52 @@ const toolDefinitions = {
 			},
 		},
 	},
+	navigateToCheckout: {
+		description: 'Navigates to the checkout page for a specific property',
+		parameters: {
+			propertyId: {
+				type: 'string',
+				description: 'The ID of the property to checkout',
+			},
+		},
+	},
+	fillCheckoutForm: {
+		description: 'Fills out the checkout form fields',
+		parameters: {
+			field: {
+				type: 'string',
+				description:
+					'The form field to fill (name, phone, meetingDate, meetingTime, notes)',
+			},
+			value: {
+				type: 'string',
+				description: 'The value to fill in the field',
+			},
+		},
+	},
+	submitCheckoutForm: {
+		description: 'Submits the checkout form',
+		parameters: {},
+	},
+	updateCheckoutElement: {
+		description: 'Updates or modifies DOM elements on the checkout page',
+		parameters: {
+			elementSelector: {
+				type: 'string',
+				description: 'CSS selector for the element to modify',
+			},
+			action: {
+				type: 'string',
+				description:
+					'Action to perform (show, hide, changeText, changeColor, addClass, removeClass)',
+			},
+			value: {
+				type: 'string',
+				description:
+					'Value for the action (text content, color, class name, etc.)',
+			},
+		},
+	},
 } as const;
 
 const tools: Tool[] = Object.entries(toolDefinitions).map(([name, config]) => ({

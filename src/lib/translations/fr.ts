@@ -25,7 +25,7 @@ export const fr = {
 		realEstate: 'Immobilier',
 		adminPanel: "Panneau d'Administration",
 		development: 'Développement',
-		propertySearch: 'Recherche et Achat de Propriétés',
+		estateSearch: 'Recherche et Achat de Biens Immobiliers',
 		systemManagement: 'Gestion du Système',
 		developmentTools: 'Outils de Développement',
 		browseProperties: 'Parcourir les Propriétés',
@@ -115,6 +115,26 @@ export const fr = {
 				description:
 					'Dites "Aller à [page]" ou "Ouvrir [URL]" pour naviguer vers une page spécifique.',
 			},
+			navigateToCheckout: {
+				name: 'Naviguer vers checkout',
+				description:
+					'Dites "Aller au checkout pour la propriété [ID]" pour naviguer vers la page de checkout.',
+			},
+			fillCheckoutForm: {
+				name: 'Remplir le formulaire de checkout',
+				description:
+					'Dites "Remplir [champ] avec [valeur]" pour remplir les champs du formulaire comme nom, téléphone, notes.',
+			},
+			submitCheckoutForm: {
+				name: 'Soumettre le formulaire de checkout',
+				description:
+					'Dites "Soumettre le formulaire" ou "Envoyer la demande de réservation" pour soumettre le formulaire de checkout.',
+			},
+			updateCheckoutElement: {
+				name: 'Mettre à jour les éléments de checkout',
+				description:
+					'Dites "Changer [élément] à [action]" pour modifier les éléments DOM sur la page de checkout.',
+			},
 		},
 		clipboard: {
 			description: 'Vous pouvez maintenant le coller quelque part.',
@@ -160,6 +180,37 @@ export const fr = {
 		selectReplica: 'Sélectionner une Réplique',
 		loadingReplicas: 'Chargement des répliques...',
 		selectVoice: 'Sélectionner une Voix',
+		sessionRestored: 'Session restaurée',
+		sessionRestoredDescription:
+			'La diffusion vocale était active et a été restaurée.',
+		restoringSession:
+			"Restauration de l'état de session vocale après navigation",
+		sessionRestoreError: "Erreur lors de la restauration de l'état de session:",
+		navigationCompleted: 'Navigation terminée',
+		navigationCompletedDescription:
+			'Vous avez navigué vers la page {path}. La diffusion vocale était active.',
+		userNavigatedFromVoice:
+			"L'utilisateur a navigué depuis la diffusion vocale depuis:",
+		navigationInfoError:
+			'Erreur lors du traitement des informations de navigation:',
+		estateDetailsError:
+			'Erreur lors du chargement des détails du bien immobilier',
+		estateDetailsErrorDescription:
+			'Impossible de charger les informations sur le bien immobilier sélectionné',
+		loadingDatabase: 'Chargement de la base de données immobilière complète...',
+		aiAgentAccess:
+			"L'agent IA obtient l'accès à tous les biens immobiliers pour une meilleure assistance",
+		selectedEstate: 'Bien Immobilier Sélectionné',
+		readyForDiscussion: 'Prêt pour la discussion',
+		estateSelectedDescription:
+			"Le bien immobilier est sélectionné. L'agent vocal est prêt à donner les détails.",
+		broadcastStatus: 'Statut de Diffusion',
+		requiresInfo: 'Nécessite des informations',
+		userAnswered: 'Utilisateur a répondu',
+		currentQuestion: 'Question actuelle:',
+		status: 'Statut:',
+		pendingAnswer: 'En attente de réponse',
+		answered: 'Répondu',
 	},
 	language: 'Français',
 	languagePrompt:
@@ -212,7 +263,7 @@ export const fr = {
 				subtitle: 'Quel est votre budget pour la location/achat ?',
 				custom: 'Personnalisé',
 			},
-			propertyType: {
+			estateType: {
 				title: 'Type de Propriété',
 				subtitle:
 					"Quel type de propriété vous intéresse ? Sélectionnez toutes celles qui s'appliquent.",
@@ -232,7 +283,7 @@ export const fr = {
 				subtitle: 'Basé sur vos préférences, voici ce que vous cherchez :',
 				purpose: 'Objectif',
 				budget: 'Budget',
-				propertyTypes: 'Types de Propriété',
+				estateTypes: 'Types de Bien Immobilier',
 				location: 'Emplacement',
 				features: 'Caractéristiques Indispensables',
 				notSpecified: 'Non spécifié',
@@ -259,7 +310,7 @@ export const fr = {
 			perfectMatches: 'Vos Correspondances Parfaites',
 			matching: 'Propriétés Correspondantes',
 			found: 'trouvées',
-			property: 'propriété',
+			estate: 'bien immobilier',
 			properties: 'propriétés',
 			noProperties: 'Aucune propriété trouvée',
 			completeSteps:
@@ -280,38 +331,46 @@ export const fr = {
 	homepage: {
 		title: "Trouvez Votre Propriété de Rêve avec l'IA",
 		hero: {
-			title: "Trouvez Votre Propriété de Rêve avec l'IA",
+			badge: 'Assistant IA pour la Recherche de Propriétés',
+			title: 'Trouvez Votre Propriété',
+			titleHighlight: 'de Rêve',
 			subtitle:
-				"Découvrez des propriétés avec l'assistance intelligente de l'IA",
-			callToAction: 'Appeler pour Réserver votre Propriété',
+				'Découvrez la propriété parfaite avec notre assistant IA intelligent. Recommandations personnalisées, recherche vocale et résultats instantanés.',
+			startSearch: 'Commencer la Recherche',
+			viewCatalog: 'Voir le Catalogue',
 			locationPlaceholder:
 				'Les emplacements seront disponibles après avoir ajouté des propriétés',
-			propertyLogos: [
-				'Luxe',
-				'Moderne',
-				'Classique',
-				'Villa',
-				'Penthouse',
-				'Maison de Ville',
-				'Manoir',
-				'Propriété',
-			],
+			estateShowcase: 'À partir de 2 500 $/mois',
+			unknown: 'Inconnu',
+			estate: 'Bien Immobilier',
 		},
 		popularTypes: {
 			title: 'Types de Propriétés Populaires',
+			subtitle: 'Choisissez le type de propriété qui correspond à vos besoins',
 			placeholder:
 				'Les types de propriétés seront disponibles après avoir ajouté des propriétés',
 			objects: 'objets',
+			availableObjects: 'propriétés disponibles à la location et à la vente',
+			viewObjects: 'Voir les Propriétés',
+			addingProperties: 'Ajout de Propriétés',
 		},
 		trending: {
-			title: 'Directions Tendance : Meilleurs Emplacements',
+			title: 'Destinations Populaires',
+			subtitle:
+				'Découvrez les emplacements les plus recherchés avec les meilleures offres',
 			placeholder:
 				'Les données des villes seront disponibles après avoir ajouté des propriétés immobilières',
 			objects: 'objets',
+			availableObjects: 'propriétés disponibles',
 			from: 'À partir de',
+			averagePrice: 'Prix Moyen :',
+			explore: 'Explorer',
+			analyzingMarket: 'Analyse du Marché',
 		},
 		features: {
 			title: 'Pourquoi Nous Choisir',
+			subtitle:
+				'Nous utilisons une technologie de pointe pour simplifier la recherche de propriétés',
 			convenientSearch: {
 				title: 'Recherche Pratique',
 				description:
@@ -329,7 +388,8 @@ export const fr = {
 			},
 		},
 		testimonials: {
-			title: 'Avis des Utilisateurs',
+			title: 'Avis des Clients',
+			subtitle: 'Découvrez ce que disent nos clients satisfaits à notre sujet',
 			reviews: [
 				{
 					name: 'Olivia Parker',
@@ -354,9 +414,12 @@ export const fr = {
 			],
 		},
 		cta: {
-			title:
-				"Votre voyage dans le monde de l'immobilier commence ici. Débloquez des possibilités infinies !",
-			button: 'Voir les Propriétés >',
+			title: "Votre voyage dans le monde de l'immobilier",
+			titleHighlight: 'commence ici',
+			subtitle:
+				"Débloquez des possibilités infinies avec notre assistant IA. Trouvez votre propriété parfaite aujourd'hui !",
+			viewObjects: 'Voir les Propriétés',
+			contactUs: 'Nous Contacter',
 		},
 		footer: {
 			company: 'Sensay.io',
@@ -403,13 +466,14 @@ export const fr = {
 		loadMore: 'Charger Plus',
 		loading: 'Chargement...',
 	},
-	propertyFilters: {
+	estateFilters: {
 		searchPlaceholder: 'Rechercher des propriétés...',
 		title: 'Filtres',
 		clear: 'Effacer',
 		operationType: "Type d'Opération",
 		selectOperationType: 'Sélectionner le type',
 		allTypes: 'Tous les Types',
+		any: "N'importe lequel",
 		rent: 'Location',
 		sale: 'Vente',
 		both: 'Location et Vente',
@@ -418,11 +482,12 @@ export const fr = {
 		allCities: 'Toutes les Villes',
 		loading: 'Chargement...',
 		priceRange: 'Gamme de Prix',
+		area: 'Superficie (m²)',
 		from: 'De',
 		to: 'À',
 		searchNearby: 'Rechercher à proximité',
 	},
-	propertyGrid: {
+	estateGrid: {
 		noResults: 'Aucune propriété trouvée',
 		tryDifferentFilters: 'Essayez de modifier vos paramètres de recherche',
 		pricePerMonth: '/mois',
@@ -437,7 +502,7 @@ export const fr = {
 			sale: 'Vente',
 			both: 'Location et Vente',
 		},
-		propertyType: {
+		estateType: {
 			apartment: 'Appartement',
 			house: 'Maison',
 			condo: 'Condominium',
@@ -461,9 +526,10 @@ export const fr = {
 		reviews: 'avis',
 		details: 'Détails',
 	},
-	propertyDetail: {
+	estateDetail: {
 		back: 'Retour',
-		aboutProperty: 'À propos de la propriété',
+		aboutProperty: 'À propos du bien immobilier',
+		aboutEstate: 'À propos du bien immobilier',
 		characteristics: 'Caractéristiques',
 		amenities: 'Équipements',
 		reviews: 'Avis',
@@ -493,11 +559,11 @@ export const fr = {
 		location: 'Emplacement',
 		value: 'Rapport qualité-prix',
 		communication: 'Communication',
-		propertyNotFound: 'Propriété non trouvée',
+		estateNotFound: 'Bien immobilier non trouvé',
 		backToList: 'Retour à la liste',
 		loadingError:
-			"Une erreur s'est produite lors du chargement de la propriété",
-		propertyType: {
+			"Une erreur s'est produite lors du chargement du bien immobilier",
+		estateType: {
 			apartment: 'Appartement',
 			house: 'Maison',
 			condo: 'Condominium',

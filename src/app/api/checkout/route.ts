@@ -37,11 +37,28 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
+		// Создание или получение анонимного пользователя
+		let anonymousUser = await prisma.user.findFirst({
+			where: { email: 'anonymous@example.com' },
+		});
+
+		if (!anonymousUser) {
+			anonymousUser = await prisma.user.create({
+				data: {
+					name: 'Anonymous User',
+					email: 'anonymous@example.com',
+					password: 'anonymous', // Временный пароль для анонимного пользователя
+					languages: [], // Пустой массив языков для анонимного пользователя
+					specialties: [], // Пустой массив специализаций
+				},
+			});
+		}
+
 		// Создание записи о заказе/встрече
 		const meeting = await prisma.propertyReservation.create({
 			data: {
 				propertyId,
-				userId: 'anonymous', // Для анонимных пользователей
+				userId: anonymousUser.id,
 				operationType: property.operationType as any,
 				startDate: new Date(meetingDate),
 				endDate: new Date(meetingDate), // Однодневная встреча

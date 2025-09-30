@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
 	Property,
 	PropertySearchFilters,
@@ -28,6 +28,7 @@ interface PropertySearchResult {
 export default function PropertiesPage() {
 	const { t } = useTranslations();
 	const searchParams = useSearchParams();
+	const router = useRouter();
 	const [properties, setProperties] = useState<Property[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -142,6 +143,15 @@ export default function PropertiesPage() {
 		fetchProperties(currentFilters, 1, false);
 	}, [searchParams, fetchProperties]);
 
+	// Обработчик клика по объекту
+	const handlePropertyClick = useCallback(
+		(property: Property) => {
+			// Используем Next.js роутер для навигации без перезагрузки
+			router.push(`/estate/${property.id}`, { scroll: false });
+		},
+		[router]
+	);
+
 	// Загрузка при монтировании компонента
 	useEffect(() => {
 		const initialFilters: PropertySearchFilters = {
@@ -218,7 +228,11 @@ export default function PropertiesPage() {
 					</Card>
 				) : (
 					<>
-						<PropertyGrid properties={properties} loading={loading} />
+						<PropertyGrid
+							properties={properties}
+							loading={loading}
+							onPropertyClick={handlePropertyClick}
+						/>
 
 						{/* Кнопка "Загрузить еще" */}
 						{hasMore && !loading && (

@@ -88,17 +88,15 @@ export default function VoiceChatInterface() {
 				const timeDiff = Date.now() - state.timestamp;
 				// Восстанавливаем состояние только если прошло менее 30 секунд
 				if (timeDiff < 30000 && state.shouldRestore && state.isActive) {
-					console.log(
-						'Восстанавливаю состояние голосовой сессии после навигации'
-					);
-					toast.success('Сессия восстановлена', {
-						description: 'Голосовая трансляция была активна и восстановлена.',
+					console.log(t('voiceChat.restoringSession'));
+					toast.success(t('voiceChat.sessionRestored'), {
+						description: t('voiceChat.sessionRestoredDescription'),
 					});
 				}
 				// Очищаем состояние после обработки
 				localStorage.removeItem('voice-chat-session-state');
 			} catch (error) {
-				console.error('Ошибка при восстановлении состояния сессии:', error);
+				console.error(t('voiceChat.sessionRestoreError'), error);
 				localStorage.removeItem('voice-chat-session-state');
 			}
 		}
@@ -118,21 +116,20 @@ export default function VoiceChatInterface() {
 				const timeDiff = Date.now() - info.timestamp;
 				// Показываем уведомление только если прошло менее 30 секунд
 				if (timeDiff < 30000 && info.wasActive) {
-					console.log(
-						'Пользователь перешел с голосовой трансляции с:',
-						info.path
-					);
+					console.log(t('voiceChat.userNavigatedFromVoice'), info.path);
 					// Показываем уведомление пользователю
 					setTimeout(() => {
-						toast.success('Навигация завершена', {
-							description: `Вы перешли на страницу ${info.path}. Голосовая трансляция была активна.`,
+						toast.success(t('voiceChat.navigationCompleted'), {
+							description: t('voiceChat.navigationCompletedDescription', {
+								path: info.path,
+							}),
 						});
 					}, 1000);
 				}
 				// Очищаем информацию
 				localStorage.removeItem('voice-chat-navigation');
 			} catch (error) {
-				console.error('Ошибка при обработке информации о навигации:', error);
+				console.error(t('voiceChat.navigationInfoError'), error);
 				localStorage.removeItem('voice-chat-navigation');
 			}
 		}
@@ -165,8 +162,8 @@ export default function VoiceChatInterface() {
 					});
 				} catch (error) {
 					console.error('Error fetching property details:', error);
-					toast.error('Ошибка загрузки деталей недвижимости', {
-						description: 'Не удалось загрузить информацию о выделенном объекте',
+					toast.error(t('voiceChat.propertyDetailsError'), {
+						description: t('voiceChat.propertyDetailsErrorDescription'),
 					});
 				}
 			}, 500);
@@ -252,11 +249,11 @@ export default function VoiceChatInterface() {
 									<div className="flex items-center gap-2">
 										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
 										<span className="text-sm text-blue-800 dark:text-blue-200">
-											Загружаем полную базу данных недвижимости...
+											{t('voiceChat.loadingDatabase')}
 										</span>
 									</div>
 									<p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
-										ИИ агент получает доступ ко всем объектам для лучшей помощи
+										{t('voiceChat.aiAgentAccess')}
 									</p>
 								</motion.div>
 							)}
@@ -293,15 +290,16 @@ export default function VoiceChatInterface() {
 							transition={{ duration: 0.3 }}
 						>
 							<div className="flex items-center justify-between mb-2">
-								<h3 className="text-sm font-medium">Выделенный объект</h3>
+								<h3 className="text-sm font-medium">
+									{t('voiceChat.selectedProperty')}
+								</h3>
 								<span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary/10 text-primary">
 									<Mic className="w-3 h-3 mr-1" />
-									Готов к обсуждению
+									{t('voiceChat.readyForDiscussion')}
 								</span>
 							</div>
 							<p className="text-sm text-muted-foreground">
-								Объект недвижимости выделен. Голосовой агент готов рассказать
-								подробности.
+								{t('voiceChat.propertySelectedDescription')}
 							</p>
 						</motion.div>
 					)}
@@ -316,16 +314,18 @@ export default function VoiceChatInterface() {
 							transition={{ duration: 0.3 }}
 						>
 							<div className="flex items-center justify-between mb-2">
-								<h3 className="text-sm font-medium">Состояние трансляции</h3>
+								<h3 className="text-sm font-medium">
+									{t('voiceChat.broadcastStatus')}
+								</h3>
 								<div className="flex gap-2">
 									{hasAgentNeededInfo && (
 										<span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-											Требуется информация
+											{t('voiceChat.requiresInfo')}
 										</span>
 									)}
 									{hasUserAnswered && (
 										<span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-											Пользователь ответил
+											{t('voiceChat.userAnswered')}
 										</span>
 									)}
 								</div>
@@ -334,13 +334,14 @@ export default function VoiceChatInterface() {
 							{currentQuestion && (
 								<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-3">
 									<p className="text-sm text-blue-800 dark:text-blue-200">
-										<strong>Текущий вопрос:</strong> {currentQuestion.question}
+										<strong>{t('voiceChat.currentQuestion')}</strong>{' '}
+										{currentQuestion.question}
 									</p>
 									<p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
-										Статус:{' '}
+										{t('voiceChat.status')}{' '}
 										{currentQuestion.status === 'pending'
-											? 'Ожидает ответа'
-											: 'Отвечен'}
+											? t('voiceChat.pendingAnswer')
+											: t('voiceChat.answered')}
 									</p>
 								</div>
 							)}

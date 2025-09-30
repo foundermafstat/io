@@ -130,11 +130,11 @@ export default function ChatInterface() {
               {selectedReplica ? (
                 <div className="relative h-8 w-8 rounded-full overflow-hidden flex-shrink-0 border-2 border-white">
                   <img 
-                    src={selectedReplica.profileImage || '/coach.png'} 
+                    src={selectedReplica.profileImage || '/io-logo.png'} 
                     alt={selectedReplica.name}
                     className="h-full w-full object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/coach.png';
+                      (e.target as HTMLImageElement).src = '/io-logo.png';
                     }}
                     width={32}
                     height={32}
@@ -143,7 +143,7 @@ export default function ChatInterface() {
               ) : (
                 <div className="relative h-8 w-8 rounded-full overflow-hidden border-2 border-white">
                   <Image
-                    src="/coach.png"
+                    src="/io-logo.png"
                     alt="IO"
                     fill
                     className="object-cover"

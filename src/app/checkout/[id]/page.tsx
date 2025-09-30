@@ -102,6 +102,7 @@ export default function CheckoutPage() {
 	const [property, setProperty] = useState<Property | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [submitting, setSubmitting] = useState(false);
+	const [isSuccess, setIsSuccess] = useState(false);
 	const [formData, setFormData] = useState<CheckoutFormData>({
 		name: '',
 		phone: '',
@@ -109,6 +110,38 @@ export default function CheckoutPage() {
 		meetingTime: '',
 		notes: '',
 	});
+
+	// Инициализация формы только один раз
+	const [isFormInitialized, setIsFormInitialized] = useState(false);
+
+	// Сохранение формы при изменении
+	useEffect(() => {
+		if (isFormInitialized) {
+			localStorage.setItem(
+				`checkout-form-${propertyId}`,
+				JSON.stringify(formData)
+			);
+		}
+	}, [formData, propertyId, isFormInitialized]);
+
+	// Инициализация формы из localStorage
+	useEffect(() => {
+		if (!isFormInitialized) {
+			const savedFormData = localStorage.getItem(`checkout-form-${propertyId}`);
+			if (savedFormData) {
+				try {
+					const parsed = JSON.parse(savedFormData);
+					if (parsed.meetingDate) {
+						parsed.meetingDate = new Date(parsed.meetingDate);
+					}
+					setFormData(parsed);
+				} catch (error) {
+					console.error('Error parsing saved form data:', error);
+				}
+			}
+			setIsFormInitialized(true);
+		}
+	}, [propertyId, isFormInitialized]);
 
 	// Загрузка данных недвижимости
 	useEffect(() => {
@@ -159,20 +192,29 @@ export default function CheckoutPage() {
 				},
 				body: JSON.stringify({
 					propertyId,
-					...formData,
+					name: formData.name,
+					phone: formData.phone,
 					meetingDate: formData.meetingDate?.toISOString(),
+					meetingTime: formData.meetingTime,
+					notes: formData.notes || '',
 				}),
 			});
 
+			const result = await response.json();
+
 			if (!response.ok) {
-				throw new Error('Ошибка при создании заказа');
+				throw new Error(result.error || 'Ошибка при создании заказа');
 			}
 
 			toast.success(t('checkout.successMessage'));
-			router.push('/properties');
+			// Очищаем сохраненные данные формы после успешной отправки
+			localStorage.removeItem(`checkout-form-${propertyId}`);
+			setIsSuccess(true);
 		} catch (error) {
 			console.error('Error submitting form:', error);
-			toast.error(t('checkout.errorMessage'));
+			const errorMessage =
+				error instanceof Error ? error.message : t('checkout.errorMessage');
+			toast.error(errorMessage);
 		} finally {
 			setSubmitting(false);
 		}
@@ -201,9 +243,80 @@ export default function CheckoutPage() {
 					<h1 className="text-2xl font-bold mb-4">
 						{t('checkout.propertyNotFound')}
 					</h1>
-					<Button onClick={() => router.push('/properties')}>
+					<Button onClick={() => router.push('/catalog')}>
 						{t('checkout.backToCatalog')}
 					</Button>
+				</div>
+			</div>
+		);
+	}
+
+	// Состояние благодарности
+	if (isSuccess) {
+		return (
+			<div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+				<div className="max-w-2xl mx-auto text-center p-8">
+					<div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+						<CheckCircle className="h-12 w-12 text-white" />
+					</div>
+					<h1 className="text-4xl font-bold text-green-800 mb-6">
+						{t('checkout.thankYou')}
+					</h1>
+					<p className="text-xl text-green-700 mb-8 leading-relaxed">
+						{t('checkout.thankYouMessage')}
+					</p>
+
+					{/* Детали заявки */}
+					<div className="bg-white rounded-lg p-6 mb-8 shadow-lg">
+						<h3 className="text-lg font-semibold text-gray-800 mb-4">
+							{t('checkout.bookingDetails')}
+						</h3>
+						<div className="space-y-3 text-left">
+							<div className="flex justify-between">
+								<span className="text-gray-600">{t('checkout.property')}:</span>
+								<span className="font-medium">{property?.title}</span>
+							</div>
+							<div className="flex justify-between">
+								<span className="text-gray-600">{t('checkout.yourName')}:</span>
+								<span className="font-medium">{formData.name}</span>
+							</div>
+							<div className="flex justify-between">
+								<span className="text-gray-600">{t('checkout.phone')}:</span>
+								<span className="font-medium">{formData.phone}</span>
+							</div>
+							<div className="flex justify-between">
+								<span className="text-gray-600">
+									{t('checkout.meetingDate')}:
+								</span>
+								<span className="font-medium">
+									{formData.meetingDate &&
+										format(formData.meetingDate, 'PPP', { locale: ru })}
+								</span>
+							</div>
+							<div className="flex justify-between">
+								<span className="text-gray-600">
+									{t('checkout.meetingTime')}:
+								</span>
+								<span className="font-medium">{formData.meetingTime}</span>
+							</div>
+						</div>
+					</div>
+
+					<div className="flex flex-col sm:flex-row gap-4 justify-center">
+						<Button
+							onClick={() => router.push('/catalog')}
+							className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
+						>
+							{t('checkout.backToProperties')}
+						</Button>
+						<Button
+							onClick={() => router.push(`/estate/${propertyId}`)}
+							variant="outline"
+							className="border-green-600 text-green-600 hover:bg-green-50 px-8 py-3 text-lg"
+						>
+							{t('checkout.viewProperty')}
+						</Button>
+					</div>
 				</div>
 			</div>
 		);
@@ -228,44 +341,33 @@ export default function CheckoutPage() {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-			{/* Hero Section */}
-			<div className="relative bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
-				<div className="container mx-auto px-4 py-8">
-					{/* Навигация */}
-					<div className="mb-8">
+			{/* Header */}
+			<div className="bg-white border-b">
+				<div className="container mx-auto px-4 py-6">
+					<div className="flex items-center justify-between">
 						<Button
 							variant="ghost"
 							onClick={() => router.back()}
-							className="mb-6 hover:bg-primary/10"
+							className="hover:bg-primary/10"
 						>
 							<ArrowLeft className="h-4 w-4 mr-2" />
 							{t('checkout.back')}
 						</Button>
-
-						<div className="text-center">
-							<div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-								<Sparkles className="h-4 w-4" />
-								Вы выбрали отличную недвижимость!
-							</div>
-							<h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
-								{t('checkout.title')}
-							</h1>
-							<p className="text-xl text-gray-600 max-w-2xl mx-auto">
-								{t('checkout.subtitle')}
-							</p>
-						</div>
+						<h1 className="text-2xl font-bold text-center flex-1">
+							{t('checkout.title')}
+						</h1>
+						<div className="w-20"></div> {/* Spacer */}
 					</div>
 				</div>
 			</div>
 
-			<div className="container mx-auto px-4 py-8 max-w-7xl">
-				<div className="grid grid-cols-1 xl:grid-cols-3 gap-12">
-					{/* Левая колонка - Информация о недвижимости */}
-					<div className="xl:col-span-1 space-y-6">
+			<div className="container mx-auto px-4 py-8 max-w-6xl">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+					{/* Левая колонка - Карточка недвижимости и процесс */}
+					<div className="space-y-6">
 						{/* Карточка недвижимости */}
-						<Card className="border-0 shadow-xl overflow-hidden">
-							{/* Изображение */}
-							<div className="relative h-64 bg-gradient-to-br from-primary/20 to-primary/5">
+						<Card className="border-0 shadow-lg overflow-hidden">
+							<div className="relative h-48 bg-gradient-to-br from-primary/20 to-primary/5">
 								<Image
 									src={getMainImage()}
 									alt={property.title}
@@ -275,62 +377,59 @@ export default function CheckoutPage() {
 								<div className="absolute top-4 left-4">
 									<Badge className="bg-green-500 text-white">
 										<CheckCircle className="h-3 w-3 mr-1" />
-										Выбрано
+										{t('checkout.selected')}
 									</Badge>
 								</div>
 								{property.isFeatured && (
 									<div className="absolute top-4 right-4">
 										<Badge className="bg-yellow-500 text-black">
 											<Star className="h-3 w-3 mr-1" />
-											Премиум
+											{t('checkout.premium')}
 										</Badge>
 									</div>
 								)}
 							</div>
 
 							<CardContent className="p-6">
-								{/* Основная информация */}
-								<div className="mb-6">
-									<h3 className="text-2xl font-bold mb-3">{property.title}</h3>
-									<div className="flex items-center text-gray-600 mb-4">
-										<MapPin className="w-5 h-5 mr-2 text-primary" />
-										<span className="text-lg">
-											{[property.city, property.state, property.country]
-												.filter(Boolean)
-												.join(', ')}
-										</span>
-									</div>
+								<h3 className="text-xl font-bold mb-3">{property.title}</h3>
+								<div className="flex items-center text-gray-600 mb-4">
+									<MapPin className="w-4 h-4 mr-2 text-primary" />
+									<span>
+										{[property.city, property.state, property.country]
+											.filter(Boolean)
+											.join(', ')}
+									</span>
 								</div>
 
 								{/* Характеристики */}
-								<div className="grid grid-cols-3 gap-4 mb-6">
+								<div className="grid grid-cols-3 gap-3 mb-4">
 									{property.bedrooms && (
-										<div className="text-center p-3 bg-slate-50 rounded-lg">
-											<Bed className="w-6 h-6 mx-auto mb-2 text-primary" />
-											<div className="text-xl font-bold">
+										<div className="text-center p-2 bg-slate-50 rounded">
+											<Bed className="w-4 h-4 mx-auto mb-1 text-primary" />
+											<div className="text-sm font-bold">
 												{property.bedrooms}
 											</div>
-											<div className="text-sm text-gray-600">
+											<div className="text-xs text-gray-600">
 												{t('checkout.bedrooms')}
 											</div>
 										</div>
 									)}
 									{property.bathrooms && (
-										<div className="text-center p-3 bg-slate-50 rounded-lg">
-											<Bath className="w-6 h-6 mx-auto mb-2 text-primary" />
-											<div className="text-xl font-bold">
+										<div className="text-center p-2 bg-slate-50 rounded">
+											<Bath className="w-4 h-4 mx-auto mb-1 text-primary" />
+											<div className="text-sm font-bold">
 												{property.bathrooms}
 											</div>
-											<div className="text-sm text-gray-600">
+											<div className="text-xs text-gray-600">
 												{t('checkout.bathrooms')}
 											</div>
 										</div>
 									)}
 									{property.area && (
-										<div className="text-center p-3 bg-slate-50 rounded-lg">
-											<Square className="w-6 h-6 mx-auto mb-2 text-primary" />
-											<div className="text-xl font-bold">{property.area}</div>
-											<div className="text-sm text-gray-600">
+										<div className="text-center p-2 bg-slate-50 rounded">
+											<Square className="w-4 h-4 mx-auto mb-1 text-primary" />
+											<div className="text-sm font-bold">{property.area}</div>
+											<div className="text-xs text-gray-600">
 												{t('checkout.area')}
 											</div>
 										</div>
@@ -338,75 +437,85 @@ export default function CheckoutPage() {
 								</div>
 
 								{/* Цена */}
-								<div className="text-center p-6 bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl mb-6">
-									<div className="flex items-center justify-center mb-2">
-										<Euro className="w-8 h-8 text-primary mr-2" />
-										<span className="text-4xl font-bold text-primary">
+								<div className="text-center p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg">
+									<div className="flex items-center justify-center mb-1">
+										<Euro className="w-6 h-6 text-primary mr-2" />
+										<span className="text-2xl font-bold text-primary">
 											{price?.toLocaleString()}
 										</span>
 									</div>
 									{priceLabel && (
-										<div className="text-gray-600 mb-3">{priceLabel}</div>
+										<div className="text-sm text-gray-600 mb-2">
+											{priceLabel}
+										</div>
 									)}
-									<Badge variant="outline" className="text-sm">
+									<Badge variant="outline" className="text-xs">
 										{property.operationType === 'RENT'
 											? t('propertyDetail.operationType.rent')
 											: t('propertyDetail.operationType.sale')}
 									</Badge>
 								</div>
-
-								{/* Действия */}
-								<div className="space-y-3">
-									<Button variant="outline" className="w-full">
-										<Heart className="h-4 w-4 mr-2" />В избранное
-									</Button>
-									<Button variant="outline" className="w-full">
-										<Share2 className="h-4 w-4 mr-2" />
-										Поделиться
-									</Button>
-								</div>
 							</CardContent>
 						</Card>
 
-						{/* Преимущества */}
-						<Card className="border-0 shadow-xl">
+						{/* Как проходит сделка */}
+						<Card className="border-0 shadow-lg">
 							<CardHeader>
 								<CardTitle className="flex items-center gap-2">
-									<Zap className="h-5 w-5 text-yellow-500" />
-									Почему выбирают нас
+									<Clock className="h-5 w-5 text-primary" />
+									{t('checkout.howItWorks')}
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-4">
-								<div className="flex items-center gap-3">
-									<div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-										<Shield className="h-5 w-5 text-green-600" />
+								<div className="flex gap-4">
+									<div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+										1
 									</div>
 									<div>
-										<div className="font-semibold">Гарантия качества</div>
+										<div className="font-semibold">
+											{t('checkout.step1.title')}
+										</div>
 										<div className="text-sm text-gray-600">
-											Проверенные объекты
+											{t('checkout.step1.description')}
 										</div>
 									</div>
 								</div>
-								<div className="flex items-center gap-3">
-									<div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-										<Target className="h-5 w-5 text-blue-600" />
+								<div className="flex gap-4">
+									<div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+										2
 									</div>
 									<div>
-										<div className="font-semibold">Персональный подход</div>
+										<div className="font-semibold">
+											{t('checkout.step2.title')}
+										</div>
 										<div className="text-sm text-gray-600">
-											Индивидуальные решения
+											{t('checkout.step2.description')}
 										</div>
 									</div>
 								</div>
-								<div className="flex items-center gap-3">
-									<div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-										<TrendingUp className="h-5 w-5 text-purple-600" />
+								<div className="flex gap-4">
+									<div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+										3
 									</div>
 									<div>
-										<div className="font-semibold">Лучшие цены</div>
+										<div className="font-semibold">
+											{t('checkout.step3.title')}
+										</div>
 										<div className="text-sm text-gray-600">
-											Конкурентные предложения
+											{t('checkout.step3.description')}
+										</div>
+									</div>
+								</div>
+								<div className="flex gap-4">
+									<div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+										4
+									</div>
+									<div>
+										<div className="font-semibold">
+											{t('checkout.step4.title')}
+										</div>
+										<div className="text-sm text-gray-600">
+											{t('checkout.step4.description')}
 										</div>
 									</div>
 								</div>
@@ -414,290 +523,155 @@ export default function CheckoutPage() {
 						</Card>
 					</div>
 
-					{/* Центральная и правая колонки - Форма */}
-					<div className="xl:col-span-2">
-						<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-							{/* Форма заказа */}
-							<div className="lg:col-span-1">
-								<Card className="border-0 shadow-xl">
-									<CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
-										<CardTitle className="flex items-center gap-2">
-											<CalendarIcon className="h-6 w-6 text-primary" />
-											{t('checkout.bookMeeting')}
-										</CardTitle>
-										<p className="text-gray-600">
-											Заполните форму и мы свяжемся с вами в течение 15 минут
-										</p>
-									</CardHeader>
-									<CardContent className="p-6">
-										<form onSubmit={handleSubmit} className="space-y-6">
-											{/* Имя */}
-											<div className="space-y-2">
-												<Label htmlFor="name" className="text-base font-medium">
-													{t('checkout.yourName')} *
-												</Label>
-												<Input
-													id="name"
-													type="text"
-													placeholder={t('checkout.namePlaceholder')}
-													value={formData.name}
-													onChange={(e) =>
-														updateFormData('name', e.target.value)
+					{/* Правая колонка - Форма */}
+					<div>
+						<Card className="border-0 shadow-lg">
+							<CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
+								<CardTitle className="flex items-center gap-2">
+									<CalendarIcon className="h-5 w-5 text-primary" />
+									{t('checkout.bookMeeting')}
+								</CardTitle>
+								<p className="text-sm text-gray-600">
+									{t('checkout.subtitle')}
+								</p>
+							</CardHeader>
+							<CardContent className="p-6">
+								<form onSubmit={handleSubmit} className="space-y-4">
+									{/* Имя */}
+									<div className="space-y-2">
+										<Label htmlFor="name" className="text-sm font-medium">
+											{t('checkout.yourName')} *
+										</Label>
+										<Input
+											id="name"
+											type="text"
+											placeholder={t('checkout.namePlaceholder')}
+											value={formData.name}
+											onChange={(e) => updateFormData('name', e.target.value)}
+											required
+											className="h-10"
+										/>
+									</div>
+
+									{/* Телефон */}
+									<div className="space-y-2">
+										<Label htmlFor="phone" className="text-sm font-medium">
+											{t('checkout.phone')} *
+										</Label>
+										<Input
+											id="phone"
+											type="tel"
+											placeholder={t('checkout.phonePlaceholder')}
+											value={formData.phone}
+											onChange={(e) => updateFormData('phone', e.target.value)}
+											required
+											className="h-10"
+										/>
+									</div>
+
+									{/* Дата встречи */}
+									<div className="space-y-2">
+										<Label className="text-sm font-medium">
+											{t('checkout.meetingDate')} *
+										</Label>
+										<Popover>
+											<PopoverTrigger asChild>
+												<Button
+													variant="outline"
+													className={cn(
+														'w-full justify-start text-left font-normal h-10',
+														!formData.meetingDate && 'text-muted-foreground'
+													)}
+												>
+													<CalendarIcon className="mr-2 h-4 w-4" />
+													{formData.meetingDate ? (
+														format(formData.meetingDate, 'PPP', {
+															locale: ru,
+														})
+													) : (
+														<span>{t('checkout.selectDate')}</span>
+													)}
+												</Button>
+											</PopoverTrigger>
+											<PopoverContent className="w-auto p-0" align="start">
+												<Calendar
+													mode="single"
+													selected={formData.meetingDate}
+													onSelect={(date) =>
+														updateFormData('meetingDate', date)
 													}
-													required
-													className="h-12 text-base"
+													disabled={(date) => date < new Date()}
+													initialFocus
 												/>
-											</div>
+											</PopoverContent>
+										</Popover>
+									</div>
 
-											{/* Телефон */}
-											<div className="space-y-2">
-												<Label
-													htmlFor="phone"
-													className="text-base font-medium"
-												>
-													{t('checkout.phone')} *
-												</Label>
-												<Input
-													id="phone"
-													type="tel"
-													placeholder={t('checkout.phonePlaceholder')}
-													value={formData.phone}
-													onChange={(e) =>
-														updateFormData('phone', e.target.value)
-													}
-													required
-													className="h-12 text-base"
-												/>
-											</div>
+									{/* Время встречи */}
+									<div className="space-y-2">
+										<Label
+											htmlFor="meetingTime"
+											className="text-sm font-medium"
+										>
+											{t('checkout.meetingTime')} *
+										</Label>
+										<Select
+											value={formData.meetingTime}
+											onValueChange={(value) =>
+												updateFormData('meetingTime', value)
+											}
+										>
+											<SelectTrigger className="h-10">
+												<SelectValue placeholder={t('checkout.selectTime')} />
+											</SelectTrigger>
+											<SelectContent>
+												{TIME_SLOTS.map((time) => (
+													<SelectItem key={time} value={time}>
+														<div className="flex items-center">
+															<Clock className="w-4 h-4 mr-2" />
+															{time}
+														</div>
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</div>
 
-											{/* Дата встречи */}
-											<div className="space-y-2">
-												<Label className="text-base font-medium">
-													{t('checkout.meetingDate')} *
-												</Label>
-												<Popover>
-													<PopoverTrigger asChild>
-														<Button
-															variant="outline"
-															className={cn(
-																'w-full justify-start text-left font-normal h-12 text-base',
-																!formData.meetingDate && 'text-muted-foreground'
-															)}
-														>
-															<CalendarIcon className="mr-2 h-5 w-5" />
-															{formData.meetingDate ? (
-																format(formData.meetingDate, 'PPP', {
-																	locale: ru,
-																})
-															) : (
-																<span>{t('checkout.selectDate')}</span>
-															)}
-														</Button>
-													</PopoverTrigger>
-													<PopoverContent className="w-auto p-0" align="start">
-														<Calendar
-															mode="single"
-															selected={formData.meetingDate}
-															onSelect={(date) =>
-																updateFormData('meetingDate', date)
-															}
-															disabled={(date) => date < new Date()}
-															initialFocus
-														/>
-													</PopoverContent>
-												</Popover>
-											</div>
+									{/* Дополнительные пожелания */}
+									<div className="space-y-2">
+										<Label htmlFor="notes" className="text-sm font-medium">
+											{t('checkout.additionalNotes')}
+										</Label>
+										<Textarea
+											id="notes"
+											placeholder={t('checkout.notesPlaceholder')}
+											value={formData.notes}
+											onChange={(e) => updateFormData('notes', e.target.value)}
+											rows={3}
+										/>
+									</div>
 
-											{/* Время встречи */}
-											<div className="space-y-2">
-												<Label
-													htmlFor="meetingTime"
-													className="text-base font-medium"
-												>
-													{t('checkout.meetingTime')} *
-												</Label>
-												<Select
-													value={formData.meetingTime}
-													onValueChange={(value) =>
-														updateFormData('meetingTime', value)
-													}
-												>
-													<SelectTrigger className="h-12 text-base">
-														<SelectValue
-															placeholder={t('checkout.selectTime')}
-														/>
-													</SelectTrigger>
-													<SelectContent>
-														{TIME_SLOTS.map((time) => (
-															<SelectItem key={time} value={time}>
-																<div className="flex items-center">
-																	<Clock className="w-4 h-4 mr-2" />
-																	{time}
-																</div>
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-											</div>
-
-											{/* Дополнительные пожелания */}
-											<div className="space-y-2">
-												<Label
-													htmlFor="notes"
-													className="text-base font-medium"
-												>
-													{t('checkout.additionalNotes')}
-												</Label>
-												<Textarea
-													id="notes"
-													placeholder={t('checkout.notesPlaceholder')}
-													value={formData.notes}
-													onChange={(e) =>
-														updateFormData('notes', e.target.value)
-													}
-													rows={4}
-													className="text-base"
-												/>
-											</div>
-
-											{/* Кнопка отправки */}
-											<Button
-												type="submit"
-												className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
-												disabled={submitting}
-											>
-												{submitting ? (
-													<>
-														<Loader2 className="mr-2 h-5 w-5 animate-spin" />
-														{t('checkout.submitting')}
-													</>
-												) : (
-													<>
-														<ChevronRight className="mr-2 h-5 w-5" />
-														{t('checkout.submitBooking')}
-													</>
-												)}
-											</Button>
-										</form>
-									</CardContent>
-								</Card>
-							</div>
-
-							{/* Дополнительная информация */}
-							<div className="lg:col-span-1 space-y-6">
-								{/* Гарантии */}
-								<Card className="border-0 shadow-xl">
-									<CardHeader>
-										<CardTitle className="flex items-center gap-2">
-											<Shield className="h-5 w-5 text-green-600" />
-											Наши гарантии
-										</CardTitle>
-									</CardHeader>
-									<CardContent className="space-y-4">
-										<div className="flex items-start gap-3">
-											<CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-											<div>
-												<div className="font-medium">Быстрый ответ</div>
-												<div className="text-sm text-gray-600">
-													Свяжемся в течение 15 минут
-												</div>
-											</div>
-										</div>
-										<div className="flex items-start gap-3">
-											<CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-											<div>
-												<div className="font-medium">
-													Бесплатная консультация
-												</div>
-												<div className="text-sm text-gray-600">
-													Экспертная помощь без доплат
-												</div>
-											</div>
-										</div>
-										<div className="flex items-start gap-3">
-											<CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-											<div>
-												<div className="font-medium">Гибкое время</div>
-												<div className="text-sm text-gray-600">
-													Подберем удобное время встречи
-												</div>
-											</div>
-										</div>
-										<div className="flex items-start gap-3">
-											<CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-											<div>
-												<div className="font-medium">Конфиденциальность</div>
-												<div className="text-sm text-gray-600">
-													Ваши данные в безопасности
-												</div>
-											</div>
-										</div>
-									</CardContent>
-								</Card>
-
-								{/* Контакты */}
-								<Card className="border-0 shadow-xl">
-									<CardHeader>
-										<CardTitle className="flex items-center gap-2">
-											<Users className="h-5 w-5 text-primary" />
-											Свяжитесь с нами
-										</CardTitle>
-									</CardHeader>
-									<CardContent className="space-y-4">
-										<div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
-											<div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-												<Phone className="h-5 w-5 text-primary" />
-											</div>
-											<div>
-												<div className="font-medium">Телефон</div>
-												<div className="text-sm text-gray-600">
-													+7 (999) 123-45-67
-												</div>
-											</div>
-										</div>
-										<div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
-											<div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-												<Mail className="h-5 w-5 text-primary" />
-											</div>
-											<div>
-												<div className="font-medium">Email</div>
-												<div className="text-sm text-gray-600">
-													info@realestate.com
-												</div>
-											</div>
-										</div>
-										<div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
-											<div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-												<Clock className="h-5 w-5 text-primary" />
-											</div>
-											<div>
-												<div className="font-medium">Режим работы</div>
-												<div className="text-sm text-gray-600">
-													Пн-Вс: 9:00 - 21:00
-												</div>
-											</div>
-										</div>
-									</CardContent>
-								</Card>
-
-								{/* Информация о безопасности */}
-								<Card className="border-0 shadow-xl bg-green-50 border-green-200">
-									<CardContent className="p-6">
-										<div className="flex items-start gap-3">
-											<Lock className="h-6 w-6 text-green-600 mt-0.5" />
-											<div>
-												<div className="font-semibold text-green-800 mb-2">
-													Ваши данные защищены
-												</div>
-												<p className="text-sm text-green-700">
-													{t('checkout.infoText')}
-												</p>
-											</div>
-										</div>
-									</CardContent>
-								</Card>
-							</div>
-						</div>
+									{/* Кнопка отправки */}
+									<Button
+										type="submit"
+										className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+										disabled={submitting}
+									>
+										{submitting ? (
+											<>
+												<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+												{t('checkout.submitting')}
+											</>
+										) : (
+											<>
+												<ChevronRight className="mr-2 h-4 w-4" />
+												{t('checkout.submitBooking')}
+											</>
+										)}
+									</Button>
+								</form>
+							</CardContent>
+						</Card>
 					</div>
 				</div>
 			</div>

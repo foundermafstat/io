@@ -36,6 +36,7 @@ export const useToolsFunctions = () => {
 
 			toast(`Switched to ${newTheme} mode! 🌓`, {
 				description: t('tools.switchTheme') + newTheme + '.',
+				position: 'bottom-left',
 			});
 
 			return {
@@ -158,6 +159,7 @@ export const useToolsFunctions = () => {
 			animate();
 			toast.success(t('tools.partyMode.toast') + ' 🎉', {
 				description: t('tools.partyMode.description'),
+				position: 'bottom-left',
 			});
 			return { success: true, message: t('tools.partyMode.success') + ' 🎉' };
 		} catch (error) {
@@ -175,6 +177,7 @@ export const useToolsFunctions = () => {
 				t('tools.launchWebsiteSuccess') +
 				url +
 				", tell the user it's been launched.",
+			position: 'bottom-left',
 		});
 		return {
 			success: true,
@@ -186,6 +189,7 @@ export const useToolsFunctions = () => {
 		navigator.clipboard.writeText(text);
 		toast(t('tools.clipboard.toast') + ' 📋', {
 			description: t('tools.clipboard.description'),
+			position: 'bottom-left',
 		});
 		return {
 			success: true,
@@ -211,6 +215,7 @@ export const useToolsFunctions = () => {
 
 			toast.success(t('tools.scrapeWebsite.toast') + ' 📋', {
 				description: t('tools.scrapeWebsite.success'),
+				position: 'bottom-left',
 			});
 
 			return {
@@ -230,7 +235,7 @@ export const useToolsFunctions = () => {
 
 	const navigateToProperties = ({ filters }: { filters?: any } = {}) => {
 		try {
-			let url = '/properties';
+			let url = '/catalog';
 			const searchParams = new URLSearchParams();
 
 			if (filters) {
@@ -248,18 +253,17 @@ export const useToolsFunctions = () => {
 				url += '?' + searchParams.toString();
 			}
 
-			// Используем Next.js роутер для навигации без перезагрузки
-			router.push(url);
+			// Используем Next.js роутер для навигации без перезагрузки и без прерывания трансляции
+			router.push(url, { scroll: false });
 
-			toast.success('Navigating to properties 🏠', {
-				description: 'Loading properties page with applied filters',
+			toast.success('Navigating to catalog 🏠', {
+				description: 'Loading catalog page with applied filters',
+				position: 'bottom-left',
 			});
 
 			return {
 				success: true,
-				message: `Navigated to properties page${
-					filters ? ' with filters' : ''
-				}`,
+				message: `Navigated to catalog page${filters ? ' with filters' : ''}`,
 				url,
 			};
 		} catch (error) {
@@ -273,11 +277,12 @@ export const useToolsFunctions = () => {
 	const navigateToProperty = ({ propertyId }: { propertyId: string }) => {
 		try {
 			const url = `/estate/${propertyId}`;
-			// Используем Next.js роутер для навигации без перезагрузки
-			router.push(url);
+			// Используем Next.js роутер для навигации без перезагрузки и без прерывания трансляции
+			router.push(url, { scroll: false });
 
-			toast.success('Navigating to property 🏡', {
+			toast.success('Navigating to estate 🏡', {
 				description: `Loading property ${propertyId}`,
+				position: 'bottom-left',
 			});
 
 			return {
@@ -295,11 +300,12 @@ export const useToolsFunctions = () => {
 
 	const navigateToHome = () => {
 		try {
-			// Используем Next.js роутер для навигации без перезагрузки
-			router.push('/');
+			// Используем Next.js роутер для навигации без перезагрузки и без прерывания трансляции
+			router.push('/', { scroll: false });
 
 			toast.success('Navigating to home 🏠', {
 				description: 'Loading home page',
+				position: 'bottom-left',
 			});
 
 			return {
@@ -317,11 +323,12 @@ export const useToolsFunctions = () => {
 
 	const navigateToCars = () => {
 		try {
-			// Используем Next.js роутер для навигации без перезагрузки
-			router.push('/cars');
+			// Используем Next.js роутер для навигации без перезагрузки и без прерывания трансляции
+			router.push('/cars', { scroll: false });
 
 			toast.success('Navigating to cars 🚗', {
 				description: 'Loading cars page',
+				position: 'bottom-left',
 			});
 
 			return {
@@ -340,11 +347,12 @@ export const useToolsFunctions = () => {
 	const navigateToCar = ({ carId }: { carId: string }) => {
 		try {
 			const url = `/car/${carId}`;
-			// Используем Next.js роутер для навигации без перезагрузки
-			router.push(url);
+			// Используем Next.js роутер для навигации без перезагрузки и без прерывания трансляции
+			router.push(url, { scroll: false });
 
 			toast.success('Navigating to car 🚗', {
 				description: `Loading car ${carId}`,
+				position: 'bottom-left',
 			});
 
 			return {
@@ -380,6 +388,7 @@ export const useToolsFunctions = () => {
 
 			toast.success('Properties context loaded 🏠', {
 				description: `Loaded ${data.totalProperties} properties for AI context`,
+				position: 'bottom-left',
 			});
 
 			return {
@@ -399,6 +408,288 @@ export const useToolsFunctions = () => {
 		}
 	};
 
+	const navigateToCheckout = ({ propertyId }: { propertyId: string }) => {
+		try {
+			const url = `/checkout/${propertyId}`;
+			// Используем Next.js роутер для навигации без перезагрузки и без прерывания трансляции
+			router.push(url, { scroll: false });
+
+			toast.success('Navigating to checkout 💳', {
+				description: `Loading checkout page for property ${propertyId}`,
+				position: 'bottom-left',
+			});
+
+			return {
+				success: true,
+				message: `Navigated to checkout page for property ${propertyId}`,
+				url,
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Navigation error: ${error}`,
+			};
+		}
+	};
+
+	const fillCheckoutForm = ({
+		field,
+		value,
+	}: {
+		field: string;
+		value: string;
+	}) => {
+		try {
+			// Находим форму на странице
+			const form = document.querySelector('form');
+			if (!form) {
+				return {
+					success: false,
+					message: 'Checkout form not found on the page',
+				};
+			}
+
+			let inputElement:
+				| HTMLInputElement
+				| HTMLTextAreaElement
+				| HTMLSelectElement
+				| null = null;
+
+			// Определяем элемент по полю
+			switch (field.toLowerCase()) {
+				case 'name':
+					inputElement = form.querySelector('#name') as HTMLInputElement;
+					break;
+				case 'phone':
+					inputElement = form.querySelector('#phone') as HTMLInputElement;
+					break;
+				case 'meetingdate':
+				case 'meeting_date':
+					// Для даты нужно найти кнопку PopoverTrigger и кликнуть на неё
+					const dateButton = form.querySelector('button[data-state]');
+					if (dateButton) {
+						(dateButton as HTMLButtonElement).click();
+						// Ждем немного для открытия календаря
+						setTimeout(() => {
+							// Здесь можно добавить логику для выбора даты
+							// Пока просто показываем сообщение
+							toast.info('Date picker opened', {
+								description: 'Please select a date from the calendar',
+								position: 'bottom-left',
+							});
+						}, 100);
+					}
+					return {
+						success: true,
+						message: `Opened date picker for ${field}`,
+					};
+				case 'meetingtime':
+				case 'meeting_time':
+					inputElement = form.querySelector(
+						'[data-radix-select-trigger]'
+					) as HTMLSelectElement;
+					break;
+				case 'notes':
+					inputElement = form.querySelector('#notes') as HTMLTextAreaElement;
+					break;
+				default:
+					return {
+						success: false,
+						message: `Unknown field: ${field}`,
+					};
+			}
+
+			if (inputElement) {
+				// Устанавливаем значение
+				inputElement.value = value;
+
+				// Триггерим событие изменения
+				const event = new Event('input', { bubbles: true });
+				inputElement.dispatchEvent(event);
+
+				toast.success('Form field updated 📝', {
+					description: `Updated ${field} field with: ${value}`,
+					position: 'bottom-left',
+				});
+
+				return {
+					success: true,
+					message: `Updated ${field} field with: ${value}`,
+				};
+			} else {
+				return {
+					success: false,
+					message: `Field ${field} not found in the form`,
+				};
+			}
+		} catch (error) {
+			return {
+				success: false,
+				message: `Error filling form field: ${error}`,
+			};
+		}
+	};
+
+	const submitCheckoutForm = () => {
+		try {
+			const form = document.querySelector('form');
+			if (!form) {
+				return {
+					success: false,
+					message: 'Checkout form not found on the page',
+				};
+			}
+
+			const submitButton = form.querySelector(
+				'button[type="submit"]'
+			) as HTMLButtonElement;
+			if (!submitButton) {
+				return {
+					success: false,
+					message: 'Submit button not found in the form',
+				};
+			}
+
+			// Проверяем, что форма заполнена
+			const requiredFields = ['name', 'phone', 'meetingDate', 'meetingTime'];
+			const missingFields = [];
+
+			for (const field of requiredFields) {
+				let element: HTMLInputElement | HTMLSelectElement | null = null;
+
+				if (field === 'meetingDate') {
+					const dateButton = form.querySelector('button[data-state]');
+					if (!dateButton || !/\d/.test(dateButton.textContent || '')) {
+						missingFields.push(field);
+					}
+				} else if (field === 'meetingTime') {
+					element = form.querySelector(
+						'[data-radix-select-trigger]'
+					) as HTMLSelectElement;
+				} else {
+					element = form.querySelector(`#${field}`) as HTMLInputElement;
+				}
+
+				if (element && !element.value.trim()) {
+					missingFields.push(field);
+				}
+			}
+
+			if (missingFields.length > 0) {
+				return {
+					success: false,
+					message: `Please fill in the following required fields: ${missingFields.join(
+						', '
+					)}`,
+				};
+			}
+
+			// Отправляем форму
+			submitButton.click();
+
+			toast.success('Form submitted ✅', {
+				description: 'Checkout form has been submitted',
+				position: 'bottom-left',
+			});
+
+			return {
+				success: true,
+				message: 'Checkout form submitted successfully',
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Error submitting form: ${error}`,
+			};
+		}
+	};
+
+	const updateCheckoutElement = ({
+		elementSelector,
+		action,
+		value,
+	}: {
+		elementSelector: string;
+		action: string;
+		value?: string;
+	}) => {
+		try {
+			const element = document.querySelector(elementSelector) as HTMLElement;
+			if (!element) {
+				return {
+					success: false,
+					message: `Element with selector "${elementSelector}" not found`,
+				};
+			}
+
+			switch (action.toLowerCase()) {
+				case 'show':
+					element.style.display = 'block';
+					element.style.visibility = 'visible';
+					break;
+				case 'hide':
+					element.style.display = 'none';
+					break;
+				case 'changetext':
+				case 'change_text':
+					if (value !== undefined) {
+						element.textContent = value;
+					}
+					break;
+				case 'changecolor':
+				case 'change_color':
+					if (value !== undefined) {
+						element.style.color = value;
+					}
+					break;
+				case 'changebackground':
+				case 'change_background':
+					if (value !== undefined) {
+						element.style.backgroundColor = value;
+					}
+					break;
+				case 'addclass':
+				case 'add_class':
+					if (value !== undefined) {
+						element.classList.add(value);
+					}
+					break;
+				case 'removeclass':
+				case 'remove_class':
+					if (value !== undefined) {
+						element.classList.remove(value);
+					}
+					break;
+				case 'toggleclass':
+				case 'toggle_class':
+					if (value !== undefined) {
+						element.classList.toggle(value);
+					}
+					break;
+				default:
+					return {
+						success: false,
+						message: `Unknown action: ${action}`,
+					};
+			}
+
+			toast.success('Element updated 🎨', {
+				description: `Updated element with action: ${action}`,
+				position: 'bottom-left',
+			});
+
+			return {
+				success: true,
+				message: `Successfully updated element with action: ${action}`,
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Error updating element: ${error}`,
+			};
+		}
+	};
+
 	return {
 		getCurrentTime: timeFunction,
 		changeBackgroundColor: backgroundFunction,
@@ -409,6 +700,7 @@ export const useToolsFunctions = () => {
 			// Простая реализация скриншота
 			toast('Screenshot taken! 📸', {
 				description: 'Screenshot functionality would be implemented here',
+				position: 'bottom-left',
 			});
 			return {
 				success: true,
@@ -422,5 +714,9 @@ export const useToolsFunctions = () => {
 		navigateToCars,
 		navigateToCar,
 		loadPropertiesContext,
+		navigateToCheckout,
+		fillCheckoutForm,
+		submitCheckoutForm,
+		updateCheckoutElement,
 	};
 };

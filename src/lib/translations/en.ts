@@ -25,7 +25,7 @@ export const en = {
 		realEstate: 'Real Estate',
 		adminPanel: 'Admin Panel',
 		development: 'Development',
-		propertySearch: 'Property Search & Purchase',
+		estateSearch: 'Estate Search & Purchase',
 		systemManagement: 'System Management',
 		developmentTools: 'Development Tools',
 		browseProperties: 'Browse Properties',
@@ -110,6 +110,26 @@ export const en = {
 				description:
 					'Say "Go to [page]" or "Open [URL]" to navigate to a specific page.',
 			},
+			navigateToCheckout: {
+				name: 'Navigate to Checkout',
+				description:
+					'Say "Go to checkout for estate [ID]" to navigate to the checkout page.',
+			},
+			fillCheckoutForm: {
+				name: 'Fill Checkout Form',
+				description:
+					'Say "Fill [field] with [value]" to fill checkout form fields like name, phone, notes.',
+			},
+			submitCheckoutForm: {
+				name: 'Submit Checkout Form',
+				description:
+					'Say "Submit the form" or "Send the booking request" to submit the checkout form.',
+			},
+			updateCheckoutElement: {
+				name: 'Update Checkout Elements',
+				description:
+					'Say "Change [element] to [action]" to modify DOM elements on the checkout page.',
+			},
 		},
 		clipboard: {
 			description: 'You can now paste it somewhere.',
@@ -155,6 +175,31 @@ export const en = {
 		selectReplica: 'Select Replica',
 		loadingReplicas: 'Loading replicas...',
 		selectVoice: 'Select Voice',
+		sessionRestored: 'Session restored',
+		sessionRestoredDescription: 'Voice broadcast was active and restored.',
+		restoringSession: 'Restoring voice session state after navigation',
+		sessionRestoreError: 'Error restoring session state:',
+		navigationCompleted: 'Navigation completed',
+		navigationCompletedDescription:
+			'You navigated to page {path}. Voice broadcast was active.',
+		userNavigatedFromVoice: 'User navigated from voice broadcast from:',
+		navigationInfoError: 'Error processing navigation information:',
+		estateDetailsError: 'Error loading estate details',
+		estateDetailsErrorDescription:
+			'Failed to load information about the selected estate',
+		loadingDatabase: 'Loading full real estate database...',
+		aiAgentAccess: 'AI agent gets access to all estates for better assistance',
+		selectedEstate: 'Selected Estate',
+		readyForDiscussion: 'Ready for discussion',
+		estateSelectedDescription:
+			'Real estate is selected. Voice agent is ready to tell details.',
+		broadcastStatus: 'Broadcast Status',
+		requiresInfo: 'Requires information',
+		userAnswered: 'User answered',
+		currentQuestion: 'Current question:',
+		status: 'Status:',
+		pendingAnswer: 'Awaiting answer',
+		answered: 'Answered',
 	},
 	language: 'English',
 	languagePrompt:
@@ -162,15 +207,15 @@ export const en = {
 	quiz: {
 		title: 'Find estate with IO',
 		intro: {
-			title: 'Welcome to IO Property Quiz',
+			title: 'Welcome to IO Estate Quiz',
 			subtitle:
-				"Let's find your perfect property together! I'll guide you through a few questions to understand your needs.",
+				"Let's find your perfect estate together! I'll guide you through a few questions to understand your needs.",
 			discover: {
 				title: "What we'll discover:",
 				items: [
 					'Rent or Buy preference',
 					'Budget range',
-					'Property type preferences',
+					'Estate type preferences',
 					'Ideal location',
 					'Must-have features',
 				],
@@ -180,17 +225,17 @@ export const en = {
 				items: [
 					'Voice or text chat',
 					'Personalized recommendations',
-					'Real-time property matching',
+					'Real-time estate matching',
 					'Expert insights',
 				],
 			},
-			ready: "Ready to find your dream property? Let's start the journey!",
+			ready: "Ready to find your dream estate? Let's start the journey!",
 		},
 		steps: {
 			purpose: {
 				title: 'Rent or Buy?',
 				subtitle:
-					'Are you looking to rent a property or buy one? This will help me tailor the recommendations.',
+					'Are you looking to rent an estate or buy one? This will help me tailor the recommendations.',
 				rent: {
 					title: 'Rent',
 					description:
@@ -207,10 +252,10 @@ export const en = {
 				subtitle: "What's your budget for rent/purchase?",
 				custom: 'Custom',
 			},
-			propertyType: {
-				title: 'Property Type',
+			estateType: {
+				title: 'Estate Type',
 				subtitle:
-					'What type of property are you interested in? Select all that apply.',
+					'What type of estate are you interested in? Select all that apply.',
 				selected: 'Selected:',
 			},
 			location: {
@@ -227,15 +272,15 @@ export const en = {
 				subtitle: "Based on your preferences, here's what you're looking for:",
 				purpose: 'Purpose',
 				budget: 'Budget',
-				propertyTypes: 'Property Types',
+				estateTypes: 'Estate Types',
 				location: 'Location',
 				features: 'Must-Have Features',
 				notSpecified: 'Not specified',
 				noFeatures: 'No features selected',
 				searchMessage:
-					'Now let me search for properties that match your criteria...',
+					'Now let me search for estates that match your criteria...',
 				startOver: 'Start Over',
-				searchProperties: 'Search Properties',
+				searchEstates: 'Search Estates',
 			},
 		},
 		navigation: {
@@ -254,7 +299,7 @@ export const en = {
 			perfectMatches: 'Your Perfect Matches',
 			matching: 'Matching Properties',
 			found: 'found',
-			property: 'property',
+			estate: 'estate',
 			properties: 'properties',
 			noProperties: 'No properties found',
 			completeSteps: 'Complete more steps to see personalized recommendations',
@@ -271,41 +316,48 @@ export const en = {
 		},
 	},
 	homepage: {
-		title: 'Find Your Dream Property with AI',
+		title: 'Find Your Dream Estate with AI',
 		hero: {
-			title: 'Find Your Dream Property with AI',
-			subtitle: 'Discover properties with intelligent AI assistance',
-			callToAction: 'Call to Reserve your Property',
+			badge: 'AI Assistant for Estate Search',
+			title: 'Find Your Dream',
+			titleHighlight: 'Estate',
+			subtitle:
+				'Discover the perfect estate with our intelligent AI assistant. Personalized recommendations, voice search, and instant results.',
+			startSearch: 'Start Search',
+			viewCatalog: 'View Catalog',
 			locationPlaceholder:
 				'Locations will be available after adding properties',
-			propertyLogos: [
-				'Luxury',
-				'Modern',
-				'Classic',
-				'Villa',
-				'Penthouse',
-				'Townhouse',
-				'Mansion',
-				'Estate',
-			],
+			estateShowcase: 'From $2,500/month',
+			unknown: 'Unknown',
+			estate: 'Estate',
 		},
 		popularTypes: {
-			title: 'Popular Property Types',
-			placeholder: 'Property types will be available after adding properties',
+			title: 'Popular Estate Types',
+			subtitle: 'Choose the estate type that matches your needs',
+			placeholder: 'Estate types will be available after adding estates',
 			objects: 'objects',
+			availableObjects: 'available properties for rent and sale',
+			viewObjects: 'View Properties',
+			addingProperties: 'Adding Properties',
 		},
 		trending: {
-			title: 'Trending Directions: Best Locations',
+			title: 'Popular Destinations',
+			subtitle: 'Discover the most sought-after locations with the best offers',
 			placeholder: 'City data will be available after adding properties',
 			objects: 'objects',
+			availableObjects: 'available properties',
 			from: 'From',
+			averagePrice: 'Average Price:',
+			explore: 'Explore',
+			analyzingMarket: 'Analyzing Market',
 		},
 		features: {
 			title: 'Why Choose Us',
+			subtitle: 'We use cutting-edge technology to simplify estate search',
 			convenientSearch: {
 				title: 'Convenient Search',
 				description:
-					'Intuitive property search process with AI. Get personalized recommendations and instantly find great deals.',
+					'Intuitive estate search process with AI. Get personalized recommendations and instantly find great deals.',
 			},
 			secureTransactions: {
 				title: 'Secure Transactions',
@@ -315,26 +367,27 @@ export const en = {
 			smartNavigation: {
 				title: 'Smart Navigation',
 				description:
-					'AI-powered location analysis and detailed neighborhood research to find the perfect property, making the search process simple and enjoyable.',
+					'AI-powered location analysis and detailed neighborhood research to find the perfect estate, making the search process simple and enjoyable.',
 			},
 		},
 		testimonials: {
-			title: 'User Reviews',
+			title: 'Customer Reviews',
+			subtitle: 'See what our satisfied customers say about us',
 			reviews: [
 				{
 					name: 'Olivia Parker',
 					handle: '@oliviaparker',
-					text: 'Best Property Search Experience! The AI interface is intuitive, making it easy to find the ideal property... Highly recommended!',
+					text: 'Best Estate Search Experience! The AI interface is intuitive, making it easy to find the ideal estate... Highly recommended!',
 				},
 				{
 					name: 'Emma Thompson',
 					handle: '@emmathompson',
-					text: 'A Seamless Experience! This platform made finding property hassle-free... 5-star service all the way!',
+					text: 'A Seamless Experience! This platform made finding estate hassle-free... 5-star service all the way!',
 				},
 				{
 					name: 'Sophia Rodriguez',
 					handle: '@sophiarodriguez',
-					text: "Reliable and Affordable! I've used several property platforms before, but this one stands out... I'll be coming back for all my future searches.",
+					text: "Reliable and Affordable! I've used several estate platforms before, but this one stands out... I'll be coming back for all my future searches.",
 				},
 				{
 					name: 'Daniel Johnson',
@@ -344,9 +397,12 @@ export const en = {
 			],
 		},
 		cta: {
-			title:
-				'Your journey into the world of real estate starts here. Unlock endless possibilities!',
-			button: 'View Properties >',
+			title: 'Your journey into the world of real estate',
+			titleHighlight: 'starts here',
+			subtitle:
+				'Unlock endless possibilities with our AI assistant. Find your perfect estate today!',
+			viewObjects: 'View Properties',
+			contactUs: 'Contact Us',
 		},
 		footer: {
 			company: 'Sensay.io',
@@ -366,7 +422,7 @@ export const en = {
 					'Real Estate Guide',
 					'Market Analysis',
 					'Investment Tips',
-					'Property Types',
+					'Estate Types',
 				],
 				policies: 'Policies',
 				policiesItems: ['Privacy', 'Terms of Use', 'Cookie Settings'],
@@ -389,13 +445,14 @@ export const en = {
 		loadMore: 'Load More',
 		loading: 'Loading...',
 	},
-	propertyFilters: {
+	estateFilters: {
 		searchPlaceholder: 'Search properties...',
 		title: 'Filters',
 		clear: 'Clear',
 		operationType: 'Operation Type',
 		selectOperationType: 'Select type',
 		allTypes: 'All Types',
+		any: 'Any',
 		rent: 'Rent',
 		sale: 'Sale',
 		both: 'Rent & Sale',
@@ -404,11 +461,12 @@ export const en = {
 		allCities: 'All Cities',
 		loading: 'Loading...',
 		priceRange: 'Price Range',
+		area: 'Area (m²)',
 		from: 'From',
 		to: 'To',
 		searchNearby: 'Search nearby',
 	},
-	propertyGrid: {
+	estateGrid: {
 		noResults: 'No properties found',
 		tryDifferentFilters: 'Try changing your search parameters',
 		pricePerMonth: '/month',
@@ -423,7 +481,7 @@ export const en = {
 			sale: 'Sale',
 			both: 'Rent & Sale',
 		},
-		propertyType: {
+		estateType: {
 			apartment: 'Apartment',
 			house: 'House',
 			condo: 'Condo',
@@ -447,9 +505,10 @@ export const en = {
 		reviews: 'reviews',
 		details: 'Details',
 	},
-	propertyDetail: {
+	estateDetail: {
 		back: 'Back',
-		aboutProperty: 'About the Property',
+		aboutProperty: 'About the Estate',
+		aboutEstate: 'About the Estate',
 		characteristics: 'Characteristics',
 		amenities: 'Amenities',
 		reviews: 'Reviews',
@@ -479,10 +538,10 @@ export const en = {
 		location: 'Location',
 		value: 'Value for money',
 		communication: 'Communication',
-		propertyNotFound: 'Property not found',
+		estateNotFound: 'Estate not found',
 		backToList: 'Back to list',
-		loadingError: 'An error occurred while loading the property',
-		propertyType: {
+		loadingError: 'An error occurred while loading the estate',
+		estateType: {
 			apartment: 'Apartment',
 			house: 'House',
 			condo: 'Condo',
@@ -519,11 +578,11 @@ export const en = {
 		},
 	},
 	checkout: {
-		title: 'Book Property Viewing',
+		title: 'Book Estate Viewing',
 		subtitle: 'Fill out the form to schedule a meeting with an agent',
 		back: 'Back',
-		selectedProperty: 'Selected Property',
-		propertyNotFound: 'Property not found',
+		selectedEstate: 'Selected Estate',
+		estateNotFound: 'Estate not found',
 		backToCatalog: 'Back to catalog',
 		bookMeeting: 'Book a Meeting',
 		yourName: 'Your name',
@@ -548,5 +607,46 @@ export const en = {
 		bathrooms: 'bathrooms',
 		area: 'm²',
 		perMonth: '/month',
+		// New translations
+		selected: 'Selected',
+		premium: 'Premium',
+		howItWorks: 'How the process works',
+		step1: {
+			title: '1. Submit Application',
+			description: 'Fill out the form and submit your estate viewing request',
+		},
+		step2: {
+			title: '2. Confirmation',
+			description:
+				'Our agent will contact you within 15 minutes to confirm the meeting',
+		},
+		step3: {
+			title: '3. Viewing',
+			description:
+				'Meet with the agent and view the estate at a convenient time',
+		},
+		step4: {
+			title: '4. Decision',
+			description: 'Make a decision and complete paperwork if interested',
+		},
+		guarantees: 'Our Guarantees',
+		quickResponse: 'Quick Response',
+		quickResponseDesc: 'We will contact you within 15 minutes',
+		freeConsultation: 'Free Consultation',
+		freeConsultationDesc: 'Expert assistance at no extra cost',
+		flexibleTime: 'Flexible Time',
+		flexibleTimeDesc: 'We will find a convenient meeting time',
+		confidentiality: 'Confidentiality',
+		confidentialityDesc: 'Your data is secure',
+		contactUs: 'Contact Us',
+		phone: 'Phone',
+		email: 'Email',
+		workingHours: 'Working Hours',
+		workingHoursValue: 'Mon-Sun: 9:00 - 21:00',
+		dataProtected: 'Your data is protected',
+		thankYou: 'Thank you for your application!',
+		thankYouMessage:
+			'We have received your application and will contact you shortly to confirm the meeting.',
+		backToProperties: 'Back to catalog',
 	},
 };

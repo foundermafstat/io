@@ -25,6 +25,7 @@ import {
 	Mic,
 } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useQuiz } from '@/lib/quiz-context';
 import { useTranslations } from '@/components/translations-context';
 
@@ -42,6 +43,7 @@ export function QuizPropertyGrid({
 	className,
 }: QuizPropertyGridProps) {
 	const { t } = useTranslations();
+	const router = useRouter();
 	const [scrollPosition, setScrollPosition] = React.useState(0);
 	const [maxScroll, setMaxScroll] = React.useState(0);
 	const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -256,6 +258,7 @@ export function QuizPropertyGrid({
 function PropertyCard({ property }: { property: Property }) {
 	const { state, selectProperty } = useQuiz();
 	const { t } = useTranslations();
+	const router = useRouter();
 	const [imageLoading, setImageLoading] = React.useState(true);
 	const [imageError, setImageError] = React.useState(false);
 
@@ -277,6 +280,13 @@ function PropertyCard({ property }: { property: Property }) {
 
 	const handleSelect = () => {
 		selectProperty(isSelected ? null : property.id);
+	};
+
+	const handleViewProperty = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		// Используем Next.js роутер для навигации без перезагрузки
+		router.push(`/estate/${property.id}`, { scroll: false });
 	};
 
 	return (
@@ -427,11 +437,7 @@ function PropertyCard({ property }: { property: Property }) {
 					</div>
 
 					<div className="flex items-center gap-2">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => (window.location.href = `/estate/${property.id}`)}
-						>
+						<Button variant="outline" size="sm" onClick={handleViewProperty}>
 							<Eye className="w-4 h-4 mr-1" />
 							{t('quiz.properties.view')}
 						</Button>

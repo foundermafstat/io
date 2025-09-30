@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Property, PropertyReview } from '@/types/property';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,6 +60,7 @@ import { toast } from 'sonner';
 export default function PropertyDetailPage() {
 	const { t } = useTranslations();
 	const params = useParams();
+	const router = useRouter();
 	const propertyId = params.id as string;
 
 	const [property, setProperty] = useState<Property | null>(null);
@@ -80,7 +81,7 @@ export default function PropertyDetailPage() {
 
 				if (!propertyResponse.ok) {
 					throw new Error(
-						`${t('propertyDetail.loadingError')}: ${propertyResponse.status}`
+						`${t('estateDetail.loadingError')}: ${propertyResponse.status}`
 					);
 				}
 
@@ -94,7 +95,7 @@ export default function PropertyDetailPage() {
 				}
 			} catch (err) {
 				const errorMessage =
-					err instanceof Error ? err.message : t('propertyDetail.loadingError');
+					err instanceof Error ? err.message : t('estateDetail.loadingError');
 				setError(errorMessage);
 				toast.error(errorMessage);
 			} finally {
@@ -116,25 +117,23 @@ export default function PropertyDetailPage() {
 
 	const getDisplayPrice = (property: Property) => {
 		if (property.operationType === 'RENT' && property.rentPrice) {
-			return `${formatPrice(property.rentPrice)}${t(
-				'propertyDetail.perMonth'
-			)}`;
+			return `${formatPrice(property.rentPrice)}${t('estateDetail.perMonth')}`;
 		} else if (property.operationType === 'SALE' && property.salePrice) {
 			return formatPrice(property.salePrice);
 		} else if (property.operationType === 'BOTH') {
 			if (property.rentPrice && property.salePrice) {
 				return `${formatPrice(property.rentPrice)}${t(
-					'propertyDetail.perMonth'
+					'estateDetail.perMonth'
 				)} • ${formatPrice(property.salePrice)}`;
 			} else if (property.rentPrice) {
 				return `${formatPrice(property.rentPrice)}${t(
-					'propertyDetail.perMonth'
+					'estateDetail.perMonth'
 				)}`;
 			} else if (property.salePrice) {
 				return formatPrice(property.salePrice);
 			}
 		}
-		return t('propertyDetail.priceNotSpecified');
+		return t('estateDetail.priceNotSpecified');
 	};
 
 	const getMainImage = (property: Property) => {
@@ -179,7 +178,12 @@ export default function PropertyDetailPage() {
 	};
 
 	const getAmenityTranslation = (amenity: string) => {
-		return t(`propertyDetail.amenitiesList.${amenity}` as any) || amenity;
+		return t(`estateDetail.amenitiesList.${amenity}` as any) || amenity;
+	};
+
+	const handleBookViewing = () => {
+		// Используем Next.js роутер для навигации без перезагрузки
+		router.push(`/checkout/${propertyId}`, { scroll: false });
 	};
 
 	const renderStars = (rating: number) => {
@@ -224,12 +228,12 @@ export default function PropertyDetailPage() {
 				<Card className="border-red-200 bg-red-50">
 					<CardContent className="p-6 text-center">
 						<h3 className="text-lg font-semibold text-red-800 mb-2">
-							{error || t('propertyDetail.propertyNotFound')}
+							{error || t('estateDetail.propertyNotFound')}
 						</h3>
 						<Link href="/catalog">
 							<Button variant="outline">
 								<ArrowLeft className="h-4 w-4 mr-2" />
-								{t('propertyDetail.backToList')}
+								{t('estateDetail.backToList')}
 							</Button>
 						</Link>
 					</CardContent>
@@ -251,7 +255,7 @@ export default function PropertyDetailPage() {
 						<Link href="/catalog">
 							<Button variant="ghost" className="text-white hover:bg-white/20">
 								<ArrowLeft className="h-4 w-4 mr-2" />
-								{t('propertyDetail.back')}
+								{t('estateDetail.back')}
 							</Button>
 						</Link>
 					</div>
@@ -290,7 +294,7 @@ export default function PropertyDetailPage() {
 													</div>
 													<span className="text-lg font-semibold">
 														{averageRating.toFixed(1)} ({reviews.length}{' '}
-														{t('propertyDetail.reviewsCount')})
+														{t('estateDetail.reviewsCount')})
 													</span>
 												</div>
 											)}
@@ -304,13 +308,13 @@ export default function PropertyDetailPage() {
 											{property.isFeatured && (
 												<Badge className="bg-yellow-500 text-black">
 													<Star className="h-3 w-3 mr-1" />
-													{t('propertyDetail.featured')}
+													{t('estateDetail.featured')}
 												</Badge>
 											)}
 											{property.isVerified && (
 												<Badge className="bg-green-500">
 													<CheckCircle className="h-3 w-3 mr-1" />
-													{t('propertyDetail.verified')}
+													{t('estateDetail.verified')}
 												</Badge>
 											)}
 										</div>
@@ -386,7 +390,7 @@ export default function PropertyDetailPage() {
 						<Card className="border-0 shadow-xl">
 							<CardHeader>
 								<CardTitle className="text-2xl">
-									{t('propertyDetail.aboutProperty')}
+									{t('estateDetail.aboutProperty')}
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
@@ -401,7 +405,7 @@ export default function PropertyDetailPage() {
 							<CardHeader>
 								<CardTitle className="text-2xl flex items-center gap-2">
 									<Home className="h-6 w-6" />
-									{t('propertyDetail.characteristics')}
+									{t('estateDetail.characteristics')}
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
@@ -414,7 +418,7 @@ export default function PropertyDetailPage() {
 													{property.bedrooms}
 												</div>
 												<div className="text-sm text-gray-600">
-													{t('propertyDetail.bedrooms')}
+													{t('estateDetail.bedrooms')}
 												</div>
 											</div>
 										</div>
@@ -427,7 +431,7 @@ export default function PropertyDetailPage() {
 													{property.bathrooms}
 												</div>
 												<div className="text-sm text-gray-600">
-													{t('propertyDetail.bathrooms')}
+													{t('estateDetail.bathrooms')}
 												</div>
 											</div>
 										</div>
@@ -440,7 +444,7 @@ export default function PropertyDetailPage() {
 													{property.area}
 												</div>
 												<div className="text-sm text-gray-600">
-													{t('propertyDetail.area')}
+													{t('estateDetail.area')}
 												</div>
 											</div>
 										</div>
@@ -453,7 +457,7 @@ export default function PropertyDetailPage() {
 													{property.floor}
 												</div>
 												<div className="text-sm text-gray-600">
-													{t('propertyDetail.floor')}
+													{t('estateDetail.floor')}
 												</div>
 											</div>
 										</div>
@@ -470,7 +474,7 @@ export default function PropertyDetailPage() {
 									<CardHeader>
 										<CardTitle className="text-2xl flex items-center gap-2">
 											<Star className="h-6 w-6" />
-											{t('propertyDetail.amenities')}
+											{t('estateDetail.amenities')}
 										</CardTitle>
 									</CardHeader>
 									<CardContent>
@@ -500,7 +504,7 @@ export default function PropertyDetailPage() {
 								<CardHeader>
 									<CardTitle className="text-2xl flex items-center gap-2">
 										<Users className="h-6 w-6" />
-										{t('propertyDetail.reviews')} ({reviews.length})
+										{t('estateDetail.reviews')} ({reviews.length})
 									</CardTitle>
 								</CardHeader>
 								<CardContent>
@@ -517,7 +521,7 @@ export default function PropertyDetailPage() {
 															{review.isVerified && (
 																<Badge variant="secondary" className="text-xs">
 																	<CheckCircle className="h-3 w-3 mr-1" />
-																	{t('propertyDetail.verifiedReview')}
+																	{t('estateDetail.verifiedReview')}
 																</Badge>
 															)}
 														</div>
@@ -546,7 +550,7 @@ export default function PropertyDetailPage() {
 														{review.cleanliness && (
 															<div className="text-sm">
 																<span className="text-gray-600">
-																	{t('propertyDetail.cleanliness')}:{' '}
+																	{t('estateDetail.cleanliness')}:{' '}
 																</span>
 																<span className="font-medium">
 																	{review.cleanliness}/5
@@ -556,7 +560,7 @@ export default function PropertyDetailPage() {
 														{review.location && (
 															<div className="text-sm">
 																<span className="text-gray-600">
-																	{t('propertyDetail.location')}:{' '}
+																	{t('estateDetail.location')}:{' '}
 																</span>
 																<span className="font-medium">
 																	{review.location}/5
@@ -566,7 +570,7 @@ export default function PropertyDetailPage() {
 														{review.value && (
 															<div className="text-sm">
 																<span className="text-gray-600">
-																	{t('propertyDetail.value')}:{' '}
+																	{t('estateDetail.value')}:{' '}
 																</span>
 																<span className="font-medium">
 																	{review.value}/5
@@ -576,7 +580,7 @@ export default function PropertyDetailPage() {
 														{review.communication && (
 															<div className="text-sm">
 																<span className="text-gray-600">
-																	{t('propertyDetail.communication')}:{' '}
+																	{t('estateDetail.communication')}:{' '}
 																</span>
 																<span className="font-medium">
 																	{review.communication}/5
@@ -604,7 +608,7 @@ export default function PropertyDetailPage() {
 									</div>
 									<Badge variant="outline" className="text-sm">
 										{t(
-											`propertyDetail.operationType.${property.operationType.toLowerCase()}`
+											`estateDetail.operationType.${property.operationType.toLowerCase()}`
 										)}
 									</Badge>
 								</div>
@@ -613,25 +617,23 @@ export default function PropertyDetailPage() {
 									<Button
 										className="w-full"
 										size="lg"
-										onClick={() =>
-											(window.location.href = `/checkout/${property.id}`)
-										}
+										onClick={handleBookViewing}
 									>
 										<Calendar className="h-5 w-5 mr-2" />
-										{t('propertyDetail.bookViewing')}
+										{t('estateDetail.bookViewing')}
 									</Button>
 									<Button variant="outline" className="w-full" size="lg">
 										<Phone className="h-5 w-5 mr-2" />
-										{t('propertyDetail.contact')}
+										{t('estateDetail.contact')}
 									</Button>
 									<div className="flex gap-2">
 										<Button variant="outline" className="flex-1">
 											<Heart className="h-4 w-4 mr-2" />
-											{t('propertyDetail.addToFavorites')}
+											{t('estateDetail.addToFavorites')}
 										</Button>
 										<Button variant="outline" className="flex-1">
 											<Share2 className="h-4 w-4 mr-2" />
-											{t('propertyDetail.share')}
+											{t('estateDetail.share')}
 										</Button>
 									</div>
 								</div>
@@ -642,15 +644,13 @@ export default function PropertyDetailPage() {
 						<Card className="border-0 shadow-xl">
 							<CardContent className="p-6">
 								<h3 className="font-semibold mb-4">
-									{t('propertyDetail.statistics')}
+									{t('estateDetail.statistics')}
 								</h3>
 								<div className="space-y-3">
 									<div className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
 											<Eye className="h-4 w-4 text-gray-500" />
-											<span className="text-sm">
-												{t('propertyDetail.views')}
-											</span>
+											<span className="text-sm">{t('estateDetail.views')}</span>
 										</div>
 										<span className="font-medium">{property.views || 0}</span>
 									</div>
@@ -659,7 +659,7 @@ export default function PropertyDetailPage() {
 											<div className="flex items-center gap-2">
 												<Star className="h-4 w-4 text-gray-500" />
 												<span className="text-sm">
-													{t('propertyDetail.rating')}
+													{t('estateDetail.rating')}
 												</span>
 											</div>
 											<div className="flex items-center gap-2">
@@ -674,7 +674,7 @@ export default function PropertyDetailPage() {
 										<div className="flex items-center gap-2">
 											<Users className="h-4 w-4 text-gray-500" />
 											<span className="text-sm">
-												{t('propertyDetail.reviews')}
+												{t('estateDetail.reviews')}
 											</span>
 										</div>
 										<span className="font-medium">{reviews.length}</span>
@@ -687,7 +687,7 @@ export default function PropertyDetailPage() {
 						<Card className="border-0 shadow-xl">
 							<CardContent className="p-6">
 								<h3 className="font-semibold mb-4">
-									{t('propertyDetail.owner')}
+									{t('estateDetail.owner')}
 								</h3>
 								<div className="flex items-center gap-3">
 									<div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -695,21 +695,21 @@ export default function PropertyDetailPage() {
 									</div>
 									<div>
 										<div className="font-medium">
-											{t('propertyDetail.realEstateAgency')}
+											{t('estateDetail.realEstateAgency')}
 										</div>
 										<div className="text-sm text-gray-600">
-											{t('propertyDetail.verifiedPartner')}
+											{t('estateDetail.verifiedPartner')}
 										</div>
 									</div>
 								</div>
 								<div className="mt-4 space-y-2">
 									<Button variant="outline" size="sm" className="w-full">
 										<Phone className="h-4 w-4 mr-2" />
-										{t('propertyDetail.call')}
+										{t('estateDetail.call')}
 									</Button>
 									<Button variant="outline" size="sm" className="w-full">
 										<Mail className="h-4 w-4 mr-2" />
-										{t('propertyDetail.write')}
+										{t('estateDetail.write')}
 									</Button>
 								</div>
 							</CardContent>

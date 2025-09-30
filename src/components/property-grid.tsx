@@ -61,9 +61,9 @@ export default function PropertyGrid({
 		return (
 			<div className="text-center py-12">
 				<div className="text-gray-500 text-lg mb-4">
-					{t('propertyGrid.noResults')}
+					{t('estateGrid.noResults')}
 				</div>
-				<p className="text-gray-400">{t('propertyGrid.tryDifferentFilters')}</p>
+				<p className="text-gray-400">{t('estateGrid.tryDifferentFilters')}</p>
 			</div>
 		);
 	}

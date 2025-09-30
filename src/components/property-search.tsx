@@ -176,11 +176,11 @@ export function PropertySearch({
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 						<div className="md:col-span-2">
 							<Label htmlFor="query">
-								{t('propertyFilters.searchPlaceholder')}
+								{t('estateFilters.searchPlaceholder')}
 							</Label>
 							<Input
 								id="query"
-								placeholder={t('propertyFilters.searchPlaceholder')}
+								placeholder={t('estateFilters.searchPlaceholder')}
 								value={filters.query || ''}
 								onChange={(e) => handleFilterChange('query', e.target.value)}
 								onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -195,7 +195,7 @@ export function PropertySearch({
 								<Button
 									variant="outline"
 									onClick={handleLocationSearch}
-									title={t('propertyFilters.searchNearby')}
+									title={t('estateFilters.searchNearby')}
 								>
 									<MapPin className="h-4 w-4" />
 								</Button>
@@ -217,7 +217,7 @@ export function PropertySearch({
 								}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder={t('propertyFilters.allTypes')} />
+									<SelectValue placeholder={t('estateFilters.allTypes')} />
 								</SelectTrigger>
 								<SelectContent>
 									{OPERATION_TYPE_OPTIONS.map((option) => (
@@ -230,10 +230,10 @@ export function PropertySearch({
 						</div>
 
 						<div>
-							<Label htmlFor="city">Город</Label>
+							<Label htmlFor="city">{t('estateFilters.city')}</Label>
 							<Input
 								id="city"
-								placeholder={t('propertyFilters.selectCity')}
+								placeholder={t('estateFilters.selectCity')}
 								value={filters.city || ''}
 								onChange={(e) => handleFilterChange('city', e.target.value)}
 							/>
@@ -251,10 +251,10 @@ export function PropertySearch({
 								}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder={t('propertyFilters.allTypes')} />
+									<SelectValue placeholder={t('estateFilters.allTypes')} />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="any">Любое</SelectItem>
+									<SelectItem value="any">{t('estateFilters.any')}</SelectItem>
 									{[1, 2, 3, 4, 5, 6].map((num) => (
 										<SelectItem key={num} value={num.toString()}>
 											{num}+
@@ -276,10 +276,10 @@ export function PropertySearch({
 								}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder={t('propertyFilters.allTypes')} />
+									<SelectValue placeholder={t('estateFilters.allTypes')} />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="any">Любое</SelectItem>
+									<SelectItem value="any">{t('estateFilters.any')}</SelectItem>
 									{[1, 1.5, 2, 2.5, 3, 3.5, 4].map((num) => (
 										<SelectItem key={num} value={num.toString()}>
 											{num}+
@@ -351,12 +351,12 @@ export function PropertySearch({
 
 								{/* Ценовой диапазон */}
 								<div>
-									<Label>Ценовой диапазон</Label>
+									<Label>{t('estateFilters.priceRange')}</Label>
 									<div className="space-y-2 mt-2">
 										<div className="grid grid-cols-2 gap-2">
 											<Input
 												type="number"
-												placeholder={t('propertyFilters.from')}
+												placeholder={t('estateFilters.from')}
 												value={filters.minPrice || ''}
 												onChange={(e) =>
 													handleFilterChange(
@@ -369,7 +369,7 @@ export function PropertySearch({
 											/>
 											<Input
 												type="number"
-												placeholder={t('propertyFilters.to')}
+												placeholder={t('estateFilters.to')}
 												value={filters.maxPrice || ''}
 												onChange={(e) =>
 													handleFilterChange(
@@ -386,12 +386,12 @@ export function PropertySearch({
 
 								{/* Площадь */}
 								<div>
-									<Label>Площадь (м²)</Label>
+									<Label>{t('estateFilters.area')}</Label>
 									<div className="space-y-2 mt-2">
 										<div className="grid grid-cols-2 gap-2">
 											<Input
 												type="number"
-												placeholder={t('propertyFilters.from')}
+												placeholder={t('estateFilters.from')}
 												value={filters.minArea || ''}
 												onChange={(e) =>
 													handleFilterChange(
@@ -404,7 +404,7 @@ export function PropertySearch({
 											/>
 											<Input
 												type="number"
-												placeholder={t('propertyFilters.to')}
+												placeholder={t('estateFilters.to')}
 												value={filters.maxArea || ''}
 												onChange={(e) =>
 													handleFilterChange(

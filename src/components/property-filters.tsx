@@ -4,7 +4,13 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent } from '@/components/ui/card';
 import { Search, Filter, X } from 'lucide-react';
@@ -17,15 +23,19 @@ interface PropertyFiltersProps {
 	loading?: boolean;
 }
 
-export default function PropertyFilters({ onFiltersChange, loading = false }: PropertyFiltersProps) {
+export default function PropertyFilters({
+	onFiltersChange,
+	loading = false,
+}: PropertyFiltersProps) {
 	const { t } = useTranslations();
-	const { filters, updateFilters, resetFilters, getActiveFiltersCount } = usePropertyFilters();
-	
+	const { filters, updateFilters, resetFilters, getActiveFiltersCount } =
+		usePropertyFilters();
+
 	const [priceRange, setPriceRange] = useState<[number, number]>([
 		filters.minPrice || 0,
 		filters.maxPrice || 10000000,
 	]);
-	
+
 	const [cities, setCities] = useState<string[]>([]);
 	const [citiesLoading, setCitiesLoading] = useState(true);
 
@@ -57,13 +67,22 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 	// Обновляем слайдер при изменении типа операции
 	useEffect(() => {
 		if (filters.operationType === 'RENT') {
-			const newRange: [number, number] = [filters.minPrice || 0, filters.maxPrice || 500000];
+			const newRange: [number, number] = [
+				filters.minPrice || 0,
+				filters.maxPrice || 500000,
+			];
 			setPriceRange(newRange);
 		} else if (filters.operationType === 'SALE') {
-			const newRange: [number, number] = [filters.minPrice || 1000000, filters.maxPrice || 50000000];
+			const newRange: [number, number] = [
+				filters.minPrice || 1000000,
+				filters.maxPrice || 50000000,
+			];
 			setPriceRange(newRange);
 		} else {
-			const newRange: [number, number] = [filters.minPrice || 0, filters.maxPrice || 10000000];
+			const newRange: [number, number] = [
+				filters.minPrice || 0,
+				filters.maxPrice || 10000000,
+			];
 			setPriceRange(newRange);
 		}
 	}, [filters.operationType, filters.minPrice, filters.maxPrice]);
@@ -73,7 +92,8 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 	};
 
 	const handleOperationTypeChange = (value: string) => {
-		const operationType = value === 'any' ? undefined : (value as OperationType);
+		const operationType =
+			value === 'any' ? undefined : (value as OperationType);
 		updateFilters({ operationType });
 	};
 
@@ -118,7 +138,7 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 			<div className="relative">
 				<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
 				<Input
-					placeholder={t('propertyFilters.searchPlaceholder')}
+					placeholder={t('estateFilters.searchPlaceholder')}
 					value={filters.query}
 					onChange={(e) => handleSearchChange(e.target.value)}
 					className="pl-10 h-12 text-lg"
@@ -132,7 +152,7 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 						<div className="flex items-center gap-2">
 							<Filter className="h-5 w-5" />
 							<h3 className="text-lg font-semibold">
-								{t('propertyFilters.title')}
+								{t('estateFilters.title')}
 								{getActiveFiltersCount() > 0 && (
 									<span className="ml-2 text-sm text-primary">
 										({getActiveFiltersCount()})
@@ -147,44 +167,64 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 							disabled={loading || getActiveFiltersCount() === 0}
 						>
 							<X className="h-4 w-4 mr-2" />
-							{t('propertyFilters.clear')}
+							{t('estateFilters.clear')}
 						</Button>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 						{/* Тип операции */}
 						<div className="space-y-2">
-							<Label htmlFor="operation-type">{t('propertyFilters.operationType')}</Label>
+							<Label htmlFor="operation-type">
+								{t('estateFilters.operationType')}
+							</Label>
 							<Select
 								value={filters.operationType || 'any'}
 								onValueChange={handleOperationTypeChange}
 								disabled={loading}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder={t('propertyFilters.selectOperationType')} />
+									<SelectValue
+										placeholder={t('estateFilters.selectOperationType')}
+									/>
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="any">{t('propertyFilters.allTypes')}</SelectItem>
-									<SelectItem value="RENT">{t('propertyFilters.rent')}</SelectItem>
-									<SelectItem value="SALE">{t('propertyFilters.sale')}</SelectItem>
-									<SelectItem value="BOTH">{t('propertyFilters.both')}</SelectItem>
+									<SelectItem value="any">
+										{t('estateFilters.allTypes')}
+									</SelectItem>
+									<SelectItem value="RENT">
+										{t('estateFilters.rent')}
+									</SelectItem>
+									<SelectItem value="SALE">
+										{t('estateFilters.sale')}
+									</SelectItem>
+									<SelectItem value="BOTH">
+										{t('estateFilters.both')}
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
 
 						{/* Город */}
 						<div className="space-y-2">
-							<Label htmlFor="city">{t('propertyFilters.city')}</Label>
+							<Label htmlFor="city">{t('estateFilters.city')}</Label>
 							<Select
 								value={filters.city || 'any'}
 								onValueChange={handleCityChange}
 								disabled={loading || citiesLoading}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder={citiesLoading ? t('propertyFilters.loading') : t('propertyFilters.selectCity')} />
+									<SelectValue
+										placeholder={
+											citiesLoading
+												? t('estateFilters.loading')
+												: t('estateFilters.selectCity')
+										}
+									/>
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="any">{t('propertyFilters.allCities')}</SelectItem>
+									<SelectItem value="any">
+										{t('estateFilters.allCities')}
+									</SelectItem>
 									{cities.map((city) => (
 										<SelectItem key={city} value={city}>
 											{city}
@@ -196,7 +236,7 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 
 						{/* Диапазон цен */}
 						<div className="space-y-2 lg:col-span-2">
-							<Label>{t('propertyFilters.priceRange')}</Label>
+							<Label>{t('estateFilters.priceRange')}</Label>
 							<div className="px-2">
 								<Slider
 									value={priceRange}
@@ -208,8 +248,12 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 									disabled={loading}
 								/>
 								<div className="flex justify-between text-sm text-gray-600 mt-2">
-									<span>{t('propertyFilters.from')}: {formatPrice(priceRange[0])}</span>
-									<span>{t('propertyFilters.to')}: {formatPrice(priceRange[1])}</span>
+									<span>
+										{t('estateFilters.from')}: {formatPrice(priceRange[0])}
+									</span>
+									<span>
+										{t('estateFilters.to')}: {formatPrice(priceRange[1])}
+									</span>
 								</div>
 							</div>
 						</div>

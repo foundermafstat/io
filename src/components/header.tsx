@@ -204,7 +204,7 @@ function HeaderInner() {
 						}
 					>
 						<MessageSquare
-							className={isChatVisible ? 'text-primary' : 'text-white'}
+							className={isChatVisible ? 'text-primary' : 'text-foreground'}
 						/>
 					</Button>
 

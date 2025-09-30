@@ -21,10 +21,10 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-	title: 'IO',
+	title: 'IO - AI-powered estate platform',
 	description: 'AI-powered estate platform',
 	icons: {
-		icon: '/favicon.ico', // или путь к .png/.svg, если используешь другой формат
+		icon: '/io-logo.png', // или путь к .png/.svg, если используешь другой формат
 	},
 };
 

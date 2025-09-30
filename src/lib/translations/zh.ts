@@ -24,7 +24,7 @@ export const zh = {
 		realEstate: '房地产',
 		adminPanel: '管理面板',
 		development: '开发',
-		propertySearch: '房产搜索与购买',
+		estateSearch: '房地产搜索与购买',
 		systemManagement: '系统管理',
 		developmentTools: '开发工具',
 		browseProperties: '浏览房产',
@@ -106,6 +106,22 @@ export const zh = {
 				name: '导航到页面',
 				description: '说"转到[页面]"或"打开[URL]"来导航到特定页面。',
 			},
+			navigateToCheckout: {
+				name: '导航到结账页面',
+				description: '说"转到房产[ID]的结账页面"以导航到结账页面。',
+			},
+			fillCheckoutForm: {
+				name: '填写结账表单',
+				description: '说"用[值]填充[字段]"来填写表单字段如姓名、电话、备注。',
+			},
+			submitCheckoutForm: {
+				name: '提交结账表单',
+				description: '说"提交表单"或"发送预订请求"来提交结账表单。',
+			},
+			updateCheckoutElement: {
+				name: '更新结账元素',
+				description: '说"将[元素]改为[操作]"来修改结账页面上的DOM元素。',
+			},
 		},
 		clipboard: {
 			description: '您现在可以将其粘贴到某处。',
@@ -150,6 +166,29 @@ export const zh = {
 		selectReplica: '选择副本',
 		loadingReplicas: '正在加载副本...',
 		selectVoice: '选择语音',
+		sessionRestored: '会话已恢复',
+		sessionRestoredDescription: '语音广播处于活动状态并已恢复。',
+		restoringSession: '导航后恢复语音会话状态',
+		sessionRestoreError: '恢复会话状态时出错:',
+		navigationCompleted: '导航已完成',
+		navigationCompletedDescription:
+			'您已导航到页面{path}。语音广播处于活动状态。',
+		userNavigatedFromVoice: '用户从语音广播导航自:',
+		navigationInfoError: '处理导航信息时出错:',
+		estateDetailsError: '加载房地产详情时出错',
+		estateDetailsErrorDescription: '无法加载所选房地产的信息',
+		loadingDatabase: '正在加载完整的房地产数据库...',
+		aiAgentAccess: 'AI代理获得所有房地产的访问权限以提供更好的帮助',
+		selectedEstate: '所选房地产',
+		readyForDiscussion: '准备讨论',
+		estateSelectedDescription: '房地产已选择。语音代理准备讲述详情。',
+		broadcastStatus: '广播状态',
+		requiresInfo: '需要信息',
+		userAnswered: '用户已回答',
+		currentQuestion: '当前问题:',
+		status: '状态:',
+		pendingAnswer: '等待回答',
+		answered: '已回答',
 	},
 	language: 'Chinese',
 	languagePrompt:
@@ -193,7 +232,7 @@ export const zh = {
 				subtitle: '您的租赁/购买预算是多少？',
 				custom: '自定义',
 			},
-			propertyType: {
+			estateType: {
 				title: '房产类型',
 				subtitle: '您对什么类型的房产感兴趣？选择所有适用的选项。',
 				selected: '已选择：',
@@ -211,7 +250,7 @@ export const zh = {
 				subtitle: '根据您的偏好，这是您寻找的：',
 				purpose: '目的',
 				budget: '预算',
-				propertyTypes: '房产类型',
+				estateTypes: '房地产类型',
 				location: '位置',
 				features: '必备功能',
 				notSpecified: '未指定',
@@ -237,7 +276,7 @@ export const zh = {
 			perfectMatches: '您的完美匹配',
 			matching: '匹配的房产',
 			found: '找到',
-			property: '房产',
+			estate: '房地产',
 			properties: '房产',
 			noProperties: '未找到房产',
 			completeSteps: '完成更多步骤以查看个性化推荐',
@@ -256,34 +295,41 @@ export const zh = {
 	homepage: {
 		title: '用AI找到您的梦想房产',
 		hero: {
-			title: '用AI找到您的梦想房产',
-			subtitle: '使用智能AI助手发现房产',
-			callToAction: '致电预订您的房产',
+			badge: 'AI房产搜索助手',
+			title: '找到您的梦想',
+			titleHighlight: '房产',
+			subtitle:
+				'通过我们智能的AI助手发现完美房产。个性化推荐、语音搜索和即时结果。',
+			startSearch: '开始搜索',
+			viewCatalog: '查看目录',
 			locationPlaceholder: '添加房产后位置将可用',
-			propertyLogos: [
-				'豪华',
-				'现代',
-				'经典',
-				'别墅',
-				'顶层公寓',
-				'联排别墅',
-				'豪宅',
-				'房产',
-			],
+			estateShowcase: '起价 $2,500/月',
+			unknown: '未知',
+			estate: '房地产',
 		},
 		popularTypes: {
 			title: '热门房产类型',
+			subtitle: '选择符合您需求的房产类型',
 			placeholder: '添加房产后房产类型将可用',
 			objects: '个房产',
+			availableObjects: '个可租售房产',
+			viewObjects: '查看房产',
+			addingProperties: '正在添加房产',
 		},
 		trending: {
-			title: '热门方向：最佳位置',
+			title: '热门目的地',
+			subtitle: '发现最受欢迎的位置和最佳优惠',
 			placeholder: '添加房地产后城市数据将可用',
 			objects: '个房产',
+			availableObjects: '个可用房产',
 			from: '起价',
+			averagePrice: '平均价格：',
+			explore: '探索',
+			analyzingMarket: '分析市场',
 		},
 		features: {
 			title: '为什么选择我们',
+			subtitle: '我们使用尖端技术简化房产搜索',
 			convenientSearch: {
 				title: '便捷搜索',
 				description:
@@ -300,7 +346,8 @@ export const zh = {
 			},
 		},
 		testimonials: {
-			title: '用户评价',
+			title: '客户评价',
+			subtitle: '了解我们满意客户对我们的评价',
 			reviews: [
 				{
 					name: 'Olivia Parker',
@@ -325,8 +372,11 @@ export const zh = {
 			],
 		},
 		cta: {
-			title: '您的房地产之旅从这里开始。解锁无限可能！',
-			button: '查看房产 >',
+			title: '您的房地产之旅',
+			titleHighlight: '从这里开始',
+			subtitle: '通过我们的AI助手解锁无限可能。今天就找到您的完美房产！',
+			viewObjects: '查看房产',
+			contactUs: '联系我们',
 		},
 		footer: {
 			company: 'Sensay.io',
@@ -368,13 +418,14 @@ export const zh = {
 		loadMore: '加载更多',
 		loading: '加载中...',
 	},
-	propertyFilters: {
+	estateFilters: {
 		searchPlaceholder: '搜索物业...',
 		title: '筛选器',
 		clear: '清除',
 		operationType: '操作类型',
 		selectOperationType: '选择类型',
 		allTypes: '所有类型',
+		any: '任意',
 		rent: '出租',
 		sale: '出售',
 		both: '出租和出售',
@@ -383,11 +434,12 @@ export const zh = {
 		allCities: '所有城市',
 		loading: '加载中...',
 		priceRange: '价格范围',
+		area: '面积 (平方米)',
 		from: '从',
 		to: '到',
 		searchNearby: '搜索附近',
 	},
-	propertyGrid: {
+	estateGrid: {
 		noResults: '未找到物业',
 		tryDifferentFilters: '尝试更改您的搜索参数',
 		pricePerMonth: '/月',
@@ -402,7 +454,7 @@ export const zh = {
 			sale: '出售',
 			both: '出租和出售',
 		},
-		propertyType: {
+		estateType: {
 			apartment: '公寓',
 			house: '房屋',
 			condo: '公寓',
@@ -426,9 +478,10 @@ export const zh = {
 		reviews: '评论',
 		details: '详情',
 	},
-	propertyDetail: {
+	estateDetail: {
 		back: '返回',
-		aboutProperty: '关于房产',
+		aboutProperty: '关于房地产',
+		aboutEstate: '关于房地产',
 		characteristics: '特征',
 		amenities: '设施',
 		reviews: '评论',
@@ -458,10 +511,10 @@ export const zh = {
 		location: '位置',
 		value: '性价比',
 		communication: '沟通',
-		propertyNotFound: '未找到房产',
+		estateNotFound: '未找到房地产',
 		backToList: '返回列表',
-		loadingError: '加载房产时发生错误',
-		propertyType: {
+		loadingError: '加载房地产时发生错误',
+		estateType: {
 			apartment: '公寓',
 			house: '房屋',
 			condo: '公寓',

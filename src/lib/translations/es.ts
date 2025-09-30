@@ -25,7 +25,7 @@ export const es = {
 		realEstate: 'Bienes Raíces',
 		adminPanel: 'Panel de Administración',
 		development: 'Desarrollo',
-		propertySearch: 'Búsqueda y Compra de Propiedades',
+		estateSearch: 'Búsqueda y Compra de Inmuebles',
 		systemManagement: 'Gestión del Sistema',
 		developmentTools: 'Herramientas de Desarrollo',
 		browseProperties: 'Explorar Propiedades',
@@ -114,6 +114,26 @@ export const es = {
 				description:
 					'Di "Ir a [página]" o "Abrir [URL]" para navegar a una página específica.',
 			},
+			navigateToCheckout: {
+				name: 'Navegar a checkout',
+				description:
+					'Di "Ir a checkout para propiedad [ID]" para navegar a la página de checkout.',
+			},
+			fillCheckoutForm: {
+				name: 'Llenar formulario de checkout',
+				description:
+					'Di "Llenar [campo] con [valor]" para llenar campos del formulario como nombre, teléfono, notas.',
+			},
+			submitCheckoutForm: {
+				name: 'Enviar formulario de checkout',
+				description:
+					'Di "Enviar formulario" o "Enviar solicitud de reserva" para enviar el formulario de checkout.',
+			},
+			updateCheckoutElement: {
+				name: 'Actualizar elementos de checkout',
+				description:
+					'Di "Cambiar [elemento] a [acción]" para modificar elementos DOM en la página de checkout.',
+			},
 		},
 		clipboard: {
 			description: 'Ahora puedes pegarlo en algún lugar.',
@@ -159,6 +179,34 @@ export const es = {
 		selectReplica: 'Seleccionar Réplica',
 		loadingReplicas: 'Cargando réplicas...',
 		selectVoice: 'Seleccionar Voz',
+		sessionRestored: 'Sesión restaurada',
+		sessionRestoredDescription:
+			'La transmisión de voz estaba activa y fue restaurada.',
+		restoringSession:
+			'Restaurando estado de sesión de voz después de navegación',
+		sessionRestoreError: 'Error al restaurar el estado de la sesión:',
+		navigationCompleted: 'Navegación completada',
+		navigationCompletedDescription:
+			'Navegaste a la página {path}. La transmisión de voz estaba activa.',
+		userNavigatedFromVoice: 'El usuario navegó desde transmisión de voz desde:',
+		navigationInfoError: 'Error al procesar información de navegación:',
+		estateDetailsError: 'Error al cargar detalles del inmueble',
+		estateDetailsErrorDescription:
+			'No se pudo cargar información sobre el inmueble seleccionado',
+		loadingDatabase: 'Cargando base de datos inmobiliaria completa...',
+		aiAgentAccess:
+			'El agente IA obtiene acceso a todos los inmuebles para mejor asistencia',
+		selectedEstate: 'Inmueble Seleccionado',
+		readyForDiscussion: 'Listo para discusión',
+		estateSelectedDescription:
+			'El inmueble está seleccionado. El agente de voz está listo para contar detalles.',
+		broadcastStatus: 'Estado de Transmisión',
+		requiresInfo: 'Requiere información',
+		userAnswered: 'Usuario respondió',
+		currentQuestion: 'Pregunta actual:',
+		status: 'Estado:',
+		pendingAnswer: 'Esperando respuesta',
+		answered: 'Respondido',
 	},
 	language: 'Spanish',
 	languagePrompt:
@@ -211,7 +259,7 @@ export const es = {
 				subtitle: '¿Cuál es tu presupuesto para alquiler/compra?',
 				custom: 'Personalizado',
 			},
-			propertyType: {
+			estateType: {
 				title: 'Tipo de Propiedad',
 				subtitle:
 					'¿Qué tipo de propiedad te interesa? Selecciona todas las que apliquen.',
@@ -231,7 +279,7 @@ export const es = {
 				subtitle: 'Basado en tus preferencias, esto es lo que buscas:',
 				purpose: 'Propósito',
 				budget: 'Presupuesto',
-				propertyTypes: 'Tipos de Propiedad',
+				estateTypes: 'Tipos de Inmueble',
 				location: 'Ubicación',
 				features: 'Características Imprescindibles',
 				notSpecified: 'No especificado',
@@ -258,7 +306,7 @@ export const es = {
 			perfectMatches: 'Tus Coincidencias Perfectas',
 			matching: 'Propiedades Coincidentes',
 			found: 'encontradas',
-			property: 'propiedad',
+			estate: 'inmueble',
 			properties: 'propiedades',
 			noProperties: 'No se encontraron propiedades',
 			completeSteps:
@@ -279,37 +327,45 @@ export const es = {
 	homepage: {
 		title: 'Encuentra tu Propiedad Ideal con IA',
 		hero: {
-			title: 'Encuentra tu Propiedad Ideal con IA',
-			subtitle: 'Descubre propiedades con asistencia inteligente de IA',
-			callToAction: 'Llamar para Reservar tu Propiedad',
+			badge: 'Asistente de IA para Búsqueda de Propiedades',
+			title: 'Encuentra tu Propiedad',
+			titleHighlight: 'Ideal',
+			subtitle:
+				'Descubre la propiedad perfecta con nuestro asistente de IA inteligente. Recomendaciones personalizadas, búsqueda por voz y resultados instantáneos.',
+			startSearch: 'Iniciar Búsqueda',
+			viewCatalog: 'Ver Catálogo',
 			locationPlaceholder:
 				'Las ubicaciones estarán disponibles después de agregar propiedades',
-			propertyLogos: [
-				'Lujo',
-				'Moderno',
-				'Clásico',
-				'Villa',
-				'Penthouse',
-				'Casa Adosada',
-				'Mansión',
-				'Propiedad',
-			],
+			estateShowcase: 'Desde $2,500/mes',
+			unknown: 'Desconocido',
+			estate: 'Inmueble',
 		},
 		popularTypes: {
 			title: 'Tipos de Propiedades Populares',
+			subtitle: 'Elige el tipo de propiedad que se adapte a tus necesidades',
 			placeholder:
 				'Los tipos de propiedades estarán disponibles después de agregar propiedades',
 			objects: 'objetos',
+			availableObjects: 'propiedades disponibles para alquiler y venta',
+			viewObjects: 'Ver Propiedades',
+			addingProperties: 'Agregando Propiedades',
 		},
 		trending: {
-			title: 'Direcciones en Tendencia: Mejores Ubicaciones',
+			title: 'Destinos Populares',
+			subtitle: 'Descubre las ubicaciones más buscadas con las mejores ofertas',
 			placeholder:
 				'Los datos de ciudades estarán disponibles después de agregar propiedades inmobiliarias',
 			objects: 'objetos',
+			availableObjects: 'propiedades disponibles',
 			from: 'Desde',
+			averagePrice: 'Precio Promedio:',
+			explore: 'Explorar',
+			analyzingMarket: 'Analizando el Mercado',
 		},
 		features: {
 			title: 'Por Qué Elegirnos',
+			subtitle:
+				'Utilizamos tecnología de vanguardia para simplificar la búsqueda de propiedades',
 			convenientSearch: {
 				title: 'Búsqueda Conveniente',
 				description:
@@ -327,7 +383,8 @@ export const es = {
 			},
 		},
 		testimonials: {
-			title: 'Reseñas de Usuarios',
+			title: 'Reseñas de Clientes',
+			subtitle: 'Ve lo que dicen nuestros clientes satisfechos sobre nosotros',
 			reviews: [
 				{
 					name: 'Olivia Parker',
@@ -352,9 +409,12 @@ export const es = {
 			],
 		},
 		cta: {
-			title:
-				'¡Tu viaje al mundo inmobiliario comienza aquí. ¡Desbloquea infinitas posibilidades!',
-			button: 'Ver Propiedades >',
+			title: 'Tu viaje al mundo inmobiliario',
+			titleHighlight: 'comienza aquí',
+			subtitle:
+				'¡Desbloquea infinitas posibilidades con nuestro asistente de IA. Encuentra tu propiedad perfecta hoy!',
+			viewObjects: 'Ver Propiedades',
+			contactUs: 'Contáctanos',
 		},
 		footer: {
 			company: 'Sensay.io',
@@ -401,13 +461,14 @@ export const es = {
 		loadMore: 'Cargar Más',
 		loading: 'Cargando...',
 	},
-	propertyFilters: {
+	estateFilters: {
 		searchPlaceholder: 'Buscar propiedades...',
 		title: 'Filtros',
 		clear: 'Limpiar',
 		operationType: 'Tipo de Operación',
 		selectOperationType: 'Seleccionar tipo',
 		allTypes: 'Todos los Tipos',
+		any: 'Cualquiera',
 		rent: 'Alquiler',
 		sale: 'Venta',
 		both: 'Alquiler y Venta',
@@ -416,11 +477,12 @@ export const es = {
 		allCities: 'Todas las Ciudades',
 		loading: 'Cargando...',
 		priceRange: 'Rango de Precios',
+		area: 'Área (m²)',
 		from: 'Desde',
 		to: 'Hasta',
 		searchNearby: 'Buscar cerca',
 	},
-	propertyGrid: {
+	estateGrid: {
 		noResults: 'No se encontraron propiedades',
 		tryDifferentFilters: 'Intenta cambiar tus parámetros de búsqueda',
 		pricePerMonth: '/mes',
@@ -435,7 +497,7 @@ export const es = {
 			sale: 'Venta',
 			both: 'Alquiler y Venta',
 		},
-		propertyType: {
+		estateType: {
 			apartment: 'Apartamento',
 			house: 'Casa',
 			condo: 'Condominio',
@@ -459,9 +521,10 @@ export const es = {
 		reviews: 'reseñas',
 		details: 'Detalles',
 	},
-	propertyDetail: {
+	estateDetail: {
 		back: 'Atrás',
-		aboutProperty: 'Sobre la Propiedad',
+		aboutProperty: 'Sobre el Inmueble',
+		aboutEstate: 'Sobre el Inmueble',
 		characteristics: 'Características',
 		amenities: 'Comodidades',
 		reviews: 'Reseñas',
@@ -491,10 +554,10 @@ export const es = {
 		location: 'Ubicación',
 		value: 'Relación calidad-precio',
 		communication: 'Comunicación',
-		propertyNotFound: 'Propiedad no encontrada',
+		estateNotFound: 'Inmueble no encontrado',
 		backToList: 'Volver a la lista',
-		loadingError: 'Ocurrió un error al cargar la propiedad',
-		propertyType: {
+		loadingError: 'Ocurrió un error al cargar el inmueble',
+		estateType: {
 			apartment: 'Apartamento',
 			house: 'Casa',
 			condo: 'Condominio',

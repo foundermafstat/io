@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from '@/components/translations-context';
 import { getRandomEstateImage } from '@/lib/utils/estate-images';
 
@@ -71,6 +72,7 @@ export function PropertyCard({
 	isFavorite = false,
 }: PropertyCardProps) {
 	const { t } = useTranslations();
+	const router = useRouter();
 	const [imageLoading, setImageLoading] = React.useState(true);
 	const [imageError, setImageError] = React.useState(false);
 
@@ -109,7 +111,9 @@ export function PropertyCard({
 			: property.salePrice;
 
 	const priceLabel =
-		property.operationType === OperationType.RENT ? '/мес' : '';
+		property.operationType === OperationType.RENT
+			? t('estateGrid.pricePerMonth')
+			: '';
 
 	const handleImageLoad = () => {
 		setImageLoading(false);
@@ -120,10 +124,31 @@ export function PropertyCard({
 		setImageError(true);
 	};
 
+	const handlePropertyClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		// Используем Next.js роутер для навигации без перезагрузки
+		router.push(`/estate/${property.id}`, { scroll: false });
+	};
+
+	const handleDetailsClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		// Используем Next.js роутер для навигации без перезагрузки
+		router.push(`/estate/${property.id}`, { scroll: false });
+	};
+
+	const handleBookViewingClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		// Используем Next.js роутер для навигации без перезагрузки
+		router.push(`/checkout/${property.id}`, { scroll: false });
+	};
+
 	return (
 		<Card
 			className="group hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer hover:scale-[1.02]"
-			onClick={() => onPropertyClick?.(property)}
+			onClick={handlePropertyClick}
 		>
 			{/* Image */}
 			<div className="relative h-48 bg-muted">
@@ -144,7 +169,7 @@ export function PropertyCard({
 					<div className="flex items-center justify-center h-full text-muted-foreground bg-muted">
 						<div className="text-center">
 							<MapPin className="w-8 h-8 mx-auto mb-2 opacity-50" />
-							<p className="text-xs">{t('propertyGrid.imageNotAvailable')}</p>
+							<p className="text-xs">{t('estateGrid.imageNotAvailable')}</p>
 						</div>
 					</div>
 				)}
@@ -201,20 +226,20 @@ export function PropertyCard({
 					{property.bedrooms && (
 						<div className="flex items-center">
 							<Bed className="w-4 h-4 mr-1" />
-							{property.bedrooms}
+							{property.bedrooms} {t('estateGrid.bedrooms')}
 						</div>
 					)}
 					{property.bathrooms && (
 						<div className="flex items-center">
 							<Bath className="w-4 h-4 mr-1" />
-							{property.bathrooms}
+							{property.bathrooms} {t('estateGrid.bathrooms')}
 						</div>
 					)}
 					{property.area && (
 						<div className="flex items-center">
 							<Square className="w-4 h-4 mr-1" />
 							{property.area}
-							{t('propertyGrid.area')}
+							{t('estateGrid.area')}
 						</div>
 					)}
 				</div>
@@ -231,7 +256,7 @@ export function PropertyCard({
 							))}
 							{property.features.length > 3 && (
 								<Badge variant="outline" className="text-xs">
-									+{property.features.length - 3} {t('propertyGrid.more')}
+									+{property.features.length - 3} {t('estateGrid.more')}
 								</Badge>
 							)}
 						</div>
@@ -256,11 +281,8 @@ export function PropertyCard({
 							variant="outline"
 							size="sm"
 							className="h-8 w-8 p-0"
-							onClick={(e) => {
-								e.stopPropagation();
-								window.location.href = `/estate/${property.id}`;
-							}}
-							title={t('propertyGrid.details')}
+							onClick={handleDetailsClick}
+							title={t('estateGrid.details')}
 						>
 							<Eye className="w-4 h-4" />
 						</Button>
@@ -268,11 +290,8 @@ export function PropertyCard({
 							variant="default"
 							size="sm"
 							className="h-8 w-8 p-0"
-							onClick={(e) => {
-								e.stopPropagation();
-								window.location.href = `/checkout/${property.id}`;
-							}}
-							title={t('propertyGrid.bookViewing')}
+							onClick={handleBookViewingClick}
+							title={t('estateGrid.bookViewing')}
 						>
 							<Phone className="w-4 h-4" />
 						</Button>
@@ -282,11 +301,11 @@ export function PropertyCard({
 				{/* Stats */}
 				<div className="flex items-center justify-between text-xs text-muted-foreground mt-2 pt-2 border-t">
 					<span>
-						{property.views || 0} {t('propertyGrid.views')}
+						{property.views || 0} {t('estateGrid.views')}
 					</span>
 					<span>
 						{Array.isArray(property.reviews) ? property.reviews.length : 0}{' '}
-						{t('propertyGrid.reviews')}
+						{t('estateGrid.reviews')}
 					</span>
 				</div>
 			</CardContent>
