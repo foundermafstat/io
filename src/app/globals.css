@@ -13,7 +13,7 @@
 		--popover: 0 0% 100%;
 		--popover-foreground: 0 0% 3.9%;
 
-		--primary:  35 90% 55%;
+		--primary: 35 90% 55%;
 		--primary-foreground: 0 85.7% 97.3%;
 
 		--secondary: 0 0% 96.1%;
@@ -33,6 +33,9 @@
 		--ring: 35 90% 55%;
 
 		--radius: 0.5rem;
+
+		/* Font variables */
+		--font-montserrat: 'Montserrat', sans-serif;
 	}
 
 	/* Updated dark theme to match the screenshot */
@@ -73,6 +76,54 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		font-family: var(--font-montserrat);
+		font-weight: 300; /* Тонкое начертание по умолчанию */
+	}
+
+	/* Настройка весов шрифта для разных элементов */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 600; /* Полужирный для заголовков */
+	}
+
+	.font-thin {
+		font-weight: 100;
+	}
+
+	.font-extralight {
+		font-weight: 200;
+	}
+
+	.font-light {
+		font-weight: 300;
+	}
+
+	.font-normal {
+		font-weight: 400;
+	}
+
+	.font-medium {
+		font-weight: 500;
+	}
+
+	.font-semibold {
+		font-weight: 600;
+	}
+
+	.font-bold {
+		font-weight: 700;
+	}
+
+	.font-extrabold {
+		font-weight: 800;
+	}
+
+	.font-black {
+		font-weight: 900;
 	}
 }
 
@@ -353,6 +404,58 @@
 	}
 }
 
+/* Page load animations */
+.page-fade-in {
+	opacity: 0;
+	transform: translateY(20px);
+	animation: page-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes page-fade-in {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Staggered card animations */
+.card-stagger {
+	opacity: 0;
+	transform: translateY(20px);
+	animation: card-stagger 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes card-stagger {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Smooth grid transitions */
+.property-grid-animate {
+	transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.property-grid-enter {
+	opacity: 0;
+	transform: translateY(10px);
+}
+
+.property-grid-enter-active {
+	opacity: 1;
+	transform: translateY(0);
+	transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
 .property-card-exit {
 	opacity: 1;
 	transform: translateY(0) scale(1);
@@ -407,12 +510,12 @@
 
 /* Carousel styles */
 .scrollbar-hide {
-	-ms-overflow-style: none;  /* Internet Explorer 10+ */
-	scrollbar-width: none;  /* Firefox */
+	-ms-overflow-style: none; /* Internet Explorer 10+ */
+	scrollbar-width: none; /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-	display: none;  /* Safari and Chrome */
+	display: none; /* Safari and Chrome */
 }
 
 /* Smooth scrolling for carousel */
@@ -423,20 +526,36 @@
 
 /* Carousel gradient overlays */
 .carousel-gradient-left {
-	background: linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%);
+	background: linear-gradient(
+		to right,
+		hsl(var(--background)) 0%,
+		transparent 100%
+	);
 }
 
 .carousel-gradient-right {
-	background: linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%);
+	background: linear-gradient(
+		to left,
+		hsl(var(--background)) 0%,
+		transparent 100%
+	);
 }
 
 /* Dark mode gradients */
 .dark .carousel-gradient-left {
-	background: linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%);
+	background: linear-gradient(
+		to right,
+		hsl(var(--background)) 0%,
+		transparent 100%
+	);
 }
 
 .dark .carousel-gradient-right {
-	background: linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%);
+	background: linear-gradient(
+		to left,
+		hsl(var(--background)) 0%,
+		transparent 100%
+	);
 }
 
 /* Carousel card styles */
@@ -446,7 +565,8 @@
 
 .carousel-card:hover {
 	transform: translateY(-4px);
-	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Touch scrolling improvements */

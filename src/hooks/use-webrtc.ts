@@ -18,6 +18,7 @@ export interface Tool {
 interface UseWebRTCAudioSessionReturn {
 	status: string;
 	isSessionActive: boolean;
+	isLoadingContext: boolean;
 	audioIndicatorRef: React.RefObject<HTMLDivElement | null>;
 	startSession: () => Promise<void>;
 	stopSession: () => void;
@@ -40,6 +41,7 @@ export default function useWebRTCAudioSession(
 	// Connection/session states
 	const [status, setStatus] = useState('');
 	const [isSessionActive, setIsSessionActive] = useState(false);
+	const [isLoadingContext, setIsLoadingContext] = useState(false);
 
 	// Audio references for local mic
 	// Approach A: explicitly typed as HTMLDivElement | null
@@ -80,9 +82,33 @@ export default function useWebRTCAudioSession(
 	}
 
 	/**
+	 * Load properties context for AI
+	 */
+	async function loadPropertiesContext() {
+		setIsLoadingContext(true);
+		try {
+			const response = await fetch('/api/properties/ai-context?limit=1000');
+			const data = await response.json();
+
+			if (response.ok && data.properties) {
+				console.log(`Loaded ${data.totalProperties} properties for AI context`);
+				return data;
+			}
+		} catch (error) {
+			console.warn('Failed to load properties context:', error);
+		} finally {
+			setIsLoadingContext(false);
+		}
+		return null;
+	}
+
+	/**
 	 * Configure the data channel on open, sending a session update to the server.
 	 */
-	function configureDataChannel(dataChannel: RTCDataChannel) {
+	async function configureDataChannel(dataChannel: RTCDataChannel) {
+		// Load properties context first
+		const propertiesContext = await loadPropertiesContext();
+
 		// Send session update
 		const sessionUpdate = {
 			type: 'session.update',
@@ -116,6 +142,32 @@ export default function useWebRTCAudioSession(
 			},
 		};
 		dataChannel.send(JSON.stringify(languageMessage));
+
+		// Send properties context if loaded successfully
+		if (propertiesContext) {
+			const propertiesMessage = {
+				type: 'conversation.item.create',
+				item: {
+					type: 'message',
+					role: 'system',
+					content: [
+						{
+							type: 'input_text',
+							text: `PROPERTIES CONTEXT LOADED: I have access to ${
+								propertiesContext.totalProperties
+							} properties. Here's a summary: ${JSON.stringify(
+								propertiesContext.properties.slice(0, 5),
+								null,
+								2
+							)}... (and ${
+								propertiesContext.totalProperties - 5
+							} more properties). I can help you search, filter, and navigate to specific properties.`,
+						},
+					],
+				},
+			};
+			dataChannel.send(JSON.stringify(propertiesMessage));
+		}
 	}
 
 	/**
@@ -478,9 +530,9 @@ export default function useWebRTCAudioSession(
 			const dataChannel = pc.createDataChannel('response');
 			dataChannelRef.current = dataChannel;
 
-			dataChannel.onopen = () => {
+			dataChannel.onopen = async () => {
 				// console.log("Data channel open");
-				configureDataChannel(dataChannel);
+				await configureDataChannel(dataChannel);
 			};
 			dataChannel.onmessage = handleDataChannelMessage;
 
@@ -549,6 +601,7 @@ export default function useWebRTCAudioSession(
 
 		setCurrentVolume(0);
 		setIsSessionActive(false);
+		setIsLoadingContext(false);
 		setStatus('Session stopped');
 		setMsgs([]);
 		setConversation([]);
@@ -623,6 +676,7 @@ export default function useWebRTCAudioSession(
 	return {
 		status,
 		isSessionActive,
+		isLoadingContext,
 		audioIndicatorRef,
 		startSession,
 		stopSession,

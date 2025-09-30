@@ -4,9 +4,11 @@ import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { animate as framerAnimate } from 'framer-motion';
 import { useTranslations } from '@/components/translations-context';
+import { useRouter } from 'next/navigation';
 
 export const useToolsFunctions = () => {
 	const { t } = useTranslations();
+	const router = useRouter();
 
 	const timeFunction = () => {
 		const now = new Date();
@@ -226,6 +228,177 @@ export const useToolsFunctions = () => {
 		}
 	};
 
+	const navigateToProperties = ({ filters }: { filters?: any } = {}) => {
+		try {
+			let url = '/properties';
+			const searchParams = new URLSearchParams();
+
+			if (filters) {
+				if (filters.query) searchParams.set('query', filters.query);
+				if (filters.operationType)
+					searchParams.set('operationType', filters.operationType);
+				if (filters.city) searchParams.set('city', filters.city);
+				if (filters.minPrice)
+					searchParams.set('minPrice', filters.minPrice.toString());
+				if (filters.maxPrice)
+					searchParams.set('maxPrice', filters.maxPrice.toString());
+			}
+
+			if (searchParams.toString()) {
+				url += '?' + searchParams.toString();
+			}
+
+			// Используем Next.js роутер для навигации без перезагрузки
+			router.push(url);
+
+			toast.success('Navigating to properties 🏠', {
+				description: 'Loading properties page with applied filters',
+			});
+
+			return {
+				success: true,
+				message: `Navigated to properties page${
+					filters ? ' with filters' : ''
+				}`,
+				url,
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Navigation error: ${error}`,
+			};
+		}
+	};
+
+	const navigateToProperty = ({ propertyId }: { propertyId: string }) => {
+		try {
+			const url = `/estate/${propertyId}`;
+			// Используем Next.js роутер для навигации без перезагрузки
+			router.push(url);
+
+			toast.success('Navigating to property 🏡', {
+				description: `Loading property ${propertyId}`,
+			});
+
+			return {
+				success: true,
+				message: `Navigated to property ${propertyId}`,
+				url,
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Navigation error: ${error}`,
+			};
+		}
+	};
+
+	const navigateToHome = () => {
+		try {
+			// Используем Next.js роутер для навигации без перезагрузки
+			router.push('/');
+
+			toast.success('Navigating to home 🏠', {
+				description: 'Loading home page',
+			});
+
+			return {
+				success: true,
+				message: 'Navigated to home page',
+				url: '/',
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Navigation error: ${error}`,
+			};
+		}
+	};
+
+	const navigateToCars = () => {
+		try {
+			// Используем Next.js роутер для навигации без перезагрузки
+			router.push('/cars');
+
+			toast.success('Navigating to cars 🚗', {
+				description: 'Loading cars page',
+			});
+
+			return {
+				success: true,
+				message: 'Navigated to cars page',
+				url: '/cars',
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Navigation error: ${error}`,
+			};
+		}
+	};
+
+	const navigateToCar = ({ carId }: { carId: string }) => {
+		try {
+			const url = `/car/${carId}`;
+			// Используем Next.js роутер для навигации без перезагрузки
+			router.push(url);
+
+			toast.success('Navigating to car 🚗', {
+				description: `Loading car ${carId}`,
+			});
+
+			return {
+				success: true,
+				message: `Navigated to car ${carId}`,
+				url,
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Navigation error: ${error}`,
+			};
+		}
+	};
+
+	const loadPropertiesContext = async ({
+		featuredOnly = false,
+	}: { featuredOnly?: boolean } = {}) => {
+		try {
+			const response = await fetch(
+				`/api/properties/ai-context?featured=${featuredOnly}&limit=1000`
+			);
+			const data = await response.json();
+
+			if (!response.ok) {
+				return {
+					success: false,
+					message: `Failed to load properties context: ${
+						data.error || 'Unknown error'
+					}`,
+				};
+			}
+
+			toast.success('Properties context loaded 🏠', {
+				description: `Loaded ${data.totalProperties} properties for AI context`,
+			});
+
+			return {
+				success: true,
+				message: `Successfully loaded ${data.totalProperties} properties for AI context. The AI now has access to all property information including titles, descriptions, prices, locations, and features.`,
+				data: {
+					totalProperties: data.totalProperties,
+					properties: data.properties,
+					lastUpdated: data.lastUpdated,
+				},
+			};
+		} catch (error) {
+			return {
+				success: false,
+				message: `Error loading properties context: ${error}`,
+			};
+		}
+	};
+
 	return {
 		getCurrentTime: timeFunction,
 		changeBackgroundColor: backgroundFunction,
@@ -243,5 +416,11 @@ export const useToolsFunctions = () => {
 			};
 		},
 		scrapeWebsite,
+		navigateToProperties,
+		navigateToProperty,
+		navigateToHome,
+		navigateToCars,
+		navigateToCar,
+		loadPropertiesContext,
 	};
 };

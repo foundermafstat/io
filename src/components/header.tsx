@@ -58,8 +58,12 @@ function HeaderInner() {
 		{ name: t('header.settings'), path: '/admin/settings' },
 	];
 
-	// Legacy items (keeping for backward compatibility)
-	const legacyItems = [
+	// Development items (replica management and tools)
+	const developmentItems = [
+		{ name: t('header.replicasManagement'), path: '/replicas' },
+		{ name: t('header.aiTraining'), path: '/training' },
+		{ name: t('header.databaseManagement'), path: '/admin/database' },
+		{ name: t('header.settings'), path: '/admin/settings' },
 		{ name: t('header.apiKeys'), path: '/api-keys' },
 		{ name: t('header.chatHistory'), path: '/chat-history' },
 		{ name: t('header.experimentalApi'), path: '/experimental' },
@@ -68,15 +72,11 @@ function HeaderInner() {
 	const { headerState } = useHeader();
 	return (
 		<header className="border-b bg-background text-foreground">
-		<div className="flex items-center justify-between">
-			<div className="flex items-center gap-4">
-				<div className="w-20 h-20 bg-white flex items-center justify-center">
-					<img 
-						src="/io-logo.png" 
-						alt="IO Logo" 
-						className="w-12 h-12"
-					/>
-				</div>
+			<div className="flex items-center justify-between">
+				<div className="flex items-center gap-4">
+					<div className="w-20 h-20 bg-white flex items-center justify-center">
+						<img src="/io-logo.png" alt="IO Logo" className="w-12 h-12" />
+					</div>
 
 					<nav className="hidden md:flex items-center gap-6">
 						<Link
@@ -88,99 +88,99 @@ function HeaderInner() {
 							{t('header.home')}
 						</Link>
 						<Link
-							href="/quiz"
+							href="http://localhost:3000/catalog"
 							className={`text-sm font-medium transition-colors hover:text-primary ${
-								pathname === '/quiz' ? 'text-primary' : 'text-foreground'
+								pathname === '/catalog' ? 'text-primary' : 'text-foreground'
 							}`}
 						>
-							Property Quiz
+							{t('header.catalog')}
 						</Link>
 
 						{/* Dropdown menu for Real Estate Application */}
-						<DropdownMenu>
+						{/* <DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">{t('header.realEstate')}</span>
+									<span className="text-sm font-medium">
+										{t('header.realEstate')}
+									</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>{t('header.propertySearch')}</DropdownMenuLabel>
+								<DropdownMenuLabel>
+									{t('header.propertySearch')}
+								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								{realEstateItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
 										<Link
 											href={item.path}
-											className={
-												pathname === item.path
-													? 'bg-accent'
-													: ''
-											}
+											className={pathname === item.path ? 'bg-accent' : ''}
 										>
 											{item.name}
 										</Link>
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuContent>
-						</DropdownMenu>
+						</DropdownMenu> */}
 
 						{/* Dropdown menu for Admin Panel */}
-						<DropdownMenu>
+						{/* <DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">{t('header.adminPanel')}</span>
+									<span className="text-sm font-medium">
+										{t('header.adminPanel')}
+									</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>{t('header.systemManagement')}</DropdownMenuLabel>
+								<DropdownMenuLabel>
+									{t('header.systemManagement')}
+								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								{adminItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
 										<Link
 											href={item.path}
-											className={
-												pathname === item.path
-													? 'bg-accent'
-													: ''
-											}
+											className={pathname === item.path ? 'bg-accent' : ''}
 										>
 											{item.name}
 										</Link>
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuContent>
-						</DropdownMenu>
+						</DropdownMenu> */}
 
-						{/* Dropdown menu for Legacy/Development Tools */}
+						{/* Dropdown menu for Development Tools */}
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
 									className="flex items-center gap-1 text-foreground hover:bg-accent hover:text-accent-foreground px-2 py-1 h-auto"
 								>
-									<span className="text-sm font-medium">{t('header.development')}</span>
+									<span className="text-sm font-medium">
+										{t('header.development')}
+									</span>
 									<ChevronDown size={14} />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>{t('header.developmentTools')}</DropdownMenuLabel>
+								<DropdownMenuLabel>
+									{t('header.developmentTools')}
+								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								{legacyItems.map((item) => (
+								{developmentItems.map((item) => (
 									<DropdownMenuItem key={item.path} asChild>
 										<Link
 											href={item.path}
-											className={
-												pathname === item.path
-													? 'bg-accent'
-													: ''
-											}
+											className={pathname === item.path ? 'bg-accent' : ''}
 										>
 											{item.name}
 										</Link>
@@ -197,7 +197,11 @@ function HeaderInner() {
 						size="icon"
 						onClick={toggleChat}
 						className="text-foreground hover:bg-accent hover:text-accent-foreground"
-						title={isChatVisible ? t('header.hideAiAssistant') : t('header.showAiAssistant')}
+						title={
+							isChatVisible
+								? t('header.hideAiAssistant')
+								: t('header.showAiAssistant')
+						}
 					>
 						<MessageSquare
 							className={isChatVisible ? 'text-primary' : 'text-white'}
@@ -325,9 +329,7 @@ function ReplicaDropdown() {
 							key={replica.uuid}
 							onClick={() => setSelectedReplicaUuid(replica.uuid)}
 							className={
-								selectedReplicaUuid === replica.uuid
-									? 'bg-accent'
-									: ''
+								selectedReplicaUuid === replica.uuid ? 'bg-accent' : ''
 							}
 						>
 							{replica.name}
@@ -335,7 +337,9 @@ function ReplicaDropdown() {
 						</DropdownMenuItem>
 					))
 				) : (
-					<DropdownMenuItem disabled>{t('header.noReplicasAvailable')}</DropdownMenuItem>
+					<DropdownMenuItem disabled>
+						{t('header.noReplicasAvailable')}
+					</DropdownMenuItem>
 				)}
 
 				<DropdownMenuSeparator />

@@ -1,6 +1,6 @@
 import type React from 'react';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -14,7 +14,11 @@ import ResizablePanel from '@/components/resizable-panel';
 import { TranslationsProvider } from '@/components/translations-context';
 import { Toaster } from '@/components/ui/sonner';
 
-const inter = Inter({ subsets: ['latin'] });
+const montserrat = Montserrat({
+	subsets: ['latin', 'cyrillic'],
+	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+	variable: '--font-montserrat',
+});
 
 export const metadata: Metadata = {
 	title: 'IO',
@@ -35,7 +39,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="h-full">
-			<body className={`${inter.className} h-full`} suppressHydrationWarning={true}>
+			<body
+				className={`${montserrat.className} h-full`}
+				suppressHydrationWarning={true}
+			>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
@@ -43,31 +50,31 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<TranslationsProvider>
-					<ReplicasProvider>
-						<HeaderProvider>
-							<QuizProvider>
-								<BroadcastProvider>
-									<ChatVisibilityProvider>
-										<ReplicaProvider>
-											<ChatProvider>
-												<ChatTabProvider>
-											<div className="flex flex-col h-full">
-												<Header />
-												<main className="flex-1 flex overflow-hidden">
-													<ResizablePanel>{children}</ResizablePanel>
-												</main>
-											</div>
+						<ReplicasProvider>
+							<HeaderProvider>
+								<QuizProvider>
+									<BroadcastProvider>
+										<ChatVisibilityProvider>
+											<ReplicaProvider>
+												<ChatProvider>
+													<ChatTabProvider>
+														<div className="flex flex-col h-full">
+															<Header />
+															<main className="flex-1 flex overflow-hidden">
+																<ResizablePanel>{children}</ResizablePanel>
+															</main>
+														</div>
 
-											<Toaster />
-										</ChatTabProvider>
-									</ChatProvider>
-								</ReplicaProvider>
-							</ChatVisibilityProvider>
-							</BroadcastProvider>
-						</QuizProvider>
-					</HeaderProvider>
-					</ReplicasProvider>
-				</TranslationsProvider>
+														<Toaster />
+													</ChatTabProvider>
+												</ChatProvider>
+											</ReplicaProvider>
+										</ChatVisibilityProvider>
+									</BroadcastProvider>
+								</QuizProvider>
+							</HeaderProvider>
+						</ReplicasProvider>
+					</TranslationsProvider>
 				</ThemeProvider>
 				{/* <Script 
 					src="https://chat-widget.sensay.io/b4d138ab-41ad-4830-b193-166db4d5b124/embed-script.js" 
