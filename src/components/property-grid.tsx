@@ -53,26 +53,26 @@ export default function PropertyGrid({ properties, loading = false, onPropertyCl
 	const { t } = useTranslations();
 	const formatPrice = (price: number, operationType: OperationType) => {
 		if (price >= 1000000) {
-			return `${(price / 1000000).toFixed(1)}М ₽`;
+			return `$${(price / 1000000).toFixed(1)}M`;
 		}
-		return `${(price / 1000).toFixed(0)}К ₽`;
+		return `$${(price / 1000).toFixed(0)}K`;
 	};
 
 	const getDisplayPrice = (property: Property) => {
 		if (property.operationType === OperationType.RENT && property.rentPrice) {
-			return `${formatPrice(property.rentPrice, OperationType.RENT)}/мес`;
+			return `${formatPrice(property.rentPrice, OperationType.RENT)}${t('propertyGrid.pricePerMonth')}`;
 		} else if (property.operationType === OperationType.SALE && property.salePrice) {
 			return formatPrice(property.salePrice, OperationType.SALE);
 		} else if (property.operationType === OperationType.BOTH) {
 			if (property.rentPrice && property.salePrice) {
-				return `${formatPrice(property.rentPrice, OperationType.RENT)}/мес • ${formatPrice(property.salePrice, OperationType.SALE)}`;
+				return `${formatPrice(property.rentPrice, OperationType.RENT)}${t('propertyGrid.pricePerMonth')} • ${formatPrice(property.salePrice, OperationType.SALE)}`;
 			} else if (property.rentPrice) {
-				return `${formatPrice(property.rentPrice, OperationType.RENT)}/мес`;
+				return `${formatPrice(property.rentPrice, OperationType.RENT)}${t('propertyGrid.pricePerMonth')}`;
 			} else if (property.salePrice) {
 				return formatPrice(property.salePrice, OperationType.SALE);
 			}
 		}
-		return 'Цена не указана';
+		return t('propertyGrid.priceNotSpecified');
 	};
 
 	const getMainImage = (property: Property) => {

@@ -366,6 +366,8 @@ export const fr = {
   },
   propertyGrid: {
     noResults: "Aucune propriété trouvée",
-    tryDifferentFilters: "Essayez de modifier vos paramètres de recherche"
+    tryDifferentFilters: "Essayez de modifier vos paramètres de recherche",
+    pricePerMonth: "/mois",
+    priceNotSpecified: "Prix non spécifié"
   }
 }

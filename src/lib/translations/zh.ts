@@ -366,6 +366,8 @@ export const zh = {
   },
   propertyGrid: {
     noResults: "未找到物业",
-    tryDifferentFilters: "尝试更改您的搜索参数"
+    tryDifferentFilters: "尝试更改您的搜索参数",
+    pricePerMonth: "/月",
+    priceNotSpecified: "价格未指定"
   }
 }

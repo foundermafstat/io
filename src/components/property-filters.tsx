@@ -96,9 +96,9 @@ export default function PropertyFilters({ onFiltersChange, loading = false }: Pr
 
 	const formatPrice = (price: number) => {
 		if (price >= 1000000) {
-			return `${(price / 1000000).toFixed(1)}М ₽`;
+			return `$${(price / 1000000).toFixed(1)}M`;
 		}
-		return `${(price / 1000).toFixed(0)}К ₽`;
+		return `$${(price / 1000).toFixed(0)}K`;
 	};
 
 	const getPriceRange = () => {

@@ -367,6 +367,8 @@ export const ru = {
     },
     propertyGrid: {
         noResults: "Объекты не найдены",
-        tryDifferentFilters: "Попробуйте изменить параметры поиска"
+        tryDifferentFilters: "Попробуйте изменить параметры поиска",
+        pricePerMonth: "/мес",
+        priceNotSpecified: "Цена не указана"
     }
 }

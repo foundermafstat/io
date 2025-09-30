@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from '@/components/translations-context';
 import { toast } from 'sonner';
 
 const PROPERTY_TYPE_LABELS: Record<string, string> = {
@@ -50,6 +51,7 @@ const OPERATION_TYPE_LABELS: Record<string, string> = {
 };
 
 export default function PropertyDetailPage() {
+	const { t } = useTranslations();
 	const params = useParams();
 	const propertyId = params.id as string;
 	
@@ -85,9 +87,9 @@ export default function PropertyDetailPage() {
 
 	const formatPrice = (price: number) => {
 		if (price >= 1000000) {
-			return `${(price / 1000000).toFixed(1)}М ₽`;
+			return `$${(price / 1000000).toFixed(1)}M`;
 		}
-		return `${(price / 1000).toFixed(0)}К ₽`;
+		return `$${(price / 1000).toFixed(0)}K`;
 	};
 
 	const getDisplayPrice = (property: Property) => {
